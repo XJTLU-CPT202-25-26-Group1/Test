@@ -1,2 +1,28 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('浏览专家')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container py-5">
+    <h1 class="h3 mb-4">Browse Specialists</h1>
+    <form class="row g-2 mb-4" method="get" th:action="@{/customer/specialists}">
+        <div class="col-md-6"><input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by name or category"></div>
+        <div class="col-auto"><button class="btn btn-primary" type="submit">Search</button></div>
+    </form>
+    <div class="row g-3">
+        <div class="col-md-6" th:each="specialist : ${specialists}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h5" th:text="${specialist.name}">Name</h2>
+                    <p class="mb-1"><strong>Category:</strong> <span th:text="${specialist.category.name}">Category</span></p>
+                    <p class="mb-1"><strong>Level:</strong> <span th:text="${specialist.level}">Level</span></p>
+                    <p class="mb-3"><strong>Rate:</strong> <span th:text="${specialist.feeRate}">0</span></p>
+                    <a class="btn btn-outline-primary" th:href="@{/customer/specialists/detail(id=${specialist.id})}">View details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

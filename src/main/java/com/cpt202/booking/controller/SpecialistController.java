@@ -1,7 +1,7 @@
 package com.cpt202.booking.controller;
 
 import com.cpt202.booking.model.Specialist;
-import com.cpt202.booking.repository.SpecialistRepository;
+import com.cpt202.booking.service.SpecialistService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,19 +10,14 @@ import java.util.List;
 @RequestMapping("/specialists")
 public class SpecialistController {
 
-    private final SpecialistRepository specialistRepository;
+    private final SpecialistService specialistService;
 
-    public SpecialistController(SpecialistRepository specialistRepository) {
-        this.specialistRepository = specialistRepository;
+    public SpecialistController(SpecialistService specialistService) {
+        this.specialistService = specialistService;
     }
 
     @GetMapping
     public List<Specialist> getAllSpecialists() {
-        return specialistRepository.findAll();
-    }
-
-    @PostMapping
-    public Specialist createSpecialist(@RequestBody Specialist specialist) {
-        return specialistRepository.save(specialist);
+        return specialistService.getAllSpecialists();
     }
 }

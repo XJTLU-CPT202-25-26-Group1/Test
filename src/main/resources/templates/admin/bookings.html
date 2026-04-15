@@ -1,2 +1,47 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('预约审核')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <h1 class="h3 mb-4">Pending Booking Review</h1>
+    <div class="card shadow-sm mb-4" th:each="booking : ${pendingBookings}">
+        <div class="card-body">
+            <h2 class="h5" th:text="${booking.topic}">Topic</h2>
+            <p class="mb-1"><strong>Customer:</strong> <span th:text="${booking.customerName}">Customer</span></p>
+            <p class="mb-1"><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></p>
+            <p class="mb-3"><strong>Slot:</strong> <span th:text="${booking.slot.slotDate}"></span> <span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></p>
+            <div class="d-flex gap-2 flex-wrap">
+                <form th:action="@{/admin/bookings/confirm}" method="post">
+                    <input type="hidden" name="id" th:value="${booking.id}">
+                    <button class="btn btn-success" type="submit">Confirm</button>
+                </form>
+                <form th:action="@{/admin/bookings/reject}" method="post" class="d-flex gap-2">
+                    <input type="hidden" name="id" th:value="${booking.id}">
+                    <input class="form-control" type="text" name="reason" placeholder="Rejection reason" required>
+                    <button class="btn btn-danger" type="submit">Reject</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h4 mt-5">All Bookings</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead><tr><th>ID</th><th>Customer</th><th>Specialist</th><th>Status</th><th>Fee</th></tr></thead>
+            <tbody>
+            <tr th:each="booking : ${allBookings}">
+                <td th:text="${booking.id}">1</td>
+                <td th:text="${booking.customerName}">Customer</td>
+                <td th:text="${booking.specialist.name}">Specialist</td>
+                <td th:text="${booking.status}">PENDING</td>
+                <td th:text="${booking.calculatedFee}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

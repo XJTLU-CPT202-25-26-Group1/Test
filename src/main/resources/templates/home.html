@@ -1,12 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Specialist Consultation Booking System</title>
-</head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('首页')}"></head>
 <body>
-    <h1>Specialist Consultation Booking System</h1>
-    <p>Project started successfully.</p>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+
+<main class="container py-5">
+    <div class="p-5 mb-4 bg-light rounded-4 border">
+        <h1 class="display-6 fw-bold">Specialist Consultation Booking System</h1>
+        <p class="lead mb-4">一个适合演示 first-release MVP 的三角色预约系统。当前用户：<span th:text="${currentUser}">Guest</span></p>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-primary" th:href="@{/customer/specialists}">客户端：浏览专家</a>
+            <a class="btn btn-outline-primary" th:href="@{/specialist/availability}">专家端：管理时间</a>
+            <a class="btn btn-outline-dark" th:href="@{/admin}">管理员后台</a>
+        </div>
+    </div>
+
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0">示例专家</h2>
+            <span class="badge text-bg-warning">Pending bookings: <span th:text="${pendingCount}">0</span></span>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6" th:each="specialist : ${specialists}">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h5 card-title" th:text="${specialist.name}">Name</h3>
+                        <p class="mb-1"><strong>Category:</strong> <span th:text="${specialist.category != null ? specialist.category.name : 'N/A'}">Category</span></p>
+                        <p class="mb-1"><strong>Level:</strong> <span th:text="${specialist.level}">Level</span></p>
+                        <p class="mb-3"><strong>Fee Rate:</strong> <span th:text="${specialist.feeRate}">0</span> / hour</p>
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{/customer/specialists/detail(id=${specialist.id})}">View profile and slots</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

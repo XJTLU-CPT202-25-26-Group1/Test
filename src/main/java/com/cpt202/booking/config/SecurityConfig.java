@@ -20,7 +20,7 @@ public class SecurityConfig {
                 // ✅ 静态资源放行（关键！）
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/vendors/**", "/webjars/**").permitAll()
                 // 公开页面
-                .requestMatchers("/auth/login", "/auth/register", "/error/**").permitAll()
+                .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/error/**").permitAll()
                 // 角色权限
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/specialist/**").hasAnyRole("SPECIALIST", "ADMIN")

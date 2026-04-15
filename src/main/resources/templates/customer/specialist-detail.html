@@ -1,2 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('专家详情')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container py-5">
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h1 class="h3" th:text="${specialist.name}">Name</h1>
+            <p class="mb-1"><strong>Category:</strong> <span th:text="${specialist.category.name}">Category</span></p>
+            <p class="mb-1"><strong>Level:</strong> <span th:text="${specialist.level}">Level</span></p>
+            <p class="mb-3"><strong>Hourly Rate:</strong> <span th:text="${specialist.feeRate}">0</span></p>
+            <p th:text="${specialist.profileDescription}">Description</p>
+        </div>
+    </div>
+
+    <h2 class="h4">Available Slots</h2>
+    <div class="card mb-3" th:each="slot : ${slots}">
+        <div class="card-body">
+            <p class="mb-3">
+                <strong th:text="${slot.slotDate}">2026-01-01</strong>
+                <span th:text="${slot.startTime}">10:00</span> -
+                <span th:text="${slot.endTime}">11:00</span>
+            </p>
+            <form th:action="@{/customer/bookings/create}" method="post" class="row g-2">
+                <input type="hidden" name="specialistId" th:value="${specialist.id}">
+                <input type="hidden" name="slotId" th:value="${slot.id}">
+                <div class="col-md-4"><input class="form-control" type="text" name="topic" placeholder="Consultation topic" required></div>
+                <div class="col-md-5"><input class="form-control" type="text" name="notes" placeholder="Notes"></div>
+                <div class="col-auto"><button class="btn btn-primary" type="submit">Submit Booking</button></div>
+            </form>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

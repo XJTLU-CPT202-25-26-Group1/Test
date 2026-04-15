@@ -1,4 +1,7 @@
 package com.cpt202.booking.enums;
 
 public enum RoleType {
+    CUSTOMER,
+    SPECIALIST,
+    ADMIN
 }

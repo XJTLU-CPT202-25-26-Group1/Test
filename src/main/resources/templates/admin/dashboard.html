@@ -1,2 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('管理员后台')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container py-5">
+    <h1 class="h3 mb-4">Admin Dashboard</h1>
+    <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Pending</strong><div th:text="${pendingCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Bookings</strong><div th:text="${bookingCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Specialists</strong><div th:text="${specialistCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Categories</strong><div th:text="${categoryCount}">0</div></div></div></div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <a class="btn btn-primary" th:href="@{/admin/bookings}">Review bookings</a>
+        <a class="btn btn-outline-primary" th:href="@{/admin/specialists}">Manage specialists</a>
+        <a class="btn btn-outline-secondary" th:href="@{/admin/categories}">Manage categories</a>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

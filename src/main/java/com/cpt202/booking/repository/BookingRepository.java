@@ -1,13 +1,16 @@
 package com.cpt202.booking.repository;
 
+import com.cpt202.booking.enums.BookingStatus;
 import com.cpt202.booking.model.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    boolean existsBySpecialistNameAndBookingDateAndBookingTime(
-            String specialistName,
-            String bookingDate,
-            String bookingTime
-    );
+    List<Booking> findByCustomerEmailOrderByCreatedAtDesc(String customerEmail);
+
+    List<Booking> findByStatusOrderByCreatedAtAsc(BookingStatus status);
+
+    List<Booking> findBySpecialistIdOrderByCreatedAtDesc(Long specialistId);
 }

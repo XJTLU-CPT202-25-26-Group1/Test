@@ -1,2 +1,24 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('专家预约')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <h1 class="h3 mb-4">Specialist Booking Schedule</h1>
+    <div class="card mb-3" th:each="booking : ${bookings}">
+        <div class="card-body">
+            <h2 class="h5" th:text="${booking.topic}">Topic</h2>
+            <p class="mb-1"><strong>Customer:</strong> <span th:text="${booking.customerName}">Customer</span></p>
+            <p class="mb-1"><strong>Time:</strong> <span th:text="${booking.slot.slotDate}"></span> <span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></p>
+            <p class="mb-3"><strong>Status:</strong> <span th:text="${booking.status}">CONFIRMED</span></p>
+            <form th:if="${booking.status.name() == 'CONFIRMED'}" th:action="@{/specialist/bookings/complete}" method="post">
+                <input type="hidden" name="id" th:value="${booking.id}">
+                <button class="btn btn-success" type="submit">Mark Completed</button>
+            </form>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

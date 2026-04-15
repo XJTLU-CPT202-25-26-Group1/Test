@@ -1,2 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('类别管理')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <h1 class="h3 mb-4">Expertise Categories</h1>
+    <form class="row g-2 mb-4" th:action="@{/admin/categories}" method="post">
+        <div class="col-md-6"><input class="form-control" type="text" name="name" placeholder="New category name" required></div>
+        <div class="col-auto"><button class="btn btn-primary" type="submit">Add Category</button></div>
+    </form>
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between" th:each="category : ${categories}">
+            <span th:text="${category.name}">Name</span>
+            <span class="badge text-bg-secondary" th:text="${category.status}">ACTIVE</span>
+        </li>
+    </ul>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

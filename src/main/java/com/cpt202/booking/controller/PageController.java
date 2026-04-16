@@ -1,6 +1,7 @@
 package com.cpt202.booking.controller;
 
 import com.cpt202.booking.service.BookingService;
+import com.cpt202.booking.service.ExpertiseCategoryService;
 import com.cpt202.booking.service.SpecialistService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Authentication;
@@ -13,10 +14,14 @@ public class PageController {
 
     private final SpecialistService specialistService;
     private final BookingService bookingService;
+    private final ExpertiseCategoryService categoryService;
 
-    public PageController(SpecialistService specialistService, BookingService bookingService) {
+    public PageController(SpecialistService specialistService,
+                          BookingService bookingService,
+                          ExpertiseCategoryService categoryService) {
         this.specialistService = specialistService;
         this.bookingService = bookingService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/")
@@ -24,7 +29,10 @@ public class PageController {
         if (authentication != null) {
             return resolveDashboard(authentication);
         }
+        model.addAttribute("featuredSpecialists", specialistService.getAllSpecialists().stream().limit(3).toList());
         model.addAttribute("specialistCount", specialistService.getAllSpecialists().size());
+        model.addAttribute("categoryCount", categoryService.getActiveCategories().size());
+        model.addAttribute("bookingCount", bookingService.getAllBookings().size());
         model.addAttribute("pendingCount", bookingService.getPendingBookings().size());
         return "home";
     }

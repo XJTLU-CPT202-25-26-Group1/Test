@@ -6,44 +6,167 @@
 <div th:replace="~{fragments/layout :: alerts}"></div>
 
 <main class="container py-5">
-    <div class="p-5 mb-4 bg-light rounded-4 border">
-        <h1 class="display-6 fw-bold">Specialist Consultation Booking System</h1>
-        <p class="lead mb-4">面向 Customer、Specialist 和 Administrator 的专家咨询预约平台。请先登录，再进入各自的 dashboard 完成日常操作。</p>
-        <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-primary" th:href="@{/auth/login}">登录系统</a>
-            <a class="btn btn-outline-primary" th:href="@{/auth/register}">注册 Customer / Specialist</a>
-            <a class="btn btn-outline-secondary" th:href="@{/auth/forgot-password}">找回密码</a>
+    <section class="hero-shell p-4 p-lg-5 mb-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="hero-chip mb-3">
+                    <i class="bi bi-stars"></i>
+                    Role-Based Consultation Platform
+                </span>
+                <h1 class="hero-title mb-3">让客户预约、专家排期与管理员审核在同一平台高效协作</h1>
+                <p class="hero-subtitle mb-4">
+                    专家咨询预约系统围绕 Customer、Specialist 和 Administrator 三类角色构建清晰工作流，让预约发起、状态流转与咨询执行都能在统一界面里顺畅完成。
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a class="btn btn-primary btn-lg px-4" th:href="@{/auth/login}">进入系统</a>
+                    <a class="btn btn-outline-primary btn-lg px-4" th:href="@{/auth/register}">注册账户</a>
+                    <a class="btn btn-outline-secondary btn-lg px-4" th:href="@{/auth/forgot-password}">找回密码</a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="dashboard-surface p-4">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="metric-card">
+                                <div class="metric-label">Active Specialists</div>
+                                <div class="metric-value" th:text="${specialistCount}">0</div>
+                                <div class="metric-meta">支持客户检索和预约的专家人数</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-card">
+                                <div class="metric-label">Categories</div>
+                                <div class="metric-value" th:text="${categoryCount}">0</div>
+                                <div class="metric-meta">可供筛选的专业咨询类别</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-card">
+                                <div class="metric-label">Bookings</div>
+                                <div class="metric-value" th:text="${bookingCount}">0</div>
+                                <div class="metric-meta">当前系统累计预约记录</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-card">
+                                <div class="metric-label">Pending Review</div>
+                                <div class="metric-value" th:text="${pendingCount}">0</div>
+                                <div class="metric-meta">等待管理员处理的申请</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="mb-4">
+            <h2 class="hero-title fs-2 mb-2">三端工作台清晰分工</h2>
+            <p class="section-caption mb-0">每个角色登录后都会进入自己的 dashboard，不再依赖 MVP 展示首页来寻找操作入口。</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-person-heart"></i></div>
+                    <h3 class="section-title">Customer Dashboard</h3>
+                    <p class="section-caption">查看预约统计、浏览专家、创建预约、追踪状态、收取通知并在咨询完成后提交反馈。</p>
+                    <div class="quick-grid mt-4">
+                        <a class="quick-link" th:href="@{/auth/login}">
+                            <div class="quick-link-title">统一进入客户工作台</div>
+                            <p class="quick-link-text">一眼看到预约、提醒和个人资料入口。</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-calendar2-week"></i></div>
+                    <h3 class="section-title">Specialist Dashboard</h3>
+                    <p class="section-caption">维护可预约时段、查看近期咨询日程、处理 confirmed bookings 并跟踪客户反馈。</p>
+                    <div class="quick-grid mt-4">
+                        <a class="quick-link" th:href="@{/auth/login}">
+                            <div class="quick-link-title">统一进入专家工作台</div>
+                            <p class="quick-link-text">把排期、预约和反馈放到一个信息面板里。</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+                    <h3 class="section-title">Admin Dashboard</h3>
+                    <p class="section-caption">快速掌握待审核预约、专家主数据、类别维护与近期业务流转记录。</p>
+                    <div class="quick-grid mt-4">
+                        <a class="quick-link" th:href="@{/auth/login}">
+                            <div class="quick-link-title">统一进入管理工作台</div>
+                            <p class="quick-link-text">从运营视角查看系统的整体状态。</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h4">Customer</h2>
-                    <p class="text-muted">进入 customer dashboard 后，可以浏览专家、提交预约、查看 upcoming appointments 和处理个人预约记录。</p>
+        <div class="col-lg-7">
+            <div class="panel-card">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                    <div>
+                        <h2 class="section-title mb-1">Featured Specialists</h2>
+                        <p class="section-caption mb-0">通过首页就能先看到系统里的部分专家资源和收费级别。</p>
+                    </div>
+                    <a class="btn btn-outline-primary" th:href="@{/auth/login}">登录后查看全部专家</a>
+                </div>
+                <div class="soft-list-item" th:each="specialist : ${featuredSpecialists}">
+                    <div>
+                        <div class="fw-bold" th:text="${specialist.name}">Name</div>
+                        <div class="text-muted small">
+                            <span th:text="${specialist.category != null ? specialist.category.name : 'N/A'}">Category</span>
+                            ·
+                            <span th:text="${specialist.level}">Level</span>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="soft-badge">
+                            <i class="bi bi-cash-stack"></i>
+                            <span th:text="${specialist.feeRate + ' / h'}">0 / h</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h4">Specialist</h2>
-                    <p class="text-muted">进入 specialist dashboard 后，可以维护 availability slots、查看 schedule、接收反馈并处理已确认预约。</p>
+        <div class="col-lg-5">
+            <div class="timeline-card">
+                <h2 class="section-title mb-3">预约流程一目了然</h2>
+                <div class="soft-list-item">
+                    <div>
+                        <div class="fw-bold">1. Customer 发起预约</div>
+                        <div class="text-muted small">搜索专家、查看可预约时段并提交 booking request。</div>
+                    </div>
+                    <span class="soft-badge">Pending</span>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h4">Administrator</h2>
-                    <p class="text-muted">进入 admin dashboard 后，可以查看待处理预约、维护专家和类别信息，并跟踪整体运营状态。</p>
+                <div class="soft-list-item">
+                    <div>
+                        <div class="fw-bold">2. Administrator 审核</div>
+                        <div class="text-muted small">确认或拒绝预约，维护状态流转并记录原因。</div>
+                    </div>
+                    <span class="soft-badge">Confirmed / Cancelled</span>
                 </div>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-secondary mb-0">
-                Current system data: <strong th:text="${specialistCount}">0</strong> specialists available, <strong th:text="${pendingCount}">0</strong> pending bookings waiting for review.
+                <div class="soft-list-item">
+                    <div>
+                        <div class="fw-bold">3. Specialist 完成咨询</div>
+                        <div class="text-muted small">在自己的日程中处理预约，并在咨询完成后标记 completed。</div>
+                    </div>
+                    <span class="soft-badge">Completed</span>
+                </div>
+                <div class="soft-list-item">
+                    <div>
+                        <div class="fw-bold">4. Customer 追踪与反馈</div>
+                        <div class="text-muted small">查看 detail、收取通知并在完成后提交反馈。</div>
+                    </div>
+                    <span class="soft-badge">Feedback</span>
+                </div>
             </div>
         </div>
     </section>

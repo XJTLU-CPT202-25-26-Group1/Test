@@ -1,11 +1,11 @@
 $(document).ready(function() {
-  // 密码可见性切换
+  // Toggle password visibility
   $('#togglePassword').on('click', function() {
     const $passwordField = $('#password');
     const fieldType = $passwordField.attr('type');
     $passwordField.attr('type', fieldType === 'password' ? 'text' : 'password');
     
-    // 切换图标
+    // Toggle icon
     $(this).html(
       fieldType === 'password' 
         ? '<i class="bi bi-eye-slash"></i>' 
@@ -13,7 +13,7 @@ $(document).ready(function() {
     );
   });
 
-  // 表单验证增强
+  // Enhanced form validation
   const form = document.querySelector('.needs-validation');
   if (form) {
     form.addEventListener('submit', function(event) {
@@ -25,7 +25,7 @@ $(document).ready(function() {
     }, false);
   }
 
-  // 自动清除URL参数（避免刷新后重复显示错误）
+  // Remove transient URL parameters after rendering
   if (window.history.replaceState) {
     const url = new URL(window.location);
     if (url.searchParams.has('error') || url.searchParams.has('logout')) {
@@ -35,7 +35,7 @@ $(document).ready(function() {
     }
   }
 
-  // 焦点动画（可选增强）
+  // Optional focus styling
   $('.form-control').on('focus', function() {
     $(this).closest('.input-group').addClass('shadow-sm');
   }).on('blur', function() {

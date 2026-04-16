@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
@@ -9,28 +9,28 @@
         <div class="row align-items-center g-4">
             <div class="col-lg-7">
                 <span class="hero-chip mb-3"><i class="bi bi-shield-check"></i> Administrator Workspace</span>
-                <h1 class="hero-title fs-2 mb-3">运营概览与工作流控制中心</h1>
+                <h1 class="hero-title fs-2 mb-3">Operations overview and workflow control</h1>
                 <p class="hero-subtitle mb-0">
-                    这里集中展示待审核预约、主数据规模和最近的流程活动。管理员可以从 dashboard 快速进入预约审核、专家管理、类别管理和计费页面。
+                    This workspace highlights pending reviews, master data scale, and recent workflow activity so administrators can move directly into booking review, specialist management, category maintenance, and billing.
                 </p>
             </div>
             <div class="col-lg-5">
                 <div class="quick-grid">
                     <a class="quick-link" th:href="@{/admin/bookings}">
                         <div class="quick-link-title">Review Bookings</div>
-                        <p class="quick-link-text">集中处理 pending bookings 与状态流转。</p>
+                        <p class="quick-link-text">Review pending bookings and control workflow transitions.</p>
                     </a>
                     <a class="quick-link" th:href="@{/admin/specialists}">
                         <div class="quick-link-title">Manage Specialists</div>
-                        <p class="quick-link-text">维护专家资料、状态和搜索结果。</p>
+                        <p class="quick-link-text">Maintain specialist records, operational status, and search results.</p>
                     </a>
                     <a class="quick-link" th:href="@{/admin/categories}">
                         <div class="quick-link-title">Manage Categories</div>
-                        <p class="quick-link-text">维护 expertise category 的创建与启停。</p>
+                        <p class="quick-link-text">Create, update, and activate or deactivate expertise categories.</p>
                     </a>
                     <a class="quick-link" th:href="@{/admin/billing}">
                         <div class="quick-link-title">Billing Overview</div>
-                        <p class="quick-link-text">查看 confirmed / completed 预约的计费概览。</p>
+                        <p class="quick-link-text">Review billing totals for confirmed and completed bookings.</p>
                     </a>
                 </div>
             </div>
@@ -42,28 +42,28 @@
             <div class="metric-card">
                 <div class="metric-label">Pending Review</div>
                 <div class="metric-value" th:text="${pendingCount}">0</div>
-                <div class="metric-meta">需要管理员尽快处理的预约申请</div>
+                <div class="metric-meta">Requests still waiting for administrator action</div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
             <div class="metric-card">
                 <div class="metric-label">All Bookings</div>
                 <div class="metric-value" th:text="${bookingCount}">0</div>
-                <div class="metric-meta">系统中所有预约记录总量</div>
+                <div class="metric-meta">The total number of booking records in the platform</div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
             <div class="metric-card">
                 <div class="metric-label">Specialists</div>
                 <div class="metric-value" th:text="${specialistCount}">0</div>
-                <div class="metric-meta">当前登记在系统中的专家数量</div>
+                <div class="metric-meta">The number of specialists currently registered in the system</div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
             <div class="metric-card">
                 <div class="metric-label">Categories</div>
                 <div class="metric-value" th:text="${categoryCount}">0</div>
-                <div class="metric-meta">已维护的咨询类别数量</div>
+                <div class="metric-meta">The number of expertise categories maintained in the system</div>
             </div>
         </div>
     </section>
@@ -74,25 +74,25 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                     <div>
                         <h2 class="section-title mb-1">Core Admin Functions</h2>
-                        <p class="section-caption mb-0">把管理员最常用的四类操作清晰拆开，减少页面之间来回寻找入口。</p>
+                        <p class="section-caption mb-0">Separate the most common administrator actions so each management area is easy to find.</p>
                     </div>
                 </div>
                 <div class="quick-grid">
                     <a class="quick-link" th:href="@{/admin/bookings}">
                         <div class="quick-link-title">Booking Workflow</div>
-                        <p class="quick-link-text">确认、拒绝、查看 rejection reason 和 audit visibility。</p>
+                        <p class="quick-link-text">Confirm, reject, and inspect workflow notes and audit visibility.</p>
                     </a>
                     <a class="quick-link" th:href="@{/admin/specialists}">
                         <div class="quick-link-title">Specialist Information</div>
-                        <p class="quick-link-text">创建、更新、启停专家资料并进行后台检索。</p>
+                        <p class="quick-link-text">Create, update, activate, deactivate, and search specialist records.</p>
                     </a>
                     <a class="quick-link" th:href="@{/admin/categories}">
                         <div class="quick-link-title">Category Maintenance</div>
-                        <p class="quick-link-text">防止重复类别并控制类别的启用状态。</p>
+                        <p class="quick-link-text">Prevent duplicate names and manage category availability.</p>
                     </a>
                     <a class="quick-link" th:href="@{/admin/billing}">
                         <div class="quick-link-title">Fee Overview</div>
-                        <p class="quick-link-text">快速查看 billable bookings 和费用规模。</p>
+                        <p class="quick-link-text">See billable bookings and revenue figures in one place.</p>
                     </a>
                 </div>
             </div>
@@ -102,10 +102,10 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                     <div>
                         <h2 class="section-title mb-1">Recent Workflow Activity</h2>
-                        <p class="section-caption mb-0">最近的状态变化会直接显示在这里，方便快速追踪系统动作。</p>
+                        <p class="section-caption mb-0">Track the latest status changes without leaving the dashboard.</p>
                     </div>
                 </div>
-                <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentAuditLogs)}">目前还没有新的流程活动记录。</div>
+                <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentAuditLogs)}">There is no recent workflow activity yet.</div>
                 <div class="soft-list-item" th:each="log : ${recentAuditLogs}">
                     <div>
                         <div class="fw-bold">Booking #<span th:text="${log.bookingId}">0</span></div>

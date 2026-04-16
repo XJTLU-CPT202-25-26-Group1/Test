@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('登录')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Log In')}"></head>
 <body>
   <header th:replace="~{fragments/layout :: header}"></header>
   
@@ -10,21 +10,18 @@
         <div class="card shadow-lg border-0 rounded-4">
           <div class="card-header bg-primary text-white text-center py-4">
             <h3 class="mb-0 fw-bold">
-              <i class="bi bi-person-circle me-2"></i>用户登录
+              <i class="bi bi-person-circle me-2"></i>Account Login
             </h3>
           </div>
           
           <div class="card-body p-4">
-            <!-- 消息提示区（由layout的alerts fragment处理） -->
             <div th:replace="~{fragments/layout :: alerts}"></div>
             
-            <!-- 登录表单 -->
             <form th:action="@{/auth/login}" method="post" class="needs-validation" novalidate>
-              <!-- CSRF Token -->
               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
               
               <div class="mb-4">
-                <label for="username" class="form-label fw-bold">👤 用户名</label>
+                <label for="username" class="form-label fw-bold">Username</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-person"></i></span>
                   <input type="text" 
@@ -34,12 +31,12 @@
                          required 
                          autofocus
                          th:value="${param.username}">
-                  <div class="invalid-feedback">请输入用户名</div>
+                  <div class="invalid-feedback">Please enter a username.</div>
                 </div>
               </div>
               
               <div class="mb-4">
-                <label for="password" class="form-label fw-bold">🔒 密码</label>
+                <label for="password" class="form-label fw-bold">Password</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-lock"></i></span>
                   <input type="password" 
@@ -50,29 +47,29 @@
                   <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                     <i class="bi bi-eye"></i>
                   </button>
-                  <div class="invalid-feedback">请输入密码</div>
+                  <div class="invalid-feedback">Please enter a password.</div>
                 </div>
               </div>
               
               <div class="d-grid mb-3">
                 <button type="submit" class="btn btn-primary btn-lg fw-bold py-3">
-                  <i class="bi bi-box-arrow-in-right me-2"></i>立即登录
+                  <i class="bi bi-box-arrow-in-right me-2"></i>Log In
                 </button>
               </div>
               
               <div class="text-center">
                 <a th:href="@{/auth/register}" class="text-decoration-none fw-bold text-primary">
-                  <i class="bi bi-person-plus me-1"></i>还没有账号？立即注册
+                  <i class="bi bi-person-plus me-1"></i>Need an account? Register now
                 </a>
                 <div class="mt-2">
-                  <a th:href="@{/auth/forgot-password}" class="text-decoration-none">忘记密码？使用 mock 重置流程</a>
+                  <a th:href="@{/auth/forgot-password}" class="text-decoration-none">Forgot your password? Use the mock reset flow</a>
                 </div>
                 <div class="mt-3 text-muted small">
-                  <p class="mb-1">💡 默认演示账号：</p>
-                  <p class="mb-0">管理员: admin / admin123</p>
-                  <p class="mb-0">专家: specialist / specialist123</p>
-                  <p class="mb-0">客户: customer / customer123</p>
-                  <p class="mb-0 mt-2">新注册的 customer / specialist 账号也可以直接登录。</p>
+                  <p class="mb-1">Default demo accounts:</p>
+                  <p class="mb-0">Administrator: admin / admin123</p>
+                  <p class="mb-0">Specialist: specialist / specialist123</p>
+                  <p class="mb-0">Customer: customer / customer123</p>
+                  <p class="mb-0 mt-2">Newly registered customer and specialist accounts can also sign in immediately.</p>
                 </div>
               </div>
             </form>
@@ -84,7 +81,6 @@
 
   <footer th:replace="~{fragments/layout :: footer}"></footer>
   
-  <!-- 页面专属JS -->
   <script th:src="@{/js/auth.js}"></script>
 </body>
 </html>

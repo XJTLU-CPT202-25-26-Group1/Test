@@ -1,47 +1,125 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('管理员后台')}"></head>
+<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-        <div>
-            <h1 class="h3 mb-1">Admin Dashboard</h1>
-            <p class="text-muted mb-0">Operations overview for booking workflow, specialist records, and expertise categories.</p>
+    <section class="dashboard-hero p-4 p-lg-5 mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="hero-chip mb-3"><i class="bi bi-shield-check"></i> Administrator Workspace</span>
+                <h1 class="hero-title fs-2 mb-3">运营概览与工作流控制中心</h1>
+                <p class="hero-subtitle mb-0">
+                    这里集中展示待审核预约、主数据规模和最近的流程活动。管理员可以从 dashboard 快速进入预约审核、专家管理、类别管理和计费页面。
+                </p>
+            </div>
+            <div class="col-lg-5">
+                <div class="quick-grid">
+                    <a class="quick-link" th:href="@{/admin/bookings}">
+                        <div class="quick-link-title">Review Bookings</div>
+                        <p class="quick-link-text">集中处理 pending bookings 与状态流转。</p>
+                    </a>
+                    <a class="quick-link" th:href="@{/admin/specialists}">
+                        <div class="quick-link-title">Manage Specialists</div>
+                        <p class="quick-link-text">维护专家资料、状态和搜索结果。</p>
+                    </a>
+                    <a class="quick-link" th:href="@{/admin/categories}">
+                        <div class="quick-link-title">Manage Categories</div>
+                        <p class="quick-link-text">维护 expertise category 的创建与启停。</p>
+                    </a>
+                    <a class="quick-link" th:href="@{/admin/billing}">
+                        <div class="quick-link-title">Billing Overview</div>
+                        <p class="quick-link-text">查看 confirmed / completed 预约的计费概览。</p>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-primary" th:href="@{/admin/bookings}">Review bookings</a>
-            <a class="btn btn-outline-primary" th:href="@{/admin/specialists}">Manage specialists</a>
-            <a class="btn btn-outline-secondary" th:href="@{/admin/categories}">Manage categories</a>
-            <a class="btn btn-outline-dark" th:href="@{/admin/billing}">Billing overview</a>
+    </section>
+
+    <section class="row g-3 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <div class="metric-label">Pending Review</div>
+                <div class="metric-value" th:text="${pendingCount}">0</div>
+                <div class="metric-meta">需要管理员尽快处理的预约申请</div>
+            </div>
         </div>
-    </div>
-    <div class="row g-3 mb-4">
-        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Pending Review</div><div class="display-6" th:text="${pendingCount}">0</div></div></div></div>
-        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">All Bookings</div><div class="display-6" th:text="${bookingCount}">0</div></div></div></div>
-        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Specialists</div><div class="display-6" th:text="${specialistCount}">0</div></div></div></div>
-        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Categories</div><div class="display-6" th:text="${categoryCount}">0</div></div></div></div>
-    </div>
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h2 class="h5 mb-3">Recent Workflow Activity</h2>
-            <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentAuditLogs)}">No audit activity recorded yet.</div>
-            <div class="border rounded p-3 mb-3" th:each="log : ${recentAuditLogs}">
-                <div class="d-flex justify-content-between gap-2 flex-wrap">
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <div class="metric-label">All Bookings</div>
+                <div class="metric-value" th:text="${bookingCount}">0</div>
+                <div class="metric-meta">系统中所有预约记录总量</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <div class="metric-label">Specialists</div>
+                <div class="metric-value" th:text="${specialistCount}">0</div>
+                <div class="metric-meta">当前登记在系统中的专家数量</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <div class="metric-label">Categories</div>
+                <div class="metric-value" th:text="${categoryCount}">0</div>
+                <div class="metric-meta">已维护的咨询类别数量</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4">
+        <div class="col-lg-7">
+            <div class="panel-card">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                     <div>
-                        <strong>Booking #<span th:text="${log.bookingId}">0</span></strong>
-                        <p class="mb-1" th:text="${log.remark}">Booking updated</p>
-                        <span class="badge text-bg-light border" th:text="${log.newStatus}">STATUS</span>
+                        <h2 class="section-title mb-1">Core Admin Functions</h2>
+                        <p class="section-caption mb-0">把管理员最常用的四类操作清晰拆开，减少页面之间来回寻找入口。</p>
                     </div>
-                    <div class="text-muted small text-end">
-                        <div th:text="${log.operatorUsername}">operator</div>
-                        <div th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+                </div>
+                <div class="quick-grid">
+                    <a class="quick-link" th:href="@{/admin/bookings}">
+                        <div class="quick-link-title">Booking Workflow</div>
+                        <p class="quick-link-text">确认、拒绝、查看 rejection reason 和 audit visibility。</p>
+                    </a>
+                    <a class="quick-link" th:href="@{/admin/specialists}">
+                        <div class="quick-link-title">Specialist Information</div>
+                        <p class="quick-link-text">创建、更新、启停专家资料并进行后台检索。</p>
+                    </a>
+                    <a class="quick-link" th:href="@{/admin/categories}">
+                        <div class="quick-link-title">Category Maintenance</div>
+                        <p class="quick-link-text">防止重复类别并控制类别的启用状态。</p>
+                    </a>
+                    <a class="quick-link" th:href="@{/admin/billing}">
+                        <div class="quick-link-title">Fee Overview</div>
+                        <p class="quick-link-text">快速查看 billable bookings 和费用规模。</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="panel-card">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                    <div>
+                        <h2 class="section-title mb-1">Recent Workflow Activity</h2>
+                        <p class="section-caption mb-0">最近的状态变化会直接显示在这里，方便快速追踪系统动作。</p>
+                    </div>
+                </div>
+                <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentAuditLogs)}">目前还没有新的流程活动记录。</div>
+                <div class="soft-list-item" th:each="log : ${recentAuditLogs}">
+                    <div>
+                        <div class="fw-bold">Booking #<span th:text="${log.bookingId}">0</span></div>
+                        <div class="text-muted small" th:text="${log.remark}">Booking updated</div>
+                        <div class="text-muted small" th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="soft-badge" th:text="${log.newStatus}">STATUS</div>
+                        <div class="text-muted small mt-2" th:text="${log.operatorUsername}">operator</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

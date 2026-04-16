@@ -1,2 +1,64 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('预约详情')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h1 class="h3 mb-3">Booking Detail</h1>
+                    <p><strong>Topic:</strong> <span th:text="${booking.topic}">Topic</span></p>
+                    <p><strong>Notes:</strong> <span th:text="${booking.notes}">Notes</span></p>
+                    <p><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></p>
+                    <p><strong>Category:</strong> <span th:text="${booking.specialist.category.name}">Category</span></p>
+                    <p><strong>Date:</strong> <span th:text="${booking.slot.slotDate}"></span></p>
+                    <p><strong>Time:</strong> <span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></p>
+                    <p><strong>Status:</strong> <span th:text="${booking.status}">PENDING</span></p>
+                    <p><strong>Fee:</strong> <span th:text="${booking.calculatedFee}">0</span></p>
+                    <p th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}"><strong>Rejection Reason:</strong> <span th:text="${booking.rejectionReason}"></span></p>
+                    <a class="btn btn-outline-primary" th:href="@{/customer/bookings}">Back to bookings</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Consultation Feedback</h2>
+                    <div class="alert alert-secondary" th:if="${booking.status.name() != 'COMPLETED'}">
+                        Feedback becomes available after the consultation is marked as completed.
+                    </div>
+                    <div th:if="${existingFeedback != null}">
+                        <p class="mb-2"><strong>Rating:</strong> <span th:text="${existingFeedback.rating}"></span> / 5</p>
+                        <p class="mb-0"><strong>Comment:</strong> <span th:text="${existingFeedback.comment}"></span></p>
+                    </div>
+                    <form th:if="${booking.status.name() == 'COMPLETED' and existingFeedback == null}" th:action="@{/customer/bookings/feedback}" method="post" class="row g-3">
+                        <input type="hidden" name="bookingId" th:value="${booking.id}">
+                        <div class="col-12">
+                            <label class="form-label">Rating</label>
+                            <select class="form-select" name="rating" required>
+                                <option value="">Select rating</option>
+                                <option value="5">5 - Excellent</option>
+                                <option value="4">4 - Good</option>
+                                <option value="3">3 - Average</option>
+                                <option value="2">2 - Poor</option>
+                                <option value="1">1 - Very Poor</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Comment</label>
+                            <textarea class="form-control" name="comment" rows="4" placeholder="Share your consultation experience" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-success" type="submit">Submit Feedback</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

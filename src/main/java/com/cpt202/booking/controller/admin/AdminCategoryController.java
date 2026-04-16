@@ -35,4 +35,26 @@ public class AdminCategoryController {
         }
         return "redirect:/admin/categories";
     }
+
+    @PostMapping("/update")
+    public String updateCategory(@RequestParam Long id, @RequestParam String name, RedirectAttributes redirectAttributes) {
+        try {
+            categoryService.updateCategory(id, name);
+            redirectAttributes.addFlashAttribute("message", "Category updated.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/admin/categories";
+    }
+
+    @PostMapping("/toggle")
+    public String toggleCategory(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        try {
+            categoryService.toggleCategoryStatus(id);
+            redirectAttributes.addFlashAttribute("message", "Category status updated.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/admin/categories";
+    }
 }

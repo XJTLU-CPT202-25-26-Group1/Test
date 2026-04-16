@@ -6,6 +6,34 @@
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
     <h1 class="h3 mb-4">My Bookings</h1>
+    <div class="card border-0 bg-light mb-4" th:if="${!#lists.isEmpty(notifications)}">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Recent Booking Notifications</h2>
+            <div class="small" th:each="notification : ${notifications}">
+                <p class="mb-2">
+                    <strong th:text="${notification.newStatus}">STATUS</strong>
+                    <span th:text="${notification.remark}">Booking updated</span>
+                    <span class="text-muted">·</span>
+                    <span class="text-muted" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <form class="row g-2 mb-4" method="get" th:action="@{/customer/bookings}">
+        <div class="col-md-6"><input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by topic, specialist, or status"></div>
+        <div class="col-auto"><button class="btn btn-outline-secondary" type="submit">Search</button></div>
+    </form>
+    <h2 class="h5 mb-3">Upcoming Confirmed Appointments</h2>
+    <div class="alert alert-secondary" th:if="${#lists.isEmpty(upcomingBookings)}">No upcoming confirmed appointments.</div>
+    <div class="card mb-3" th:each="booking : ${upcomingBookings}">
+        <div class="card-body">
+            <strong th:text="${booking.topic}">Topic</strong>
+            <span class="ms-2" th:text="${booking.slot.slotDate}"></span>
+            <span th:text="${booking.slot.startTime}"></span>
+        </div>
+    </div>
+
+    <h2 class="h5 mb-3 mt-4">All Bookings</h2>
     <div class="card mb-3" th:each="booking : ${bookings}">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -15,14 +43,18 @@
                     <p class="mb-1"><strong>Slot:</strong> <span th:text="${booking.slot.slotDate}"></span> <span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></p>
                     <p class="mb-1"><strong>Status:</strong> <span th:text="${booking.status}">PENDING</span></p>
                     <p class="mb-1"><strong>Fee:</strong> <span th:text="${booking.calculatedFee}">0</span></p>
+                    <p class="mb-1" th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() < 24}">
+                        <span class="text-danger">Self-service cancel/reschedule is disabled within 24 hours.</span>
+                    </p>
                     <p class="mb-0" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}"><strong>Reason:</strong> <span th:text="${booking.rejectionReason}"></span></p>
                 </div>
                 <div class="d-flex gap-2 flex-wrap">
-                    <form th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'CONFIRMED'}" th:action="@{/customer/bookings/cancel}" method="post">
+                    <a class="btn btn-outline-secondary btn-sm" th:href="@{/customer/bookings/detail(id=${booking.id})}">Details</a>
+                    <form th:if="${(booking.status.name() == 'PENDING') or (booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24)}" th:action="@{/customer/bookings/cancel}" method="post">
                         <input type="hidden" name="id" th:value="${booking.id}">
                         <button class="btn btn-outline-danger btn-sm" type="submit">Cancel</button>
                     </form>
-                    <form th:if="${booking.status.name() == 'CONFIRMED'}" th:action="@{/customer/bookings/reschedule}" method="post" class="d-flex gap-2">
+                    <form th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24}" th:action="@{/customer/bookings/reschedule}" method="post" class="d-flex gap-2">
                         <input type="hidden" name="id" th:value="${booking.id}">
                         <input class="form-control form-control-sm" type="number" min="1" name="newSlotId" placeholder="New slot ID" required>
                         <button class="btn btn-outline-primary btn-sm" type="submit">Reschedule</button>

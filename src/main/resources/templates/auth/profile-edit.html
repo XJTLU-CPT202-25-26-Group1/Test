@@ -1,2 +1,19 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('编辑资料')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <h1 class="h3 mb-4">Profile Edit</h1>
+    <form class="row g-3" th:action="@{/auth/profile-edit}" method="post" th:if="${profile != null}">
+        <div class="col-md-6"><label class="form-label">Display Name</label><input class="form-control" type="text" name="displayName" th:value="${profile.displayName}" required></div>
+        <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" type="email" name="email" th:value="${profile.email}" required></div>
+        <div class="col-md-6"><label class="form-label">Phone</label><input class="form-control" type="text" name="phone" th:value="${profile.phone}" required></div>
+        <div class="col-12"><button class="btn btn-primary" type="submit">Save</button></div>
+    </form>
+    <div class="alert alert-secondary" th:if="${profile == null}">Please log in first.</div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

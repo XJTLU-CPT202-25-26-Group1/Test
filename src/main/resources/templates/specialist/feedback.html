@@ -1,2 +1,26 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('专家反馈')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Consultation Feedback</h1>
+        <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings}">Back to Schedule</a>
+    </div>
+    <div class="alert alert-secondary" th:if="${#lists.isEmpty(feedbackList)}">No feedback has been submitted yet.</div>
+    <div class="card shadow-sm mb-3" th:each="feedback : ${feedbackList}">
+        <div class="card-body">
+            <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
+                <strong th:text="${feedback.customerName}">Customer</strong>
+                <span class="badge text-bg-success" th:text="${feedback.rating + ' / 5'}">5 / 5</span>
+            </div>
+            <p class="mb-2"><strong>Booking Topic:</strong> <span th:text="${feedback.booking.topic}">Topic</span></p>
+            <p class="mb-2" th:text="${feedback.comment}">Comment</p>
+            <p class="text-muted small mb-0" th:text="${#temporals.format(feedback.createdAt, 'yyyy-MM-dd HH:mm')}">Created At</p>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

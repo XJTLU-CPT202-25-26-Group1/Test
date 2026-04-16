@@ -23,9 +23,10 @@ public class AdminSpecialistController {
     }
 
     @GetMapping
-    public String specialistsPage(Model model) {
-        model.addAttribute("specialists", specialistService.getAllSpecialists());
+    public String specialistsPage(@RequestParam(required = false) String keyword, Model model) {
+        model.addAttribute("specialists", specialistService.searchSpecialists(keyword));
         model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("keyword", keyword == null ? "" : keyword);
         return "admin/specialists";
     }
 
@@ -39,6 +40,34 @@ public class AdminSpecialistController {
         try {
             specialistService.createSpecialist(name, level, feeRate, description, categoryId);
             redirectAttributes.addFlashAttribute("message", "Specialist created.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/admin/specialists";
+    }
+
+    @PostMapping("/update")
+    public String updateSpecialist(@RequestParam Long id,
+                                   @RequestParam String name,
+                                   @RequestParam String level,
+                                   @RequestParam Double feeRate,
+                                   @RequestParam String description,
+                                   @RequestParam Long categoryId,
+                                   RedirectAttributes redirectAttributes) {
+        try {
+            specialistService.updateSpecialist(id, name, level, feeRate, description, categoryId);
+            redirectAttributes.addFlashAttribute("message", "Specialist updated.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/admin/specialists";
+    }
+
+    @PostMapping("/toggle")
+    public String toggleSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        try {
+            specialistService.toggleStatus(id);
+            redirectAttributes.addFlashAttribute("message", "Specialist status updated.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }

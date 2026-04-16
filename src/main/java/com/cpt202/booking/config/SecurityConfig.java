@@ -4,9 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -53,24 +52,9 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ⚠️ 临时测试用户（生产环境替换为数据库认证！）
     @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails admin = User.withUsername("admin")
-                .password("{noop}admin123") // {noop}表示明文（仅测试！）
-                .roles("ADMIN")
-                .build();
-        
-        UserDetails specialist = User.withUsername("specialist")
-                .password("{noop}specialist123")
-                .roles("SPECIALIST")
-                .build();
-        
-        UserDetails customer = User.withUsername("customer")
-                .password("{noop}customer123")
-                .roles("CUSTOMER")
-                .build();
-        
-        return new InMemoryUserDetailsManager(admin, specialist, customer);
+    @SuppressWarnings("deprecation")
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 }

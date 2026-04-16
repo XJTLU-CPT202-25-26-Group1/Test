@@ -136,10 +136,10 @@ public class AuthController {
                 return "redirect:/admin/dashboard";
             }
             if ("ROLE_SPECIALIST".equals(authority.getAuthority())) {
-                return "redirect:/specialist/bookings";
+                return "redirect:/specialist/dashboard";
             }
             if ("ROLE_CUSTOMER".equals(authority.getAuthority())) {
-                return "redirect:/customer/specialists";
+                return "redirect:/customer/dashboard";
             }
         }
         return "redirect:/";

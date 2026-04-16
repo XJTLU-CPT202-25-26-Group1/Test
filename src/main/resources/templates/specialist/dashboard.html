@@ -1,2 +1,69 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Specialist Dashboard')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Specialist Dashboard</h1>
+            <p class="text-muted mb-0">
+                <span th:text="${specialist.name}">Specialist</span>
+                · <span th:text="${specialist.category != null ? specialist.category.name : 'Unassigned Category'}">Category</span>
+            </p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-primary" th:href="@{/specialist/availability}">Manage Availability</a>
+            <a class="btn btn-outline-primary" th:href="@{/specialist/bookings}">Booking Schedule</a>
+            <a class="btn btn-outline-secondary" th:href="@{/specialist/feedback}">Feedback</a>
+            <a class="btn btn-outline-dark" th:href="@{/specialist/profile}">Profile</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">All Bookings</div><div class="display-6" th:text="${bookingCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Confirmed</div><div class="display-6" th:text="${confirmedCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Completed</div><div class="display-6" th:text="${completedCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Open Slots</div><div class="display-6" th:text="${availableSlotCount}">0</div></div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Recent Bookings</h2>
+                    <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentBookings)}">No bookings assigned yet.</div>
+                    <div class="border rounded p-3 mb-3" th:each="booking : ${recentBookings}">
+                        <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+                            <div>
+                                <strong th:text="${booking.topic}">Topic</strong>
+                                <p class="mb-1 text-muted"><span th:text="${booking.customerName}">Customer</span> · <span th:text="${booking.slot.slotDate}">Date</span></p>
+                                <span class="badge text-bg-light border" th:text="${booking.status}">CONFIRMED</span>
+                            </div>
+                            <a class="btn btn-sm btn-outline-secondary" th:href="@{/specialist/bookings}">Open</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Recent Notifications</h2>
+                    <div class="alert alert-secondary" th:if="${#lists.isEmpty(notifications)}">No recent workflow notifications.</div>
+                    <div class="small mb-3" th:each="notification : ${notifications}">
+                        <p class="mb-1">
+                            <strong th:text="${notification.newStatus}">STATUS</strong>
+                            <span th:text="${notification.remark}">Booking updated</span>
+                        </p>
+                        <p class="text-muted mb-0" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

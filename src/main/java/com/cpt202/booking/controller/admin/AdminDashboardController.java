@@ -22,12 +22,13 @@ public class AdminDashboardController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping({"", "/dashboard"})
     public String dashboard(Model model) {
         model.addAttribute("pendingCount", bookingService.getPendingBookings().size());
         model.addAttribute("bookingCount", bookingService.getAllBookings().size());
         model.addAttribute("specialistCount", specialistService.getAllSpecialists().size());
         model.addAttribute("categoryCount", categoryService.getAllCategories().size());
+        model.addAttribute("recentAuditLogs", bookingService.getAuditLogs().stream().limit(6).toList());
         return "admin/dashboard";
     }
 }

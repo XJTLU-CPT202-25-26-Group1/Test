@@ -8,30 +8,42 @@
 <main class="container py-5">
     <div class="p-5 mb-4 bg-light rounded-4 border">
         <h1 class="display-6 fw-bold">Specialist Consultation Booking System</h1>
-        <p class="lead mb-4">一个适合演示 first-release MVP 的三角色预约系统。当前用户：<span th:text="${currentUser}">Guest</span></p>
+        <p class="lead mb-4">面向 Customer、Specialist 和 Administrator 的专家咨询预约平台。请先登录，再进入各自的 dashboard 完成日常操作。</p>
         <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-primary" th:href="@{/customer/specialists}">客户端：浏览专家</a>
-            <a class="btn btn-outline-primary" th:href="@{/specialist/availability}">专家端：管理时间</a>
-            <a class="btn btn-outline-dark" th:href="@{/admin}">管理员后台</a>
+            <a class="btn btn-primary" th:href="@{/auth/login}">登录系统</a>
+            <a class="btn btn-outline-primary" th:href="@{/auth/register}">注册 Customer / Specialist</a>
+            <a class="btn btn-outline-secondary" th:href="@{/auth/forgot-password}">找回密码</a>
         </div>
     </div>
 
-    <section>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h4 mb-0">示例专家</h2>
-            <span class="badge text-bg-warning">Pending bookings: <span th:text="${pendingCount}">0</span></span>
-        </div>
-        <div class="row g-3">
-            <div class="col-md-6" th:each="specialist : ${specialists}">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="h5 card-title" th:text="${specialist.name}">Name</h3>
-                        <p class="mb-1"><strong>Category:</strong> <span th:text="${specialist.category != null ? specialist.category.name : 'N/A'}">Category</span></p>
-                        <p class="mb-1"><strong>Level:</strong> <span th:text="${specialist.level}">Level</span></p>
-                        <p class="mb-3"><strong>Fee Rate:</strong> <span th:text="${specialist.feeRate}">0</span> / hour</p>
-                        <a class="btn btn-sm btn-outline-primary" th:href="@{/customer/specialists/detail(id=${specialist.id})}">View profile and slots</a>
-                    </div>
+    <section class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h4">Customer</h2>
+                    <p class="text-muted">进入 customer dashboard 后，可以浏览专家、提交预约、查看 upcoming appointments 和处理个人预约记录。</p>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h4">Specialist</h2>
+                    <p class="text-muted">进入 specialist dashboard 后，可以维护 availability slots、查看 schedule、接收反馈并处理已确认预约。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h4">Administrator</h2>
+                    <p class="text-muted">进入 admin dashboard 后，可以查看待处理预约、维护专家和类别信息，并跟踪整体运营状态。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="alert alert-secondary mb-0">
+                Current system data: <strong th:text="${specialistCount}">0</strong> specialists available, <strong th:text="${pendingCount}">0</strong> pending bookings waiting for review.
             </div>
         </div>
     </section>

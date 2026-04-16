@@ -1,2 +1,65 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Customer Dashboard')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Customer Dashboard</h1>
+            <p class="text-muted mb-0">Welcome back, <span th:text="${profile.displayName}">Customer</span>.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-primary" th:href="@{/customer/specialists}">Browse Specialists</a>
+            <a class="btn btn-outline-primary" th:href="@{/customer/bookings}">My Bookings</a>
+            <a class="btn btn-outline-secondary" th:href="@{/customer/profile}">Profile</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">All Bookings</div><div class="display-6" th:text="${bookingCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Pending Review</div><div class="display-6" th:text="${pendingCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Upcoming</div><div class="display-6" th:text="${#lists.size(upcomingBookings)}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Completed</div><div class="display-6" th:text="${completedCount}">0</div></div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Recent Bookings</h2>
+                    <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentBookings)}">No bookings yet. Start by browsing specialists.</div>
+                    <div class="border rounded p-3 mb-3" th:each="booking : ${recentBookings}">
+                        <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+                            <div>
+                                <strong th:text="${booking.topic}">Topic</strong>
+                                <p class="mb-1 text-muted"><span th:text="${booking.specialist.name}">Specialist</span> · <span th:text="${booking.slot.slotDate}">Date</span></p>
+                                <span class="badge text-bg-light border" th:text="${booking.status}">PENDING</span>
+                            </div>
+                            <a class="btn btn-sm btn-outline-secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">Open</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Recent Notifications</h2>
+                    <div class="alert alert-secondary" th:if="${#lists.isEmpty(notifications)}">No recent booking notifications.</div>
+                    <div class="small mb-3" th:each="notification : ${notifications}">
+                        <p class="mb-1">
+                            <strong th:text="${notification.newStatus}">STATUS</strong>
+                            <span th:text="${notification.remark}">Booking updated</span>
+                        </p>
+                        <p class="text-muted mb-0" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

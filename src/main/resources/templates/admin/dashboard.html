@@ -3,18 +3,44 @@
 <head th:replace="~{fragments/layout :: head('管理员后台')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <h1 class="h3 mb-4">Admin Dashboard</h1>
-    <div class="row g-3 mb-4">
-        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Pending</strong><div th:text="${pendingCount}">0</div></div></div></div>
-        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Bookings</strong><div th:text="${bookingCount}">0</div></div></div></div>
-        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Specialists</strong><div th:text="${specialistCount}">0</div></div></div></div>
-        <div class="col-md-3"><div class="card"><div class="card-body"><strong>Categories</strong><div th:text="${categoryCount}">0</div></div></div></div>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Admin Dashboard</h1>
+            <p class="text-muted mb-0">Operations overview for booking workflow, specialist records, and expertise categories.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-primary" th:href="@{/admin/bookings}">Review bookings</a>
+            <a class="btn btn-outline-primary" th:href="@{/admin/specialists}">Manage specialists</a>
+            <a class="btn btn-outline-secondary" th:href="@{/admin/categories}">Manage categories</a>
+            <a class="btn btn-outline-dark" th:href="@{/admin/billing}">Billing overview</a>
+        </div>
     </div>
-    <div class="d-flex gap-2 flex-wrap">
-        <a class="btn btn-primary" th:href="@{/admin/bookings}">Review bookings</a>
-        <a class="btn btn-outline-primary" th:href="@{/admin/specialists}">Manage specialists</a>
-        <a class="btn btn-outline-secondary" th:href="@{/admin/categories}">Manage categories</a>
+    <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Pending Review</div><div class="display-6" th:text="${pendingCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">All Bookings</div><div class="display-6" th:text="${bookingCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Specialists</div><div class="display-6" th:text="${specialistCount}">0</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Categories</div><div class="display-6" th:text="${categoryCount}">0</div></div></div></div>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Recent Workflow Activity</h2>
+            <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentAuditLogs)}">No audit activity recorded yet.</div>
+            <div class="border rounded p-3 mb-3" th:each="log : ${recentAuditLogs}">
+                <div class="d-flex justify-content-between gap-2 flex-wrap">
+                    <div>
+                        <strong>Booking #<span th:text="${log.bookingId}">0</span></strong>
+                        <p class="mb-1" th:text="${log.remark}">Booking updated</p>
+                        <span class="badge text-bg-light border" th:text="${log.newStatus}">STATUS</span>
+                    </div>
+                    <div class="text-muted small text-end">
+                        <div th:text="${log.operatorUsername}">operator</div>
+                        <div th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>

@@ -1,2 +1,45 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Specialist Profile')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Specialist Profile</h1>
+            <p class="text-muted mb-0">Read-only profile summary for the currently signed-in specialist account.</p>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/specialist/dashboard}">Back to Dashboard</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Account Information</h2>
+                    <p><strong>Username:</strong> <span th:text="${account.username}">username</span></p>
+                    <p><strong>Display Name:</strong> <span th:text="${account.displayName}">display name</span></p>
+                    <p><strong>Email:</strong> <span th:text="${account.email}">email</span></p>
+                    <p class="mb-0"><strong>Phone:</strong> <span th:text="${account.phone}">phone</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Professional Information</h2>
+                    <p><strong>Name:</strong> <span th:text="${specialist.name}">name</span></p>
+                    <p><strong>Category:</strong> <span th:text="${specialist.category != null ? specialist.category.name : 'Unassigned'}">category</span></p>
+                    <p><strong>Level:</strong> <span th:text="${specialist.level}">level</span></p>
+                    <p><strong>Status:</strong> <span th:text="${specialist.status}">ACTIVE</span></p>
+                    <p><strong>Fee Rate:</strong> <span th:text="${specialist.feeRate}">0</span> / hour</p>
+                    <p class="mb-0"><strong>Description:</strong> <span th:text="${specialist.profileDescription}">description</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

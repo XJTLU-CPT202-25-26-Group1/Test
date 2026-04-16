@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Customer Dashboard')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
@@ -9,24 +9,24 @@
         <div class="row align-items-center g-4">
             <div class="col-lg-7">
                 <span class="hero-chip mb-3"><i class="bi bi-person-heart"></i> Customer Workspace</span>
-                <h1 class="hero-title fs-2 mb-3">欢迎回来，<span th:text="${profile.displayName}">Customer</span></h1>
+                <h1 class="hero-title fs-2 mb-3">Welcome back, <span th:text="${profile.displayName}">Customer</span></h1>
                 <p class="hero-subtitle mb-0">
-                    这里集中展示你的预约进度、近期提醒和常用操作入口。你可以直接从 dashboard 跳到专家浏览、预约管理和个人资料页面。
+                    This workspace brings together your booking progress, recent reminders, and the most common actions so you can move quickly between discovery, booking management, and profile updates.
                 </p>
             </div>
             <div class="col-lg-5">
                 <div class="quick-grid">
                     <a class="quick-link" th:href="@{/customer/specialists}">
                         <div class="quick-link-title">Browse Specialists</div>
-                        <p class="quick-link-text">按类别和时间检索合适的专家并提交预约。</p>
+                        <p class="quick-link-text">Search specialists by category and date, then submit a booking request.</p>
                     </a>
                     <a class="quick-link" th:href="@{/customer/bookings}">
                         <div class="quick-link-title">Manage Bookings</div>
-                        <p class="quick-link-text">查看状态、详情、取消与改期入口。</p>
+                        <p class="quick-link-text">Check status, open details, and manage cancel or reschedule actions.</p>
                     </a>
                     <a class="quick-link" th:href="@{/customer/profile}">
                         <div class="quick-link-title">Update Profile</div>
-                        <p class="quick-link-text">维护邮箱、电话和展示名称。</p>
+                        <p class="quick-link-text">Keep your contact details and display name up to date.</p>
                     </a>
                 </div>
             </div>
@@ -38,28 +38,28 @@
             <div class="metric-card">
                 <div class="metric-label">All Bookings</div>
                 <div class="metric-value" th:text="${bookingCount}">0</div>
-                <div class="metric-meta">你当前的全部预约记录</div>
+                <div class="metric-meta">Every booking linked to your account</div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
             <div class="metric-card">
                 <div class="metric-label">Pending Review</div>
                 <div class="metric-value" th:text="${pendingCount}">0</div>
-                <div class="metric-meta">等待管理员审核的申请</div>
+                <div class="metric-meta">Requests still waiting for administrator review</div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
             <div class="metric-card">
                 <div class="metric-label">Upcoming</div>
                 <div class="metric-value" th:text="${#lists.size(upcomingBookings)}">0</div>
-                <div class="metric-meta">已确认且即将到来的预约</div>
+                <div class="metric-meta">Confirmed consultations scheduled soon</div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
             <div class="metric-card">
                 <div class="metric-label">Completed</div>
                 <div class="metric-value" th:text="${completedCount}">0</div>
-                <div class="metric-meta">已经完成并可回顾的咨询</div>
+                <div class="metric-meta">Completed consultations ready for review</div>
             </div>
         </div>
     </section>
@@ -70,11 +70,11 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                     <div>
                         <h2 class="section-title mb-1">Recent Bookings</h2>
-                        <p class="section-caption mb-0">最近的预约会显示主题、专家和当前状态，方便你快速续接操作。</p>
+                        <p class="section-caption mb-0">Keep the latest booking topic, specialist, and status in view so you can continue work without searching.</p>
                     </div>
-                    <a class="btn btn-outline-primary" th:href="@{/customer/bookings}">查看全部</a>
+                    <a class="btn btn-outline-primary" th:href="@{/customer/bookings}">View all</a>
                 </div>
-                <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentBookings)}">你还没有预约记录，可以先去浏览专家。</div>
+                <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentBookings)}">You do not have any bookings yet. Start by browsing specialists.</div>
                 <div class="soft-list-item" th:each="booking : ${recentBookings}">
                     <div>
                         <div class="fw-bold" th:text="${booking.topic}">Topic</div>
@@ -98,10 +98,10 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                     <div>
                         <h2 class="section-title mb-1">Recent Notifications</h2>
-                        <p class="section-caption mb-0">这里会提醒你预约最近发生的状态变化。</p>
+                        <p class="section-caption mb-0">Recent status changes are surfaced here so you can react quickly.</p>
                     </div>
                 </div>
-                <div class="alert alert-secondary" th:if="${#lists.isEmpty(notifications)}">目前没有新的预约提醒。</div>
+                <div class="alert alert-secondary" th:if="${#lists.isEmpty(notifications)}">There are no new booking notifications right now.</div>
                 <div class="soft-list-item" th:each="notification : ${notifications}">
                     <div>
                         <div class="fw-bold" th:text="${notification.remark}">Booking updated</div>

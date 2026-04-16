@@ -1,6 +1,6 @@
-// 全局工具函数
+// Global utility helpers
 const App = {
-  // 显示提示消息
+  // Render a dismissible alert
   showAlert: function(message, type = 'info', container = '.card-body') {
     const alertHtml = `
       <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -10,17 +10,17 @@ const App = {
     `;
     $(container).prepend(alertHtml);
     
-    // 5秒后自动关闭
+    // Auto-close after 5 seconds
     setTimeout(() => {
       $(container + ' .alert:first').alert('close');
     }, 5000);
   },
   
-  // 格式化日期（示例）
+  // Format a date-like value for UI display
   formatDate: function(dateString) {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleString('zh-CN', {
+    return date.toLocaleString('en-GB', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -29,7 +29,7 @@ const App = {
     });
   },
   
-  // 防抖函数
+  // Debounce helper
   debounce: function(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -43,15 +43,15 @@ const App = {
   }
 };
 
-// 全局错误处理
+// Global error handling
 $(window).on('error', function(e) {
   if (e.originalEvent && e.originalEvent.message) {
-    console.error('全局错误:', e.originalEvent.message);
-    // 可选：向用户显示友好提示
-    // App.showAlert('系统发生错误，请稍后重试', 'danger');
+    console.error('Global error:', e.originalEvent.message);
+    // Optional friendly UI message:
+    // App.showAlert('A system error occurred. Please try again later.', 'danger');
   }
 });
 
-// 页面加载完成提示（开发用）
-console.log('%c✅ 专家咨询预约系统前端已加载', 'color: #4361ee; font-weight: bold; font-size: 16px;');
-console.log('%c💡 提示: 按F12打开开发者工具查看详细日志', 'color: #64748b;');
+// Dev-only console notice
+console.log('%cSpecialist Consultation Booking System UI loaded', 'color: #4361ee; font-weight: bold; font-size: 16px;');
+console.log('%cTip: open DevTools for detailed logs.', 'color: #64748b;');

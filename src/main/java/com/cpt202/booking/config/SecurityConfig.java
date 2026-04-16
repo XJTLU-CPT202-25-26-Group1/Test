@@ -16,20 +16,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                // ✅ 静态资源放行（关键！）
+                // Allow static assets
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/vendors/**", "/webjars/**").permitAll()
-                // 公开页面
+                // Public pages
                 .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/error/**").permitAll()
-                // 角色权限
+                // Role-based access control
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/specialist/**").hasAnyRole("SPECIALIST", "ADMIN")
                 .requestMatchers("/customer/**").hasAnyRole("CUSTOMER", "ADMIN")
-                // 其他请求需认证
+                // Any other request requires authentication
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/auth/login")          // 自定义登录页
-                .loginProcessingUrl("/auth/login") // 处理登录的URL
+                .loginPage("/auth/login")          // Custom login page
+                .loginProcessingUrl("/auth/login") // Login processing URL
                 .defaultSuccessUrl("/auth/success", true)
                 .failureUrl("/auth/login?error=true")
                 .usernameParameter("username")
@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .accessDeniedPage("/error/403")
             )
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**") // 如有API接口
+                .ignoringRequestMatchers("/api/**") // Optional API endpoints
             );
         return http.build();
     }

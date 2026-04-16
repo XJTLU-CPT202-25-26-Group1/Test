@@ -3,11 +3,89 @@
 <head th:replace="~{fragments/layout :: head('注册')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="alert alert-info">
-        Registration is kept as a placeholder in this MVP build. Use demo accounts on the login page for customer, specialist, and admin access.
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-4">Create a New Account</h1>
+                    <form class="row g-3" th:action="@{/auth/register}" method="post">
+                        <div class="col-md-6">
+                            <label class="form-label">Username</label>
+                            <input class="form-control" type="text" name="username" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Password</label>
+                            <input class="form-control" type="password" name="password" minlength="6" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Display Name</label>
+                            <input class="form-control" type="text" name="displayName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            <input class="form-control" type="text" name="phone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" type="email" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Role</label>
+                            <select class="form-select" name="role" id="roleSelect" required>
+                                <option th:each="role : ${roles}" th:value="${role.name()}" th:text="${role.name()}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="alert alert-secondary mb-0">
+                                Specialist registration creates a specialist profile immediately, so the extra fields below are required only when role is `SPECIALIST`.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 specialist-only">
+                            <label class="form-label">Expertise Category</label>
+                            <select class="form-select" name="categoryId" id="categorySelect">
+                                <option value="">Select a category</option>
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 specialist-only">
+                            <label class="form-label">Level</label>
+                            <input class="form-control" type="text" name="level" placeholder="Associate / Senior / Consultant">
+                        </div>
+                        <div class="col-md-6 specialist-only">
+                            <label class="form-label">Hourly Fee</label>
+                            <input class="form-control" type="number" step="0.01" min="0" name="feeRate" placeholder="200">
+                        </div>
+                        <div class="col-12 specialist-only">
+                            <label class="form-label">Profile Description</label>
+                            <textarea class="form-control" name="description" rows="3" placeholder="Describe specialties and experience"></textarea>
+                        </div>
+
+                        <div class="col-12 d-flex gap-2">
+                            <button class="btn btn-primary" type="submit">Register</button>
+                            <a class="btn btn-outline-secondary" th:href="@{/auth/login}">Back to Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
+<script>
+    const roleSelect = document.getElementById('roleSelect');
+    const specialistFields = document.querySelectorAll('.specialist-only');
+    const categorySelect = document.getElementById('categorySelect');
+    function toggleSpecialistFields() {
+        const specialistMode = roleSelect.value === 'SPECIALIST';
+        specialistFields.forEach(field => field.style.display = specialistMode ? '' : 'none');
+        categorySelect.required = specialistMode;
+    }
+    toggleSpecialistFields();
+    roleSelect.addEventListener('change', toggleSpecialistFields);
+</script>
 </body>
 </html>

@@ -1,2 +1,26 @@
 <!DOCTYPE html>
-<html lang="zh-CN"></html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('周视图日程')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container py-5">
+    <h1 class="h3 mb-4">Weekly Schedule</h1>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead><tr><th>Date</th><th>Time</th><th>Customer</th><th>Topic</th><th>Status</th></tr></thead>
+            <tbody>
+            <tr th:each="booking : ${bookings}">
+                <td th:text="${booking.slot.slotDate}">2026-01-01</td>
+                <td><span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></td>
+                <td th:text="${booking.customerName}">Customer</td>
+                <td th:text="${booking.topic}">Topic</td>
+                <td th:text="${booking.status}">CONFIRMED</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a class="btn btn-outline-primary" th:href="@{/specialist/bookings}">Back to booking list</a>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

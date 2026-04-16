@@ -15,6 +15,11 @@
     </div>
 
     <h2 class="h4">Available Slots</h2>
+    <form class="row g-2 mb-3" method="get" th:action="@{/customer/specialists/detail}">
+        <input type="hidden" name="id" th:value="${specialist.id}">
+        <div class="col-md-4"><input class="form-control" type="date" name="availableDate" th:value="${availableDate}"></div>
+        <div class="col-auto"><button class="btn btn-outline-secondary" type="submit">Filter Slots</button></div>
+    </form>
     <div class="card mb-3" th:each="slot : ${slots}">
         <div class="card-body">
             <p class="mb-3">
@@ -31,6 +36,7 @@
             </form>
         </div>
     </div>
+    <div th:if="${#lists.isEmpty(slots)}" class="alert alert-secondary">No available slots for the current date filter.</div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

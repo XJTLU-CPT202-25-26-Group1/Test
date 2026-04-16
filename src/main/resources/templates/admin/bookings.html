@@ -41,6 +41,23 @@
             </tbody>
         </table>
     </div>
+
+    <h2 class="h4 mt-5">Audit Log</h2>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered">
+            <thead><tr><th>Booking ID</th><th>Old</th><th>New</th><th>Operator</th><th>Remark</th><th>Time</th></tr></thead>
+            <tbody>
+            <tr th:each="log : ${auditLogs}">
+                <td th:text="${log.bookingId}">1</td>
+                <td th:text="${log.oldStatus}">OLD</td>
+                <td th:text="${log.newStatus}">NEW</td>
+                <td th:text="${log.operatorUsername}">operator</td>
+                <td th:text="${log.remark}">remark</td>
+                <td th:text="${log.operatedAt}">time</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

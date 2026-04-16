@@ -1,7 +1,8 @@
 package com.cpt202.booking.controller.specialist;
 
 import com.cpt202.booking.service.BookingService;
-import com.cpt202.booking.service.SpecialistService;
+import com.cpt202.booking.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,24 +16,36 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SpecialistBookingController {
 
     private final BookingService bookingService;
-    private final SpecialistService specialistService;
+    private final UserService userService;
 
-    public SpecialistBookingController(BookingService bookingService, SpecialistService specialistService) {
+    public SpecialistBookingController(BookingService bookingService,
+                                       UserService userService) {
         this.bookingService = bookingService;
-        this.specialistService = specialistService;
+        this.userService = userService;
     }
 
     @GetMapping
-    public String bookingPage(Model model) {
-        Long specialistId = specialistService.getAllSpecialists().get(0).getId();
+    public String bookingPage(Authentication authentication, Model model) {
+        Long specialistId = userService.resolveSpecialistId(authentication.getName());
         model.addAttribute("bookings", bookingService.getSpecialistBookings(specialistId));
+        model.addAttribute("notifications", bookingService.getSpecialistNotifications(specialistId));
         return "specialist/bookings";
     }
 
+    @GetMapping("/weekly")
+    public String weeklySchedule(Authentication authentication, Model model) {
+        Long specialistId = userService.resolveSpecialistId(authentication.getName());
+        model.addAttribute("bookings", bookingService.getSpecialistBookings(specialistId));
+        return "specialist/booking-history";
+    }
+
     @PostMapping("/complete")
-    public String complete(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+    public String complete(Authentication authentication,
+                           @RequestParam Long id,
+                           RedirectAttributes redirectAttributes) {
         try {
-            bookingService.completeBooking(id);
+            Long specialistId = userService.resolveSpecialistId(authentication.getName());
+            bookingService.completeBookingForSpecialist(id, specialistId);
             redirectAttributes.addFlashAttribute("message", "Booking marked as completed.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());

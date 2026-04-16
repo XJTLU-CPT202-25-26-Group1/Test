@@ -23,6 +23,7 @@ public class AdminBookingController {
     public String bookingReviewPage(Model model) {
         model.addAttribute("pendingBookings", bookingService.getPendingBookings());
         model.addAttribute("allBookings", bookingService.getAllBookings());
+        model.addAttribute("auditLogs", bookingService.getAuditLogs());
         return "admin/bookings";
     }
 

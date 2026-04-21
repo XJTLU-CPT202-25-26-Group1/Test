@@ -1,6 +1,8 @@
 package com.cpt202.booking.controller.auth;
 
 import com.cpt202.booking.enums.RoleType;
+import com.cpt202.booking.model.User;
+import com.cpt202.booking.service.EmailService;
 import com.cpt202.booking.service.ExpertiseCategoryService;
 import com.cpt202.booking.service.UserService;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,10 +19,14 @@ public class AuthController {
 
     private final UserService userService;
     private final ExpertiseCategoryService categoryService;
+    private final EmailService emailService;
 
-    public AuthController(UserService userService, ExpertiseCategoryService categoryService) {
+    public AuthController(UserService userService,
+                          ExpertiseCategoryService categoryService,
+                          EmailService emailService) {
         this.userService = userService;
         this.categoryService = categoryService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/auth/login")
@@ -38,6 +44,11 @@ public class AuthController {
     @GetMapping("/auth/forgot-password")
     public String forgotPassword() {
         return "auth/forgot-password";
+    }
+
+    @GetMapping("/auth/resend-verification")
+    public String resendVerification() {
+        return "auth/resend-verification";
     }
 
     @GetMapping("/auth/reset-password")
@@ -62,8 +73,9 @@ public class AuthController {
                                @RequestParam(required = false) String description,
                                RedirectAttributes redirectAttributes) {
         try {
-            userService.registerUser(username, password, displayName, email, phone, role, categoryId, level, feeRate, description);
-            redirectAttributes.addFlashAttribute("message", "Registration successful. You can now log in with the new account.");
+            User user = userService.registerUser(username, password, displayName, email, phone, role, categoryId, level, feeRate, description);
+            emailService.sendVerificationEmail(user);
+            redirectAttributes.addFlashAttribute("message", "Registration successful. Please verify your email before logging in.");
             return "redirect:/auth/login";
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
@@ -71,18 +83,47 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/auth/verify-email")
+    public String verifyEmail(@RequestParam String username,
+                              @RequestParam String token,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            userService.verifyEmail(username, token);
+            redirectAttributes.addFlashAttribute("message", "Email verified successfully. You can now log in.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/auth/login";
+    }
+
     @PostMapping("/auth/forgot-password")
     public String sendResetToken(@RequestParam String username,
                                  @RequestParam String email,
                                  RedirectAttributes redirectAttributes) {
         try {
-            String token = userService.createResetToken(username, email);
+            userService.createResetToken(username, email);
+            emailService.sendResetPasswordEmail(userService.getByUsername(username));
             redirectAttributes.addFlashAttribute("message",
-                    "Mock verification sent. Use reset token: " + token);
-            return "redirect:/auth/reset-password?username=" + username + "&token=" + token;
+                    "Password reset instructions have been sent to your email.");
+            return "redirect:/auth/login";
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/auth/forgot-password";
+        }
+    }
+
+    @PostMapping("/auth/resend-verification")
+    public String resendVerification(@RequestParam String username,
+                                     @RequestParam String email,
+                                     RedirectAttributes redirectAttributes) {
+        try {
+            User user = userService.resendVerificationToken(username, email);
+            emailService.sendVerificationEmail(user);
+            redirectAttributes.addFlashAttribute("message", "A new verification email has been sent.");
+            return "redirect:/auth/login";
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+            return "redirect:/auth/resend-verification";
         }
     }
 
@@ -104,7 +145,7 @@ public class AuthController {
     @GetMapping("/auth/profile-edit")
     public String profileEdit(Authentication authentication, Model model) {
         if (authentication != null) {
-            model.addAttribute("profile", userService.getByUsername(authentication.getName()));
+                model.addAttribute("profile", userService.getByUsername(authentication.getName()));
         }
         return "auth/profile-edit";
     }
@@ -118,7 +159,7 @@ public class AuthController {
         if (authentication != null) {
             try {
                 userService.updateProfile(authentication.getName(), displayName, email, phone);
-                redirectAttributes.addFlashAttribute("message", "Profile updated. Mock verification assumed successful.");
+                redirectAttributes.addFlashAttribute("message", "Profile updated successfully.");
             } catch (Exception ex) {
                 redirectAttributes.addFlashAttribute("message", ex.getMessage());
             }

@@ -5,59 +5,99 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <h1 class="h3 mb-4">Manage Specialists</h1>
-    <form class="row g-2 mb-3" th:action="@{/admin/specialists}" method="get">
-        <div class="col-md-6"><input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by specialist name or category"></div>
-        <div class="col-auto"><button class="btn btn-outline-secondary" type="submit">Search</button></div>
-    </form>
-    <form class="row g-3 mb-4" th:action="@{/admin/specialists}" method="post">
-        <div class="col-md-3"><input class="form-control" type="text" name="name" placeholder="Name" required></div>
-        <div class="col-md-2"><input class="form-control" type="text" name="level" placeholder="Level" required></div>
-        <div class="col-md-2"><input class="form-control" type="number" step="0.01" name="feeRate" placeholder="Fee rate" required></div>
-        <div class="col-md-3">
-            <select class="form-select" name="categoryId" required>
-                <option value="">Select category</option>
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-            </select>
-        </div>
-        <div class="col-md-8"><input class="form-control" type="text" name="description" placeholder="Profile description" required></div>
-        <div class="col-auto"><button class="btn btn-primary" type="submit">Create</button></div>
-    </form>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead><tr><th>Name</th><th>Category</th><th>Level</th><th>Fee</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody>
-            <tr th:each="specialist : ${specialists}">
-                <td th:text="${specialist.name}">Name</td>
-                <td th:text="${specialist.category != null ? specialist.category.name : 'N/A'}">Category</td>
-                <td th:text="${specialist.level}">Level</td>
-                <td th:text="${specialist.feeRate}">0</td>
-                <td th:text="${specialist.status}">ACTIVE</td>
-                <td>
-                    <form th:action="@{/admin/specialists/update}" method="post" class="row g-2 mb-2">
-                        <input type="hidden" name="id" th:value="${specialist.id}">
-                        <div class="col-12"><input class="form-control form-control-sm" type="text" name="name" th:value="${specialist.name}" required></div>
-                        <div class="col-6"><input class="form-control form-control-sm" type="text" name="level" th:value="${specialist.level}" required></div>
-                        <div class="col-6"><input class="form-control form-control-sm" type="number" step="0.01" name="feeRate" th:value="${specialist.feeRate}" required></div>
-                        <div class="col-12">
-                            <select class="form-select form-select-sm" name="categoryId" required>
-                                <option th:each="category : ${categories}"
-                                        th:value="${category.id}"
-                                        th:selected="${specialist.category != null and specialist.category.id == category.id}"
-                                        th:text="${category.name}">Category</option>
-                            </select>
-                        </div>
-                        <div class="col-12"><input class="form-control form-control-sm" type="text" name="description" th:value="${specialist.profileDescription}" required></div>
-                        <div class="col-12"><button class="btn btn-outline-primary btn-sm w-100" type="submit">Update</button></div>
-                    </form>
-                    <form th:action="@{/admin/specialists/toggle}" method="post">
-                        <input type="hidden" name="id" th:value="${specialist.id}">
-                        <button class="btn btn-outline-dark btn-sm w-100" type="submit" th:text="${specialist.status.name() == 'ACTIVE' ? 'Deactivate' : 'Activate'}">Toggle</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="page-wrap">
+        <section class="page-intro">
+            <div class="page-kicker">Administrator master data</div>
+            <h1 class="page-title">Manage Specialists</h1>
+            <p class="page-summary">Create, search, edit, activate, and deactivate specialist records while keeping category, fee, and operational status consistent.</p>
+        </section>
+
+        <section class="toolbar-panel mb-4">
+            <form class="filter-grid" th:action="@{/admin/specialists}" method="get">
+                <div>
+                    <label class="form-label">Search specialists</label>
+                    <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by specialist name or category">
+                </div>
+                <div>
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="categoryId">
+                        <option value="">All categories</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:selected="${selectedCategoryId != null and selectedCategoryId == category.id}"
+                                th:text="${category.name}">Category</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status">
+                        <option value="">All statuses</option>
+                        <option th:each="statusOption : ${statuses}"
+                                th:value="${statusOption.name()}"
+                                th:selected="${selectedStatus == statusOption.name()}"
+                                th:text="${statusOption.name()}">ACTIVE</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn btn-outline-secondary w-100" type="submit">Search</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="section-panel mb-4">
+            <div class="section-heading">
+                <div>
+                    <h2>Create specialist</h2>
+                    <p class="section-note">Add one specialist profile to the system master data.</p>
+                </div>
+            </div>
+            <form class="row g-3" th:action="@{/admin/specialists}" method="post">
+                <div class="col-md-3"><label class="form-label">Name</label><input class="form-control" type="text" name="name" placeholder="Name" required></div>
+                <div class="col-md-2"><label class="form-label">Level</label><input class="form-control" type="text" name="level" placeholder="Level" required></div>
+                <div class="col-md-2"><label class="form-label">Fee rate</label><input class="form-control" type="number" step="0.01" name="feeRate" placeholder="Fee rate" required></div>
+                <div class="col-md-3">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="categoryId" required>
+                        <option value="">Select category</option>
+                        <option th:each="category : ${categories}" th:if="${category.status.name() == 'ACTIVE'}" th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                </div>
+                <div class="col-md-8"><label class="form-label">Profile description</label><input class="form-control" type="text" name="description" placeholder="Profile description" required></div>
+                <div class="col-md-4 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">Create</button></div>
+            </form>
+        </section>
+
+        <section class="section-panel table-panel">
+            <div class="section-heading">
+                <div>
+                    <h2>Specialist directory</h2>
+                    <p class="section-note">All specialist records with maintenance actions.</p>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped plain-table">
+                    <thead><tr><th>Name</th><th>Category</th><th>Level</th><th>Fee</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                    <tr th:each="specialist : ${specialists}">
+                        <td th:text="${specialist.name}">Name</td>
+                        <td th:text="${specialist.category != null ? specialist.category.name : 'N/A'}">Category</td>
+                        <td th:text="${specialist.level}">Level</td>
+                        <td th:text="${specialist.feeRate}">0</td>
+                        <td><span class="status-tag" th:text="${specialist.status}">ACTIVE</span></td>
+                        <td>
+                            <div class="compact-stack">
+                                <a class="btn btn-outline-primary btn-sm" th:href="@{/admin/specialists/edit(id=${specialist.id})}">Edit</a>
+                                <form th:action="@{/admin/specialists/toggle}" method="post">
+                                    <input type="hidden" name="id" th:value="${specialist.id}">
+                                    <button class="btn btn-outline-dark btn-sm w-100" type="submit" th:text="${specialist.status.name() == 'ACTIVE' ? 'Deactivate' : 'Activate'}">Toggle</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>

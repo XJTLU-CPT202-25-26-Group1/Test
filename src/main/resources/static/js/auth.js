@@ -28,9 +28,10 @@ $(document).ready(function() {
   // Remove transient URL parameters after rendering
   if (window.history.replaceState) {
     const url = new URL(window.location);
-    if (url.searchParams.has('error') || url.searchParams.has('logout')) {
+    if (url.searchParams.has('error') || url.searchParams.has('logout') || url.searchParams.has('unverified')) {
       url.searchParams.delete('error');
       url.searchParams.delete('logout');
+      url.searchParams.delete('unverified');
       window.history.replaceState(null, null, url.pathname);
     }
   }

@@ -12,6 +12,7 @@ import com.cpt202.booking.repository.SpecialistRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Comparator;
@@ -41,6 +42,11 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
+    public Booking getBookingDetail(Long bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+    }
+
     public List<Booking> getPendingBookings() {
         return bookingRepository.findByStatusOrderByCreatedAtAsc(BookingStatus.PENDING);
     }
@@ -66,9 +72,39 @@ public class BookingService {
         return bookingRepository.findBySpecialistIdOrderByCreatedAtDesc(specialistId);
     }
 
+    public List<Booking> getSpecialistBookingsForWeek(Long specialistId, LocalDate weekStart) {
+        LocalDate weekEnd = weekStart.plusDays(6);
+        return bookingRepository.findBySpecialistIdOrderByCreatedAtDesc(specialistId)
+                .stream()
+                .filter(booking -> {
+                    LocalDate slotDate = booking.getSlot().getSlotDate();
+                    return (slotDate.isEqual(weekStart) || slotDate.isAfter(weekStart))
+                            && (slotDate.isEqual(weekEnd) || slotDate.isBefore(weekEnd));
+                })
+                .sorted(Comparator.comparing((Booking booking) -> booking.getSlot().getSlotDate())
+                        .thenComparing(booking -> booking.getSlot().getStartTime()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Booking> getSpecialistCompletedBookings(Long specialistId) {
+        return bookingRepository.findBySpecialistIdOrderByCreatedAtDesc(specialistId)
+                .stream()
+                .filter(booking -> booking.getStatus() == BookingStatus.COMPLETED)
+                .collect(Collectors.toList());
+    }
+
     public Booking getCustomerBookingDetail(Long bookingId, String customerEmail) {
         return bookingRepository.findByIdAndCustomerEmail(bookingId, customerEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+    }
+
+    public Booking getSpecialistBookingDetail(Long bookingId, Long specialistId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+        if (!booking.getSpecialist().getId().equals(specialistId)) {
+            throw new IllegalArgumentException("You can only view your own consultation bookings.");
+        }
+        return booking;
     }
 
     public List<Booking> getUpcomingBookings(String customerEmail) {
@@ -86,6 +122,10 @@ public class BookingService {
 
     public List<BookingAuditLog> getAuditLogs() {
         return bookingAuditLogRepository.findAllByOrderByOperatedAtDesc();
+    }
+
+    public List<BookingAuditLog> getAuditLogsForBooking(Long bookingId) {
+        return bookingAuditLogRepository.findByBookingIdOrderByOperatedAtDesc(bookingId);
     }
 
     public List<BookingAuditLog> getCustomerNotifications(String customerEmail) {

@@ -5,29 +5,51 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <h1 class="h3 mb-4">Expertise Categories</h1>
-    <form class="row g-2 mb-4" th:action="@{/admin/categories}" method="post">
-        <div class="col-md-6"><input class="form-control" type="text" name="name" placeholder="New category name" required></div>
-        <div class="col-auto"><button class="btn btn-primary" type="submit">Add Category</button></div>
-    </form>
-    <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between" th:each="category : ${categories}">
-            <div class="d-flex gap-2 align-items-center flex-wrap">
-                <form th:action="@{/admin/categories/update}" method="post" class="d-flex gap-2">
-                    <input type="hidden" name="id" th:value="${category.id}">
-                    <input class="form-control form-control-sm" type="text" name="name" th:value="${category.name}" required>
-                    <button class="btn btn-outline-primary btn-sm" type="submit">Update</button>
-                </form>
+    <div class="page-wrap">
+        <section class="page-intro">
+            <div class="page-kicker">Administrator master data</div>
+            <h1 class="page-title">Expertise Categories</h1>
+            <p class="page-summary">Create, update, activate, and deactivate expertise categories used across specialist records and booking filters.</p>
+        </section>
+
+        <section class="section-panel mb-4">
+            <div class="section-heading">
+                <div>
+                    <h2>Create category</h2>
+                    <p class="section-note">Duplicate names are blocked by the backend rule.</p>
+                </div>
             </div>
-            <div class="d-flex gap-2 align-items-center">
-                <span class="badge text-bg-secondary" th:text="${category.status}">ACTIVE</span>
-                <form th:action="@{/admin/categories/toggle}" method="post">
-                    <input type="hidden" name="id" th:value="${category.id}">
-                    <button class="btn btn-outline-dark btn-sm" type="submit" th:text="${category.status.name() == 'ACTIVE' ? 'Deactivate' : 'Activate'}">Toggle</button>
-                </form>
+            <form class="row g-3" th:action="@{/admin/categories}" method="post">
+                <div class="col-md-8"><label class="form-label">Category name</label><input class="form-control" type="text" name="name" placeholder="New category name" required></div>
+                <div class="col-md-4 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">Add Category</button></div>
+            </form>
+        </section>
+
+        <section class="section-panel">
+            <div class="section-heading">
+                <div>
+                    <h2>Category list</h2>
+                    <p class="section-note">Maintenance actions for existing categories.</p>
+                </div>
             </div>
-        </li>
-    </ul>
+            <div class="compact-stack">
+                <div class="record-card" th:each="category : ${categories}">
+                    <div class="record-head">
+                        <form th:action="@{/admin/categories/update}" method="post" class="inline-actions w-100">
+                            <input type="hidden" name="id" th:value="${category.id}">
+                            <input class="form-control form-control-sm" type="text" name="name" th:value="${category.name}" required>
+                            <button class="btn btn-outline-primary btn-sm" type="submit">Update</button>
+                        </form>
+                        <span class="status-tag" th:text="${category.status}">ACTIVE</span>
+                    </div>
+                    <form th:action="@{/admin/categories/toggle}" method="post">
+                        <input type="hidden" name="id" th:value="${category.id}">
+                        <button class="btn btn-outline-dark btn-sm" type="submit" th:text="${category.status.name() == 'ACTIVE' ? 'Deactivate' : 'Activate'}">Toggle</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

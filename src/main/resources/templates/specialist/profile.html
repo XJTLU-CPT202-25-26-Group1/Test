@@ -5,39 +5,70 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-        <div>
-            <h1 class="h3 mb-1">Specialist Profile</h1>
-            <p class="text-muted mb-0">Read-only profile summary for the currently signed-in specialist account.</p>
-        </div>
-        <a class="btn btn-outline-secondary" th:href="@{/specialist/dashboard}">Back to Dashboard</a>
-    </div>
+    <div class="page-wrap">
+        <section class="page-intro">
+            <div class="page-kicker">Specialist profile</div>
+            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                <div>
+                    <h1 class="page-title">Specialist Profile</h1>
+                    <p class="page-summary">Read-only account and professional summary for the currently signed-in specialist account.</p>
+                </div>
+                <a class="btn btn-outline-secondary" th:href="@{/specialist/dashboard}">Back to Dashboard</a>
+            </div>
+        </section>
 
-    <div class="row g-4">
-        <div class="col-lg-5">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h2 class="h5 mb-3">Account Information</h2>
-                    <p><strong>Username:</strong> <span th:text="${account.username}">username</span></p>
-                    <p><strong>Display Name:</strong> <span th:text="${account.displayName}">display name</span></p>
-                    <p><strong>Email:</strong> <span th:text="${account.email}">email</span></p>
-                    <p class="mb-0"><strong>Phone:</strong> <span th:text="${account.phone}">phone</span></p>
+        <section class="split-layout">
+            <div class="summary-panel">
+                <h2 class="section-title mb-3">Account information</h2>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Username</span>
+                        <span class="detail-value" th:text="${account.username}">username</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Display name</span>
+                        <span class="detail-value" th:text="${account.displayName}">display name</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Email</span>
+                        <span class="detail-value" th:text="${account.email}">email</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Phone</span>
+                        <span class="detail-value" th:text="${account.phone}">phone</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-7">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h2 class="h5 mb-3">Professional Information</h2>
-                    <p><strong>Name:</strong> <span th:text="${specialist.name}">name</span></p>
-                    <p><strong>Category:</strong> <span th:text="${specialist.category != null ? specialist.category.name : 'Unassigned'}">category</span></p>
-                    <p><strong>Level:</strong> <span th:text="${specialist.level}">level</span></p>
-                    <p><strong>Status:</strong> <span th:text="${specialist.status}">ACTIVE</span></p>
-                    <p><strong>Fee Rate:</strong> <span th:text="${specialist.feeRate}">0</span> / hour</p>
-                    <p class="mb-0"><strong>Description:</strong> <span th:text="${specialist.profileDescription}">description</span></p>
+            <div class="section-panel">
+                <h2 class="section-title mb-3">Professional information</h2>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Name</span>
+                        <span class="detail-value" th:text="${specialist.name}">name</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Category</span>
+                        <span class="detail-value" th:text="${specialist.category != null ? specialist.category.name : 'Unassigned'}">category</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Level</span>
+                        <span class="detail-value" th:text="${specialist.level}">level</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value" th:text="${specialist.status}">ACTIVE</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Fee rate</span>
+                        <span class="detail-value"><span th:text="${specialist.feeRate}">0</span> / hour</span>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h3 class="section-title mb-2">Description</h3>
+                    <p class="record-description mb-0" th:text="${specialist.profileDescription}">description</p>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>

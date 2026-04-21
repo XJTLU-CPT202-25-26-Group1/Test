@@ -1,8 +1,12 @@
 package com.cpt202.booking.controller.customer;
 
 import com.cpt202.booking.service.BookingService;
+import com.cpt202.booking.service.AvailabilityService;
 import com.cpt202.booking.service.FeedbackService;
+import com.cpt202.booking.service.SpecialistService;
 import com.cpt202.booking.service.UserService;
+import com.cpt202.booking.model.AvailabilitySlot;
+import com.cpt202.booking.model.Booking;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/customer/bookings")
 public class CustomerBookingController {
@@ -19,13 +25,19 @@ public class CustomerBookingController {
     private final BookingService bookingService;
     private final UserService userService;
     private final FeedbackService feedbackService;
+    private final SpecialistService specialistService;
+    private final AvailabilityService availabilityService;
 
     public CustomerBookingController(BookingService bookingService,
                                      UserService userService,
-                                     FeedbackService feedbackService) {
+                                     FeedbackService feedbackService,
+                                     SpecialistService specialistService,
+                                     AvailabilityService availabilityService) {
         this.bookingService = bookingService;
         this.userService = userService;
         this.feedbackService = feedbackService;
+        this.specialistService = specialistService;
+        this.availabilityService = availabilityService;
     }
 
     @GetMapping
@@ -48,6 +60,20 @@ public class CustomerBookingController {
         return "customer/booking-detail";
     }
 
+    @GetMapping("/create")
+    public String createBookingPage(@RequestParam Long specialistId,
+                                    @RequestParam Long slotId,
+                                    Model model) {
+        List<AvailabilitySlot> slots = availabilityService.getAvailableSlots(specialistId);
+        AvailabilitySlot selectedSlot = slots.stream()
+                .filter(slot -> slot.getId().equals(slotId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Selected slot is no longer available."));
+        model.addAttribute("specialist", specialistService.getSpecialistById(specialistId));
+        model.addAttribute("slot", selectedSlot);
+        return "customer/create-booking";
+    }
+
     @PostMapping("/create")
     public String createBooking(Authentication authentication,
                                 @RequestParam Long specialistId,
@@ -64,6 +90,21 @@ public class CustomerBookingController {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
         return "redirect:/customer/bookings";
+    }
+
+    @GetMapping("/reschedule")
+    public String reschedulePage(Authentication authentication,
+                                 @RequestParam Long id,
+                                 Model model) {
+        String email = userService.getByUsername(authentication.getName()).getEmail();
+        Booking booking = bookingService.getCustomerBookingDetail(id, email);
+        List<AvailabilitySlot> alternativeSlots = availabilityService.getAvailableSlots(booking.getSpecialist().getId())
+                .stream()
+                .filter(slot -> !slot.getId().equals(booking.getSlot().getId()))
+                .toList();
+        model.addAttribute("booking", booking);
+        model.addAttribute("alternativeSlots", alternativeSlots);
+        return "customer/reschedule-booking";
     }
 
     @PostMapping("/cancel")

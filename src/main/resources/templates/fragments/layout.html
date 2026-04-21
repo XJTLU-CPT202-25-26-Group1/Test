@@ -17,8 +17,8 @@
   <nav class="navbar navbar-expand-lg navbar-dark app-navbar">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
-        <span class="brand-mark"><i class="bi bi-calendar-check fs-5"></i></span>
-        <span>Specialist Consultation Booking System</span>
+        <span class="brand-mark"><i class="bi bi-plus-lg"></i></span>
+        <span>Expert Appointment</span>
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -110,6 +110,12 @@
   <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show m-3" role="alert">
     <strong>Login failed</strong>
     <span>The username or password is incorrect. Please try again.</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+
+  <div th:if="${param.unverified}" class="alert alert-warning alert-dismissible fade show m-3" role="alert">
+    <strong>Email verification required</strong>
+    <span>Please verify your email address before logging in.</span>
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
   </div>
 

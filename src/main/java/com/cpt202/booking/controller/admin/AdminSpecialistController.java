@@ -1,5 +1,6 @@
 package com.cpt202.booking.controller.admin;
 
+import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.service.ExpertiseCategoryService;
 import com.cpt202.booking.service.SpecialistService;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,24 @@ public class AdminSpecialistController {
     }
 
     @GetMapping
-    public String specialistsPage(@RequestParam(required = false) String keyword, Model model) {
-        model.addAttribute("specialists", specialistService.searchSpecialists(keyword));
+    public String specialistsPage(@RequestParam(required = false) String keyword,
+                                  @RequestParam(required = false) Long categoryId,
+                                  @RequestParam(required = false) SpecialistStatus status,
+                                  Model model) {
+        model.addAttribute("specialists", specialistService.searchSpecialistsForAdmin(keyword, categoryId, status));
         model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("statuses", SpecialistStatus.values());
         model.addAttribute("keyword", keyword == null ? "" : keyword);
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("selectedStatus", status == null ? "" : status.name());
         return "admin/specialists";
+    }
+
+    @GetMapping("/edit")
+    public String specialistEditPage(@RequestParam Long id, Model model) {
+        model.addAttribute("specialist", specialistService.getSpecialistById(id));
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "admin/specialist-edit";
     }
 
     @PostMapping

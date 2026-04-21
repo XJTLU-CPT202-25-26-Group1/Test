@@ -4,35 +4,60 @@
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <main class="container py-5">
-    <h1 class="h3 mb-4">Browse Specialists</h1>
-    <form class="row g-2 mb-4" method="get" th:action="@{/customer/specialists}">
-        <div class="col-md-6"><input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by name or category"></div>
-        <div class="col-md-3">
-            <select class="form-select" name="categoryId">
-                <option value="">All categories</option>
-                <option th:each="category : ${categories}"
-                        th:value="${category.id}"
-                        th:selected="${selectedCategoryId != null and selectedCategoryId == category.id}"
-                        th:text="${category.name}">Category</option>
-            </select>
-        </div>
-        <div class="col-md-3"><input class="form-control" type="date" name="availableDate" th:value="${availableDate}"></div>
-        <div class="col-auto"><button class="btn btn-primary" type="submit">Search</button></div>
-    </form>
-    <div class="row g-3">
-        <div class="col-md-6" th:each="specialist : ${specialists}">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h2 class="h5" th:text="${specialist.name}">Name</h2>
-                    <p class="mb-1"><strong>Category:</strong> <span th:text="${specialist.category.name}">Category</span></p>
-                    <p class="mb-1"><strong>Level:</strong> <span th:text="${specialist.level}">Level</span></p>
-                    <p class="mb-3"><strong>Rate:</strong> <span th:text="${specialist.feeRate}">0</span></p>
+    <div class="page-wrap">
+        <section class="page-intro">
+            <div class="page-kicker">Customer portal</div>
+            <h1 class="page-title">Browse Specialists</h1>
+            <p class="page-summary">Search specialists by name, expertise category, and available date before opening a profile and choosing an available slot.</p>
+        </section>
+
+        <section class="toolbar-panel mb-4">
+            <form class="filter-grid" method="get" th:action="@{/customer/specialists}">
+                <div>
+                    <label class="form-label">Keyword</label>
+                    <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by name or category">
+                </div>
+                <div>
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="categoryId">
+                        <option value="">All categories</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:selected="${selectedCategoryId != null and selectedCategoryId == category.id}"
+                                th:text="${category.name}">Category</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Available date</label>
+                    <input class="form-control" type="date" name="availableDate" th:value="${availableDate}">
+                </div>
+                <div>
+                    <button class="btn btn-primary w-100" type="submit">Search</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="row g-3">
+            <div class="col-md-6" th:each="specialist : ${specialists}">
+                <div class="record-card h-100">
+                    <div class="record-head">
+                        <div>
+                            <h2 class="record-title" th:text="${specialist.name}">Name</h2>
+                            <div class="record-meta">
+                                <span><strong>Category:</strong> <span th:text="${specialist.category.name}">Category</span></span>
+                                <span><strong>Level:</strong> <span th:text="${specialist.level}">Level</span></span>
+                            </div>
+                        </div>
+                        <span class="status-tag success">Bookable</span>
+                    </div>
+                    <p class="record-description mb-3">Rate: <strong th:text="${specialist.feeRate}">0</strong> per hour</p>
                     <a class="btn btn-outline-primary" th:href="@{/customer/specialists/detail(id=${specialist.id},availableDate=${availableDate})}">View details</a>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <div th:if="${#lists.isEmpty(specialists)}" class="empty-state mt-4">No specialists matched the current filter.</div>
     </div>
-    <div th:if="${#lists.isEmpty(specialists)}" class="alert alert-secondary mt-4">No specialists matched the current filter.</div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

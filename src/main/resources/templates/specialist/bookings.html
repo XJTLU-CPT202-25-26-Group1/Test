@@ -5,35 +5,70 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <h1 class="h3 mb-4">Specialist Booking Schedule</h1>
-    <div class="mb-3 d-flex gap-2 flex-wrap">
-        <a class="btn btn-outline-primary" th:href="@{/specialist/bookings/weekly}">View Weekly Schedule</a>
-        <a class="btn btn-outline-secondary" th:href="@{/specialist/feedback}">View Consultation Feedback</a>
-    </div>
-    <div class="card border-0 bg-light mb-4" th:if="${!#lists.isEmpty(notifications)}">
-        <div class="card-body">
-            <h2 class="h5 mb-3">Recent Booking Notifications</h2>
-            <div class="small" th:each="notification : ${notifications}">
-                <p class="mb-2">
-                    <strong th:text="${notification.newStatus}">STATUS</strong>
-                    <span th:text="${notification.remark}">Booking updated</span>
-                    <span class="text-muted">·</span>
-                    <span class="text-muted" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</span>
-                </p>
+    <div class="page-wrap">
+        <section class="page-intro">
+            <div class="page-kicker">Specialist portal</div>
+            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                <div>
+                    <h1 class="page-title">Specialist Booking Schedule</h1>
+                    <p class="page-summary">Review assigned consultations, open booking details, mark confirmed sessions as completed, and jump to weekly view or feedback review.</p>
+                </div>
+                <div class="page-header-actions">
+                    <a class="btn btn-outline-primary" th:href="@{/specialist/bookings/weekly}">Weekly Schedule</a>
+                    <a class="btn btn-outline-secondary" th:href="@{/specialist/feedback}">Consultation Feedback</a>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="card mb-3" th:each="booking : ${bookings}">
-        <div class="card-body">
-            <h2 class="h5" th:text="${booking.topic}">Topic</h2>
-            <p class="mb-1"><strong>Customer:</strong> <span th:text="${booking.customerName}">Customer</span></p>
-            <p class="mb-1"><strong>Time:</strong> <span th:text="${booking.slot.slotDate}"></span> <span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></p>
-            <p class="mb-3"><strong>Status:</strong> <span th:text="${booking.status}">CONFIRMED</span></p>
-            <form th:if="${booking.status.name() == 'CONFIRMED'}" th:action="@{/specialist/bookings/complete}" method="post">
-                <input type="hidden" name="id" th:value="${booking.id}">
-                <button class="btn btn-success" type="submit">Mark Completed</button>
-            </form>
-        </div>
+        </section>
+
+        <section class="section-panel mb-4" th:if="${!#lists.isEmpty(notifications)}">
+            <div class="section-heading">
+                <div>
+                    <h2>Recent booking notifications</h2>
+                    <p class="section-note">Latest changes to your assigned consultations.</p>
+                </div>
+            </div>
+            <div class="notification-list">
+                <div class="record-card" th:each="notification : ${notifications}">
+                    <div class="record-head mb-0">
+                        <div>
+                            <h3 class="record-title" th:text="${notification.remark}">Booking updated</h3>
+                            <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+                        </div>
+                        <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-panel">
+            <div class="section-heading">
+                <div>
+                    <h2>Assigned consultations</h2>
+                    <p class="section-note">Active consultation records and completion actions.</p>
+                </div>
+            </div>
+            <div class="empty-state" th:if="${#lists.isEmpty(bookings)}">There are no bookings assigned to you right now.</div>
+            <div class="record-card" th:each="booking : ${bookings}">
+                <div class="record-head">
+                    <div>
+                        <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
+                        <div class="record-meta">
+                            <span><strong>Customer:</strong> <span th:text="${booking.customerName}">Customer</span></span>
+                            <span><strong>Date:</strong> <span th:text="${booking.slot.slotDate}">Date</span></span>
+                            <span><strong>Time:</strong> <span th:text="${booking.slot.startTime}">Time</span> - <span th:text="${booking.slot.endTime}">End</span></span>
+                        </div>
+                    </div>
+                    <span class="status-tag" th:text="${booking.status}">CONFIRMED</span>
+                </div>
+                <div class="record-actions">
+                    <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings/detail(id=${booking.id})}">Details</a>
+                    <form th:if="${booking.status.name() == 'CONFIRMED'}" th:action="@{/specialist/bookings/complete}" method="post">
+                        <input type="hidden" name="id" th:value="${booking.id}">
+                        <button class="btn btn-success" type="submit">Mark Completed</button>
+                    </form>
+                </div>
+            </div>
+        </section>
     </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>

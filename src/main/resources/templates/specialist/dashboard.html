@@ -5,20 +5,41 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <section class="dashboard-hero p-4 p-lg-5 mb-4">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7">
-                <span class="hero-chip mb-3"><i class="bi bi-calendar2-week"></i> Specialist Workspace</span>
-                <h1 class="hero-title fs-2 mb-3" th:text="${specialist.name}">Specialist Name</h1>
-                <p class="hero-subtitle mb-0">
-                    <span th:text="${specialist.category != null ? specialist.category.name : 'Unassigned Category'}">Category</span>
-                    ·
-                    <span th:text="${specialist.level}">Level</span>
-                    ·
-                    Fee Rate <strong th:text="${specialist.feeRate}">0</strong> / hour
-                </p>
+    <div class="page-wrap">
+        <section class="page-intro">
+            <div class="page-kicker">Specialist dashboard</div>
+            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                <div>
+                    <h1 class="page-title mb-2" th:text="${specialist.name}">Specialist Name</h1>
+                    <p class="page-summary">
+                        <span th:text="${specialist.category != null ? specialist.category.name : 'Unassigned category'}">Category</span>
+                        ·
+                        <span th:text="${specialist.level}">Level</span>
+                        ·
+                        Fee rate <strong th:text="${specialist.feeRate}">0</strong> per hour
+                    </p>
+                </div>
+                <div class="page-header-actions">
+                    <a class="btn btn-primary" th:href="@{/specialist/bookings}">Booking Schedule</a>
+                    <a class="btn btn-outline-secondary" th:href="@{/specialist/availability}">Availability</a>
+                </div>
             </div>
-            <div class="col-lg-5">
+        </section>
+
+        <section class="split-layout mb-4">
+            <div class="summary-panel">
+                <span class="hero-chip mb-3"><i class="bi bi-calendar2-week"></i> Specialist workspace</span>
+                <h2 class="section-title mb-2">Consultation delivery overview</h2>
+                <p class="section-caption mb-3">Manage open time slots, track confirmed bookings, review consultation feedback, and keep your specialist profile current.</p>
+                <div class="surface-note">Booked time slots are locked from editing so confirmed consultation records stay consistent once customers enter the workflow.</div>
+            </div>
+            <div class="section-panel">
+                <div class="section-heading">
+                    <div>
+                        <h2>Quick actions</h2>
+                        <p class="section-note">Common specialist tasks grouped together.</p>
+                    </div>
+                </div>
                 <div class="quick-grid">
                     <a class="quick-link" th:href="@{/specialist/availability}">
                         <div class="quick-link-title">Manage Availability</div>
@@ -38,10 +59,9 @@
                     </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="row g-3 mb-4">
+        <section class="row g-3 mb-4">
         <div class="col-md-6 col-xl-3">
             <div class="metric-card">
                 <div class="metric-label">All Bookings</div>
@@ -70,56 +90,59 @@
                 <div class="metric-meta">Future slots that remain open for booking</div>
             </div>
         </div>
-    </section>
+        </section>
 
-    <section class="row g-4">
-        <div class="col-lg-7">
-            <div class="panel-card">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                    <div>
-                        <h2 class="section-title mb-1">Recent Bookings</h2>
-                        <p class="section-caption mb-0">See recent consultations by customer, time, and status so daily work is easy to prioritize.</p>
+        <section class="row g-4">
+            <div class="col-lg-7">
+                <div class="section-panel h-100">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Recent bookings</h2>
+                            <p class="section-note">Latest consultations assigned to you.</p>
+                        </div>
+                        <a class="btn btn-outline-primary" th:href="@{/specialist/bookings}">View all</a>
                     </div>
-                    <a class="btn btn-outline-primary" th:href="@{/specialist/bookings}">View all</a>
-                </div>
-                <div class="alert alert-secondary" th:if="${#lists.isEmpty(recentBookings)}">No bookings have been assigned to you yet.</div>
-                <div class="soft-list-item" th:each="booking : ${recentBookings}">
-                    <div>
-                        <div class="fw-bold" th:text="${booking.topic}">Topic</div>
-                        <div class="text-muted small">
-                            <span th:text="${booking.customerName}">Customer</span>
-                            ·
-                            <span th:text="${booking.slot.slotDate}">Date</span>
-                            ·
-                            <span th:text="${booking.slot.startTime}">Time</span>
+                    <div class="empty-state" th:if="${#lists.isEmpty(recentBookings)}">No bookings have been assigned to you yet.</div>
+                    <div class="record-card" th:each="booking : ${recentBookings}">
+                        <div class="record-head">
+                            <div>
+                                <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
+                                <div class="record-meta">
+                                    <span><strong>Customer:</strong> <span th:text="${booking.customerName}">Customer</span></span>
+                                    <span><strong>Date:</strong> <span th:text="${booking.slot.slotDate}">Date</span></span>
+                                    <span><strong>Time:</strong> <span th:text="${booking.slot.startTime}">Time</span></span>
+                                </div>
+                            </div>
+                            <span class="status-tag" th:text="${booking.status}">CONFIRMED</span>
+                        </div>
+                        <div class="record-actions">
+                            <a class="btn btn-sm btn-outline-secondary" th:href="@{/specialist/bookings/detail(id=${booking.id})}">Open detail</a>
                         </div>
                     </div>
-                    <div class="text-end">
-                        <div class="soft-badge" th:text="${booking.status}">CONFIRMED</div>
-                        <a class="btn btn-sm btn-outline-secondary mt-2" th:href="@{/specialist/bookings}">Open</a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="section-panel h-100">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Recent notifications</h2>
+                            <p class="section-note">Recent schedule and workflow events.</p>
+                        </div>
+                    </div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(notifications)}">There are no new work notifications right now.</div>
+                    <div class="record-card" th:each="notification : ${notifications}">
+                        <div class="record-head mb-0">
+                            <div>
+                                <h3 class="record-title" th:text="${notification.remark}">Booking updated</h3>
+                                <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+                            </div>
+                            <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="panel-card">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                    <div>
-                        <h2 class="section-title mb-1">Recent Notifications</h2>
-                        <p class="section-caption mb-0">Keep recent booking changes and actions visible in one place.</p>
-                    </div>
-                </div>
-                <div class="alert alert-secondary" th:if="${#lists.isEmpty(notifications)}">There are no new work notifications right now.</div>
-                <div class="soft-list-item" th:each="notification : ${notifications}">
-                    <div>
-                        <div class="fw-bold" th:text="${notification.remark}">Booking updated</div>
-                        <div class="text-muted small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-                    </div>
-                    <div class="soft-badge" th:text="${notification.newStatus}">STATUS</div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

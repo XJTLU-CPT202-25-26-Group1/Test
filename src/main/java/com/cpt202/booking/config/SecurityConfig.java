@@ -4,9 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.authentication.DisabledException;
 
 @Configuration
 @EnableWebSecurity
@@ -19,7 +22,7 @@ public class SecurityConfig {
                 // Allow static assets
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/vendors/**", "/webjars/**").permitAll()
                 // Public pages
-                .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/error/**").permitAll()
+                .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-email", "/auth/resend-verification", "/error/**").permitAll()
                 // Role-based access control
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/specialist/**").hasAnyRole("SPECIALIST", "ADMIN")
@@ -31,7 +34,7 @@ public class SecurityConfig {
                 .loginPage("/auth/login")          // Custom login page
                 .loginProcessingUrl("/auth/login") // Login processing URL
                 .defaultSuccessUrl("/auth/success", true)
-                .failureUrl("/auth/login?error=true")
+                .failureHandler((request, response, exception) -> response.sendRedirect(buildFailureRedirect(exception)))
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll()
@@ -52,9 +55,15 @@ public class SecurityConfig {
         return http.build();
     }
 
+    private String buildFailureRedirect(AuthenticationException exception) {
+        if (exception instanceof DisabledException) {
+            return "/auth/login?unverified=true";
+        }
+        return "/auth/login?error=true";
+    }
+
     @Bean
-    @SuppressWarnings("deprecation")
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }

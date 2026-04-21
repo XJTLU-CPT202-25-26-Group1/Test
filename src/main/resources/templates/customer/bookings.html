@@ -5,63 +5,111 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <h1 class="h3 mb-4">My Bookings</h1>
-    <div class="card border-0 bg-light mb-4" th:if="${!#lists.isEmpty(notifications)}">
-        <div class="card-body">
-            <h2 class="h5 mb-3">Recent Booking Notifications</h2>
-            <div class="small" th:each="notification : ${notifications}">
-                <p class="mb-2">
-                    <strong th:text="${notification.newStatus}">STATUS</strong>
-                    <span th:text="${notification.remark}">Booking updated</span>
-                    <span class="text-muted">·</span>
-                    <span class="text-muted" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <form class="row g-2 mb-4" method="get" th:action="@{/customer/bookings}">
-        <div class="col-md-6"><input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by topic, specialist, or status"></div>
-        <div class="col-auto"><button class="btn btn-outline-secondary" type="submit">Search</button></div>
-    </form>
-    <h2 class="h5 mb-3">Upcoming Confirmed Appointments</h2>
-    <div class="alert alert-secondary" th:if="${#lists.isEmpty(upcomingBookings)}">No upcoming confirmed appointments.</div>
-    <div class="card mb-3" th:each="booking : ${upcomingBookings}">
-        <div class="card-body">
-            <strong th:text="${booking.topic}">Topic</strong>
-            <span class="ms-2" th:text="${booking.slot.slotDate}"></span>
-            <span th:text="${booking.slot.startTime}"></span>
-        </div>
-    </div>
-
-    <h2 class="h5 mb-3 mt-4">All Bookings</h2>
-    <div class="card mb-3" th:each="booking : ${bookings}">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+    <div class="page-wrap">
+        <section class="page-intro">
+            <div class="page-kicker">Customer portal</div>
+            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
                 <div>
-                    <h2 class="h5" th:text="${booking.topic}">Topic</h2>
-                    <p class="mb-1"><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></p>
-                    <p class="mb-1"><strong>Slot:</strong> <span th:text="${booking.slot.slotDate}"></span> <span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></p>
-                    <p class="mb-1"><strong>Status:</strong> <span th:text="${booking.status}">PENDING</span></p>
-                    <p class="mb-1"><strong>Fee:</strong> <span th:text="${booking.calculatedFee}">0</span></p>
-                    <p class="mb-1" th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() < 24}">
-                        <span class="text-danger">Self-service cancel/reschedule is disabled within 24 hours.</span>
-                    </p>
-                    <p class="mb-0" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}"><strong>Reason:</strong> <span th:text="${booking.rejectionReason}"></span></p>
+                    <h1 class="page-title">My Bookings</h1>
+                    <p class="page-summary">View upcoming appointments, search previous requests, track workflow status, and open details for cancellation, rescheduling, or feedback.</p>
                 </div>
-                <div class="d-flex gap-2 flex-wrap">
+                <a class="btn btn-primary" th:href="@{/customer/specialists}">New Booking</a>
+            </div>
+        </section>
+
+        <section class="toolbar-panel mb-4">
+            <form class="filter-grid" method="get" th:action="@{/customer/bookings}">
+                <div>
+                    <label class="form-label">Search bookings</label>
+                    <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by topic, specialist, or status">
+                </div>
+                <div></div>
+                <div></div>
+                <div>
+                    <button class="btn btn-outline-secondary w-100" type="submit">Search</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="section-panel mb-4" th:if="${!#lists.isEmpty(notifications)}">
+            <div class="section-heading">
+                <div>
+                    <h2>Recent Booking Notifications</h2>
+                    <p class="section-note">Latest booking decisions and status changes.</p>
+                </div>
+            </div>
+            <div class="notification-list">
+                <div class="record-card" th:each="notification : ${notifications}">
+                    <div class="record-head mb-0">
+                        <div>
+                            <h3 class="record-title" th:text="${notification.remark}">Booking updated</h3>
+                            <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+                        </div>
+                        <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-panel mb-4">
+            <div class="section-heading">
+                <div>
+                    <h2>Upcoming Confirmed Appointments</h2>
+                    <p class="section-note">Confirmed consultations scheduled in the future.</p>
+                </div>
+            </div>
+            <div class="empty-state" th:if="${#lists.isEmpty(upcomingBookings)}">No upcoming confirmed appointments.</div>
+            <div class="record-card" th:each="booking : ${upcomingBookings}">
+                <div class="record-head mb-0">
+                    <div>
+                        <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
+                        <div class="record-meta">
+                            <span><strong>Date:</strong> <span th:text="${booking.slot.slotDate}">Date</span></span>
+                            <span><strong>Time:</strong> <span th:text="${booking.slot.startTime}">Time</span></span>
+                            <span><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></span>
+                        </div>
+                    </div>
+                    <span class="status-tag success">Upcoming</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-panel">
+            <div class="section-heading">
+                <div>
+                    <h2>All Bookings</h2>
+                    <p class="section-note">Full booking history with status, fee, and next actions.</p>
+                </div>
+            </div>
+            <div class="empty-state" th:if="${#lists.isEmpty(bookings)}">No bookings are available for the current filter.</div>
+            <div class="record-card" th:each="booking : ${bookings}">
+                <div class="record-head">
+                    <div>
+                        <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
+                        <div class="record-meta">
+                            <span><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></span>
+                            <span><strong>Slot:</strong> <span th:text="${booking.slot.slotDate}">Date</span> <span th:text="${booking.slot.startTime}">Time</span> - <span th:text="${booking.slot.endTime}">End</span></span>
+                            <span><strong>Fee:</strong> <span th:text="${booking.calculatedFee}">0</span></span>
+                        </div>
+                    </div>
+                    <span class="status-tag" th:text="${booking.status}">PENDING</span>
+                </div>
+                <p class="record-description mb-2" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}">Reason: <span th:text="${booking.rejectionReason}"></span></p>
+                <p class="record-description mb-3" th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() < 24}">
+                    Self-service cancel or reschedule is disabled within 24 hours of the appointment.
+                </p>
+                <div class="record-actions">
                     <a class="btn btn-outline-secondary btn-sm" th:href="@{/customer/bookings/detail(id=${booking.id})}">Details</a>
                     <form th:if="${(booking.status.name() == 'PENDING') or (booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24)}" th:action="@{/customer/bookings/cancel}" method="post">
                         <input type="hidden" name="id" th:value="${booking.id}">
                         <button class="btn btn-outline-danger btn-sm" type="submit">Cancel</button>
                     </form>
-                    <form th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24}" th:action="@{/customer/bookings/reschedule}" method="post" class="d-flex gap-2">
-                        <input type="hidden" name="id" th:value="${booking.id}">
-                        <input class="form-control form-control-sm" type="number" min="1" name="newSlotId" placeholder="New slot ID" required>
-                        <button class="btn btn-outline-primary btn-sm" type="submit">Reschedule</button>
-                    </form>
+                    <a class="btn btn-outline-primary btn-sm"
+                       th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24}"
+                       th:href="@{/customer/bookings/reschedule(id=${booking.id})}">Reschedule</a>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>

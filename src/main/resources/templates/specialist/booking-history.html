@@ -1,72 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('周排班视图')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Weekly Schedule', '/css/specialist/bookings.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">周排班视图</div>
-      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-        <div>
-          <h1 class="page-title">本周接诊计划</h1>
-          <p class="page-summary">查看当前周的预约安排，并快速浏览最近完成的咨询记录。</p>
-        </div>
-        <div class="page-header-actions">
-          <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings/weekly(weekStart=${weekStart.minusDays(7)})}">上一周</a>
-          <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings/weekly(weekStart=${weekStart.plusDays(7)})}">下一周</a>
-          <a class="btn btn-primary" th:href="@{/specialist/bookings}">返回日程列表</a>
-        </div>
-      </div>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="section-panel table-panel mb-4">
-      <div class="section-heading">
-        <div>
-          <h2>周范围</h2>
-          <p class="section-note"><span th:text="${weekStart}">2026-01-01</span> 至 <span th:text="${weekEnd}">2026-01-07</span></p>
-        </div>
-      </div>
-      <div class="empty-state" th:if="${#lists.isEmpty(bookings)}">本周还没有排入预约。</div>
-      <div class="table-responsive" th:if="${!#lists.isEmpty(bookings)}">
-        <table class="table table-striped plain-table">
-          <thead><tr><th>日期</th><th>时间</th><th>客户</th><th>主题</th><th>状态</th></tr></thead>
-          <tbody>
-          <tr th:each="booking : ${bookings}">
-            <td th:text="${booking.slot.slotDate}">2026-01-01</td>
-            <td><span th:text="${booking.slot.startTime}"></span> - <span th:text="${booking.slot.endTime}"></span></td>
-            <td th:text="${booking.customerName}">Customer</td>
-            <td th:text="${booking.topic}">Topic</td>
-            <td><span class="status-tag" th:text="${booking.status}">CONFIRMED</span></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+    <div class="shell-body">
+        <aside th:replace="~{fragments/layout :: sideNav}"></aside>
+        <main class="page-content stack">
+            <section class="page-header">
+                <div>
+                    <h1>Weekly schedule</h1>
+                    <p>View bookings scheduled for the selected week and keep recent completed sessions visible.</p>
+                </div>
+            </section>
 
-    <section class="section-panel">
-      <div class="section-heading">
-        <div>
-          <h2>最近完成的咨询</h2>
-          <p class="section-note">用于快速查看历史记录。</p>
-        </div>
-      </div>
-      <div class="empty-state" th:if="${#lists.isEmpty(historyBookings)}">目前还没有完成的咨询历史。</div>
-      <div class="record-card" th:each="booking : ${historyBookings}">
-        <div class="record-head mb-0">
-          <div>
-            <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
-            <div class="record-meta">
-              <span><strong>日期：</strong><span th:text="${booking.slot.slotDate}">Date</span></span>
-              <span><strong>客户：</strong><span th:text="${booking.customerName}">Customer</span></span>
-            </div>
-          </div>
-          <span class="status-tag success">已完成</span>
-        </div>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+            <section class="panel">
+                <form class="toolbar" method="get" th:action="@{/specialist/bookings/weekly}">
+                    <div class="field">
+                        <label for="weekStart">Week starting Monday</label>
+                        <input id="weekStart" name="weekStart" type="date" th:value="${weekStart}">
+                    </div>
+                    <div class="inline-actions">
+                        <button class="button button--primary" type="submit">Load week</button>
+                    </div>
+                    <span class="tag" th:text="${#temporals.format(weekStart, 'dd MMM yyyy') + ' - ' + #temporals.format(weekEnd, 'dd MMM yyyy')}">21 Apr 2026 - 27 Apr 2026</span>
+                </form>
+            </section>
+
+            <section class="two-column">
+                <article class="table-card">
+                    <div class="section-header">
+                        <div>
+                            <h2>Bookings this week</h2>
+                            <p class="section-subtitle">Chronologically ordered bookings between the selected Monday and Sunday.</p>
+                        </div>
+                    </div>
+                    <div class="table-scroll" th:if="${!#lists.isEmpty(bookings)}">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Customer</th>
+                                <th>Topic</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="booking : ${bookings}">
+                                <td th:text="${#temporals.format(booking.slot.slotDate, 'EEE, dd MMM')}">Tue, 21 Apr</td>
+                                <td th:text="${#temporals.format(booking.slot.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.slot.endTime, 'HH:mm')}">10:00 - 11:00</td>
+                                <td th:text="${booking.customerName}">Demo Customer</td>
+                                <td th:text="${booking.topic}">Contract review</td>
+                                <td>
+                                    <span class="status-badge" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}"
+                                          th:text="${booking.status}">CONFIRMED</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(bookings)}">
+                        No bookings fall inside the selected week.
+                    </div>
+                </article>
+
+                <article class="panel">
+                    <div class="section-header">
+                        <div>
+                            <h2>Recent completed sessions</h2>
+                            <p class="section-subtitle">Latest completed bookings for quick follow-up.</p>
+                        </div>
+                    </div>
+                    <div class="activity-feed" th:if="${!#lists.isEmpty(historyBookings)}">
+                        <div class="activity-feed__item" th:each="booking : ${historyBookings}">
+                            <strong th:text="${booking.topic}">Consultation topic</strong>
+                            <span th:text="${booking.customerName + ' • ' + #temporals.format(booking.slot.slotDate, 'dd MMM yyyy')}">Demo Customer</span>
+                            <small th:text="${#temporals.format(booking.createdAt, 'dd MMM yyyy HH:mm')}">21 Apr 2026 10:22</small>
+                        </div>
+                    </div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(historyBookings)}">
+                        No completed sessions yet.
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/specialist/bookings.js')}"></th:block>
 </body>
 </html>

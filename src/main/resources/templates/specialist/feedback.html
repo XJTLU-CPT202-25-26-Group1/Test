@@ -1,36 +1,41 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('患者反馈')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Specialist Feedback', '/css/specialist/feedback.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">反馈中心</div>
-      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-        <div>
-          <h1 class="page-title">患者反馈</h1>
-          <p class="page-summary">查看完成咨询后提交的评分与评价。</p>
-        </div>
-        <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings}">返回接诊日程</a>
-      </div>
-    </section>
-    <div class="empty-state" th:if="${#lists.isEmpty(feedbackList)}">目前还没有收到患者反馈。</div>
-    <div class="record-card" th:each="feedback : ${feedbackList}">
-      <div class="record-head">
-        <div>
-          <h2 class="record-title" th:text="${feedback.customerName}">Customer</h2>
-          <div class="record-meta">
-            <span><strong>预约主题：</strong><span th:text="${feedback.booking.topic}">Topic</span></span>
-            <span><strong>提交时间：</strong><span th:text="${#temporals.format(feedback.createdAt, 'yyyy-MM-dd HH:mm')}">Created At</span></span>
-          </div>
-        </div>
-        <span class="status-tag success" th:text="${feedback.rating + ' / 5'}">5 / 5</span>
-      </div>
-      <p class="record-description mb-0" th:text="${feedback.comment}">Comment</p>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
+
+    <div class="shell-body">
+        <aside th:replace="~{fragments/layout :: sideNav}"></aside>
+        <main class="page-content stack">
+            <section class="page-header">
+                <div>
+                    <h1>Customer feedback</h1>
+                    <p>Review customer ratings and comments submitted after completed consultations.</p>
+                </div>
+            </section>
+
+            <section class="cards-grid" th:if="${!#lists.isEmpty(feedbackList)}">
+                <article class="list-card" th:each="feedback : ${feedbackList}">
+                    <span class="tag rating" th:text="${'Rating: ' + feedback.rating + ' / 5'}">Rating: 5 / 5</span>
+                    <h3 th:text="${feedback.customerName}">Demo Customer</h3>
+                    <p th:text="${feedback.comment}">Helpful consultation.</p>
+                    <div class="summary-strip">
+                        <span class="tag" th:text="${'Booking #' + feedback.booking.id}">Booking #1</span>
+                        <span class="tag" th:text="${#temporals.format(feedback.createdAt, 'dd MMM yyyy')}">21 Apr 2026</span>
+                    </div>
+                </article>
+            </section>
+
+            <section class="panel empty-state" th:if="${#lists.isEmpty(feedbackList)}">
+                Feedback will appear here after customers submit ratings on completed bookings.
+            </section>
+        </main>
     </div>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/specialist/feedback.js')}"></th:block>
 </body>
 </html>

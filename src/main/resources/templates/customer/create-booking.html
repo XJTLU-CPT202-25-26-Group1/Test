@@ -1,66 +1,85 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('创建预约')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Create Booking', '/css/customer/bookings.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">预约创建</div>
-      <h1 class="page-title">确认预约信息</h1>
-      <p class="page-summary">核对专家与时段后提交预约申请，后端仍按原有逻辑进入待审核状态。</p>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="split-layout">
-      <div class="summary-panel">
-        <h2 class="section-title mb-3">预约摘要</h2>
-        <div class="detail-grid">
-          <div class="detail-item">
-            <span class="detail-label">专家</span>
-            <span class="detail-value" th:text="${specialist.name}">Name</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">分类</span>
-            <span class="detail-value" th:text="${specialist.category != null ? specialist.category.name : '未分类'}">Category</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">级别</span>
-            <span class="detail-value" th:text="${specialist.level}">Level</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">预约时段</span>
-            <span class="detail-value"><span th:text="${slot.slotDate}">2026-01-01</span> <span th:text="${slot.startTime}">10:00</span> - <span th:text="${slot.endTime}">11:00</span></span>
-          </div>
-        </div>
-      </div>
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>预约申请表</h2>
-            <p class="section-note">填写主题和备注后提交。</p>
-          </div>
-        </div>
-        <form th:action="@{/customer/bookings/create}" method="post" class="row g-3">
-          <input type="hidden" name="specialistId" th:value="${specialist.id}">
-          <input type="hidden" name="slotId" th:value="${slot.id}">
-          <div class="col-12">
-            <label class="form-label">咨询主题</label>
-            <input class="form-control" type="text" name="topic" placeholder="简要描述本次咨询需求" required>
-          </div>
-          <div class="col-12">
-            <label class="form-label">补充说明</label>
-            <textarea class="form-control" name="notes" rows="5" placeholder="填写背景情况、诉求重点或需要专家提前了解的信息"></textarea>
-          </div>
-          <div class="col-12 form-actions">
-            <button class="btn btn-primary" type="submit">提交预约申请</button>
-            <a class="btn btn-outline-secondary" th:href="@{/customer/specialists/detail(id=${specialist.id})}">返回专家详情</a>
-          </div>
-        </form>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <main class="page-content--centered stack">
+        <section class="page-header">
+            <div>
+                <h1>Create booking request</h1>
+                <p>Review the specialist and selected time slot before submitting your consultation request.</p>
+            </div>
+        </section>
+
+        <section class="two-column">
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Booking details</h2>
+                        <p class="section-subtitle">Complete the request form to send it for administrator review.</p>
+                    </div>
+                </div>
+                <form class="stack" th:action="@{/customer/bookings/create}" method="post">
+                    <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                    <input type="hidden" name="specialistId" th:value="${specialist.id}">
+                    <input type="hidden" name="slotId" th:value="${slot.id}">
+                    <div class="field">
+                        <label for="topic">Consultation topic</label>
+                        <input id="topic" name="topic" type="text" required placeholder="Describe the topic you want to discuss">
+                    </div>
+                    <div class="field">
+                        <label for="notes">Additional notes</label>
+                        <textarea id="notes" name="notes" placeholder="Optional context, documents, or expectations"></textarea>
+                    </div>
+                    <div class="inline-actions">
+                        <button class="button button--primary" type="submit">Submit booking request</button>
+                        <a class="button button--ghost" th:href="@{/customer/specialists/detail(id=${specialist.id})}">Back to specialist</a>
+                    </div>
+                </form>
+            </article>
+
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Selected specialist & slot</h2>
+                        <p class="section-subtitle">This information is resolved from the chosen slot.</p>
+                    </div>
+                </div>
+                <div class="detail-list">
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Specialist</span>
+                        <span class="detail-list__value" th:text="${specialist.name}">Alice Chen</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Category</span>
+                        <span class="detail-list__value" th:text="${specialist.category != null ? specialist.category.name : 'Unassigned category'}">Legal</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Level</span>
+                        <span class="detail-list__value" th:text="${specialist.level}">Senior</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Date</span>
+                        <span class="detail-list__value" th:text="${#temporals.format(slot.slotDate, 'dd MMM yyyy')}">24 Apr 2026</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Time</span>
+                        <span class="detail-list__value" th:text="${#temporals.format(slot.startTime, 'HH:mm') + ' - ' + #temporals.format(slot.endTime, 'HH:mm')}">10:00 - 11:00</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Estimated fee</span>
+                        <span class="detail-list__value" th:text="${'$' + #numbers.formatDecimal(specialist.feeRate, 1, 2)} + '/hour'">$300.00/hour</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/customer/bookings.js')}"></th:block>
 </body>
 </html>

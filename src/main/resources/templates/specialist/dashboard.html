@@ -1,142 +1,111 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('专家工作台')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Specialist Dashboard', '/css/specialist/dashboard.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">专家服务台</div>
-      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-        <div>
-          <h1 class="page-title mb-2" th:text="${specialist.name}">专家姓名</h1>
-          <p class="page-summary">
-            <span th:text="${specialist.category != null ? specialist.category.name : '未分配分类'}">Category</span>
-            ·
-            <span th:text="${specialist.level}">Level</span>
-            ·
-            咨询费 <strong th:text="${specialist.feeRate}">0</strong> / 小时
-          </p>
-        </div>
-        <div class="page-header-actions">
-          <a class="btn btn-primary" th:href="@{/specialist/bookings}">接诊日程</a>
-          <a class="btn btn-outline-secondary" th:href="@{/specialist/availability}">排班管理</a>
-        </div>
-      </div>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="section-panel mb-4">
-      <div class="section-heading">
-        <div>
-          <h2>常用入口</h2>
-          <p class="section-note">围绕排班、接诊、反馈和资料四个高频场景重组。</p>
-        </div>
-      </div>
-      <div class="quick-grid">
-        <a class="quick-link" th:href="@{/specialist/availability}">
-          <div class="feature-icon"><i class="bi bi-calendar2-week"></i></div>
-          <div class="quick-link-title">排班管理</div>
-          <p class="quick-link-text">新增、调整和删除未被占用的时段。</p>
-        </a>
-        <a class="quick-link" th:href="@{/specialist/bookings}">
-          <div class="feature-icon"><i class="bi bi-journal-medical"></i></div>
-          <div class="quick-link-title">接诊日程</div>
-          <p class="quick-link-text">查看已分配预约并标记完成咨询。</p>
-        </a>
-        <a class="quick-link" th:href="@{/specialist/feedback}">
-          <div class="feature-icon"><i class="bi bi-chat-heart"></i></div>
-          <div class="quick-link-title">患者反馈</div>
-          <p class="quick-link-text">查看已完成咨询后的评分与评论。</p>
-        </a>
-        <a class="quick-link" th:href="@{/specialist/profile}">
-          <div class="feature-icon"><i class="bi bi-person-vcard"></i></div>
-          <div class="quick-link-title">个人资料</div>
-          <p class="quick-link-text">核对专家资料、账号信息和专业简介。</p>
-        </a>
-      </div>
-    </section>
+    <div class="shell-body">
+        <aside th:replace="~{fragments/layout :: sideNav}"></aside>
+        <main class="page-content stack">
+            <section class="hero-card dashboard-hero">
+                <div class="eyebrow">Specialist workspace</div>
+                <h1 th:text="${'Hello, ' + specialist.name + '.'}">Hello, Specialist.</h1>
+                <p>Manage your consultation pipeline, keep availability accurate, and monitor recent booking activity.</p>
+                <div class="summary-strip">
+                    <span class="tag" th:text="${specialist.category != null ? specialist.category.name : 'Unassigned category'}">Category</span>
+                    <span class="tag" th:text="${specialist.level}">Senior</span>
+                    <span class="tag" th:text="${'$' + #numbers.formatDecimal(specialist.feeRate, 1, 2)} + '/hour'">$300.00/hour</span>
+                </div>
+            </section>
 
-    <section class="row g-3 mb-4">
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">全部预约</div>
-          <div class="metric-value" th:text="${bookingCount}">0</div>
-          <div class="metric-meta">当前分配给你的所有预约记录。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">待接诊</div>
-          <div class="metric-value" th:text="${confirmedCount}">0</div>
-          <div class="metric-meta">已确认但尚未完成的咨询数量。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">已完成</div>
-          <div class="metric-value" th:text="${completedCount}">0</div>
-          <div class="metric-meta">已经标记完成并可查看反馈的预约。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">空闲时段</div>
-          <div class="metric-value" th:text="${availableSlotCount}">0</div>
-          <div class="metric-meta">未来仍可被客户预约的排班数量。</div>
-        </div>
-      </div>
-    </section>
+            <section class="stats-grid">
+                <article class="metric-card">
+                    <span class="metric-card__label">Total bookings</span>
+                    <strong class="metric-card__value" th:text="${bookingCount}">0</strong>
+                    <span class="metric-card__hint">All bookings assigned to your specialist profile.</span>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-card__label">Confirmed</span>
+                    <strong class="metric-card__value" th:text="${confirmedCount}">0</strong>
+                    <span class="metric-card__hint">Confirmed sessions still awaiting delivery.</span>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-card__label">Completed</span>
+                    <strong class="metric-card__value" th:text="${completedCount}">0</strong>
+                    <span class="metric-card__hint">Consultations already completed.</span>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-card__label">Open slots</span>
+                    <strong class="metric-card__value" th:text="${availableSlotCount}">0</strong>
+                    <span class="metric-card__hint">Future slots still available for booking.</span>
+                </article>
+            </section>
 
-    <section class="split-layout">
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>最近预约</h2>
-            <p class="section-note">保留预约详情与完成按钮逻辑，重新整理展示层次。</p>
-          </div>
-          <a class="btn btn-outline-primary" th:href="@{/specialist/bookings}">查看全部</a>
-        </div>
-        <div class="empty-state" th:if="${#lists.isEmpty(recentBookings)}">目前还没有分配给你的预约。</div>
-        <div class="record-card" th:each="booking : ${recentBookings}">
-          <div class="record-head">
-            <div>
-              <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
-              <div class="record-meta">
-                <span><strong>客户：</strong><span th:text="${booking.customerName}">Customer</span></span>
-                <span><strong>日期：</strong><span th:text="${booking.slot.slotDate}">Date</span></span>
-                <span><strong>时间：</strong><span th:text="${booking.slot.startTime}">Time</span></span>
-              </div>
-            </div>
-            <span class="status-tag" th:text="${booking.status}">CONFIRMED</span>
-          </div>
-          <div class="record-actions">
-            <a class="btn btn-sm btn-outline-secondary" th:href="@{/specialist/bookings/detail(id=${booking.id})}">查看详情</a>
-          </div>
-        </div>
-      </div>
+            <section class="dashboard-grid">
+                <article class="table-card">
+                    <div class="section-header">
+                        <div>
+                            <h2>Recent bookings</h2>
+                            <p class="section-subtitle">Latest consultations associated with your profile.</p>
+                        </div>
+                        <a class="button button--ghost" th:href="@{/specialist/bookings}">Open bookings</a>
+                    </div>
+                    <div class="table-scroll" th:if="${!#lists.isEmpty(recentBookings)}">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Topic</th>
+                                <th>Status</th>
+                                <th>Session</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="booking : ${recentBookings}">
+                                <td th:text="${booking.customerName}">Demo Customer</td>
+                                <td th:text="${booking.topic}">Contract review</td>
+                                <td>
+                                    <span class="status-badge" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}"
+                                          th:text="${booking.status}">PENDING</span>
+                                </td>
+                                <td th:text="${#temporals.format(booking.slot.slotDate, 'dd MMM yyyy') + ', ' + #temporals.format(booking.slot.startTime, 'HH:mm')}">24 Apr 2026, 10:00</td>
+                                <td><a class="button button--ghost" th:href="@{/specialist/bookings/detail(id=${booking.id})}">Details</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(recentBookings)}">
+                        No bookings yet.
+                    </div>
+                </article>
 
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>工作提醒</h2>
-            <p class="section-note">聚合最近与自己相关的预约状态变化。</p>
-          </div>
-        </div>
-        <div class="empty-state" th:if="${#lists.isEmpty(notifications)}">当前没有新的工作提醒。</div>
-        <div class="record-card" th:each="notification : ${notifications}">
-          <div class="record-head mb-0">
-            <div>
-              <h3 class="record-title" th:text="${notification.remark}">提醒</h3>
-              <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-            </div>
-            <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+                <article class="panel dashboard-sidecard">
+                    <div class="section-header">
+                        <div>
+                            <h2>Notifications</h2>
+                            <p class="section-subtitle">Recent audit log events for your bookings.</p>
+                        </div>
+                    </div>
+                    <div class="activity-feed" th:if="${!#lists.isEmpty(notifications)}">
+                        <div class="activity-feed__item" th:each="log : ${notifications}">
+                            <strong th:text="${'Booking #' + log.bookingId + ' → ' + log.newStatus}">Booking update</strong>
+                            <span th:text="${log.remark}">Remark</span>
+                            <small th:text="${#temporals.format(log.operatedAt, 'dd MMM yyyy HH:mm')}">21 Apr 2026 10:22</small>
+                        </div>
+                    </div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(notifications)}">
+                        No recent booking updates.
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/specialist/dashboard.js')}"></th:block>
 </body>
 </html>

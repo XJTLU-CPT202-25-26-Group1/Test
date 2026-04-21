@@ -1,63 +1,79 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('改期预约')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reschedule Booking', '/css/customer/bookings.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">预约改期</div>
-      <h1 class="page-title">选择新的时段</h1>
-      <p class="page-summary">先查看当前预约信息，再从可用备选时段中选择新的咨询时间。</p>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="split-layout">
-      <div class="summary-panel">
-        <h2 class="section-title mb-3">当前预约</h2>
-        <div class="detail-grid">
-          <div class="detail-item">
-            <span class="detail-label">主题</span>
-            <span class="detail-value" th:text="${booking.topic}">Topic</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">专家</span>
-            <span class="detail-value" th:text="${booking.specialist.name}">Specialist</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">原时段</span>
-            <span class="detail-value"><span th:text="${booking.slot.slotDate}">2026-01-01</span> <span th:text="${booking.slot.startTime}">10:00</span> - <span th:text="${booking.slot.endTime}">11:00</span></span>
-          </div>
-        </div>
-      </div>
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>选择新时段</h2>
-            <p class="section-note">仅展示当前仍可预约的备选时段。</p>
-          </div>
-        </div>
-        <div class="empty-state" th:if="${#lists.isEmpty(alternativeSlots)}">暂时没有可用于改期的新时段。</div>
-        <form th:if="${!#lists.isEmpty(alternativeSlots)}" th:action="@{/customer/bookings/reschedule}" method="post" class="row g-3">
-          <input type="hidden" name="id" th:value="${booking.id}">
-          <div class="col-12" th:each="slot : ${alternativeSlots}">
-            <label class="slot-choice">
-              <span>
-                <strong th:text="${slot.slotDate}">2026-01-01</strong>
-                <span class="subtle-text ms-2"><span th:text="${slot.startTime}">10:00</span> - <span th:text="${slot.endTime}">11:00</span></span>
-              </span>
-              <input class="form-check-input" type="radio" name="newSlotId" th:value="${slot.id}" required>
-            </label>
-          </div>
-          <div class="col-12 form-actions">
-            <button class="btn btn-primary" type="submit">确认改期</button>
-            <a class="btn btn-outline-secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">返回预约详情</a>
-          </div>
-        </form>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <main class="page-content--centered stack">
+        <section class="page-header">
+            <div>
+                <h1 th:text="${'Reschedule Booking #' + booking.id}">Reschedule Booking</h1>
+                <p>Choose a new available slot. Once submitted, the booking returns to pending review.</p>
+            </div>
+        </section>
+
+        <section class="two-column">
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Current booking</h2>
+                        <p class="section-subtitle">Reference information for the existing confirmed booking.</p>
+                    </div>
+                </div>
+                <div class="detail-list">
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Topic</span>
+                        <span class="detail-list__value" th:text="${booking.topic}">Tax planning</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Specialist</span>
+                        <span class="detail-list__value" th:text="${booking.specialist.name}">Bob Wang</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Current slot</span>
+                        <span class="detail-list__value"
+                              th:text="${#temporals.format(booking.slot.slotDate, 'dd MMM yyyy') + ', ' + #temporals.format(booking.slot.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.slot.endTime, 'HH:mm')}">
+                            24 Apr 2026, 10:00 - 11:00
+                        </span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Select a new slot</h2>
+                        <p class="section-subtitle">Only alternative future slots for the same specialist are available.</p>
+                    </div>
+                </div>
+                <form class="stack" th:action="@{/customer/bookings/reschedule}" method="post">
+                    <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                    <input type="hidden" name="id" th:value="${booking.id}">
+                    <div class="stack" th:if="${!#lists.isEmpty(alternativeSlots)}">
+                        <label class="list-card" th:each="slot : ${alternativeSlots}">
+                            <span class="inline-actions">
+                                <input type="radio" name="newSlotId" th:value="${slot.id}" required>
+                                <strong th:text="${#temporals.format(slot.slotDate, 'EEEE, dd MMM yyyy')}">Friday, 24 Apr 2026</strong>
+                            </span>
+                            <p th:text="${#temporals.format(slot.startTime, 'HH:mm') + ' - ' + #temporals.format(slot.endTime, 'HH:mm')}">10:00 - 11:00</p>
+                        </label>
+                    </div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(alternativeSlots)}">
+                        No alternative slots are currently available for this specialist.
+                    </div>
+                    <div class="inline-actions">
+                        <button class="button button--primary" type="submit" th:disabled="${#lists.isEmpty(alternativeSlots)}">Submit reschedule request</button>
+                        <a class="button button--ghost" th:href="@{/customer/bookings/detail(id=${booking.id})}">Back to detail</a>
+                    </div>
+                </form>
+            </article>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/customer/bookings.js')}"></th:block>
 </body>
 </html>

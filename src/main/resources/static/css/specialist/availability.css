@@ -1,1 +1,3 @@
-/* Placeholder */
+.availability-table .button[disabled] {
+    opacity: 0.5;
+}

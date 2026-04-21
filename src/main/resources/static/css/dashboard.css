@@ -1,1 +1,44 @@
+.dashboard-hero {
+    display: grid;
+    gap: 18px;
+}
 
+.dashboard-hero h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.dashboard-hero p {
+    margin: 0;
+    max-width: 58ch;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.activity-feed {
+    display: grid;
+    gap: 14px;
+}
+
+.activity-feed__item {
+    display: grid;
+    gap: 6px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(216, 225, 238, 0.75);
+}
+
+.activity-feed__item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.activity-feed__item strong {
+    color: var(--heading);
+}
+
+.activity-feed__item small {
+    color: var(--text-soft);
+}
+
+.dashboard-sidecard {
+    background: linear-gradient(180deg, #ffffff, #f6faff);
+}

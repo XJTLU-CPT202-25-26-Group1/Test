@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('403 无权限')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Access Denied', null)}"></head>
 <body>
-  <header th:replace="~{fragments/layout :: header}"></header>
-  <main class="site-main">
-    <div class="error-shell">
-      <div class="page-kicker">访问控制</div>
-      <div class="error-code">403</div>
-      <h1 class="page-title">你当前没有权限访问这个页面。</h1>
-      <p class="page-summary">请返回上一级页面，或回到首页使用具备相应权限的账号重新登录。</p>
-      <div class="form-actions justify-content-center mt-4">
-        <a class="btn btn-primary" href="/">回到首页</a>
-        <a class="btn btn-outline-secondary" href="/auth/login">前往登录</a>
-      </div>
-    </div>
-  </main>
-  <footer th:replace="~{fragments/layout :: footer}"></footer>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <main class="page-content--centered stack">
+        <section class="hero-card">
+            <div class="eyebrow">403 error</div>
+            <h1>You do not have permission to access this page.</h1>
+            <p>The current account role cannot open the requested resource. Return to your dashboard or sign in with a different role.</p>
+            <div class="hero-actions">
+                <a class="button button--primary" th:href="@{${dashboardPath}}">Go to dashboard</a>
+                <a class="button button--ghost" th:href="@{/}">Back to home</a>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts(null)}"></th:block>
 </body>
 </html>

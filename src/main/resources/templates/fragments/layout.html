@@ -14,7 +14,7 @@
 
 <body>
 <header th:fragment="header">
-  <nav class="navbar navbar-expand-lg navbar-dark app-navbar">
+  <nav class="navbar navbar-expand-lg app-navbar">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
         <span class="brand-mark"><i class="bi bi-plus-lg"></i></span>
@@ -27,8 +27,11 @@
 
       <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
         <ul class="navbar-nav app-nav-list">
-          <li class="nav-item" th:if="${!isAuthenticated}">
+          <li class="nav-item">
             <a class="nav-link" th:href="@{/}">Home</a>
+          </li>
+          <li class="nav-item" th:if="${!isAuthenticated}">
+            <a class="nav-link" th:href="@{/customer/specialists}">Browse</a>
           </li>
           <li class="nav-item" th:if="${!isAuthenticated}">
             <a class="nav-link" th:href="@{/auth/register}">Register</a>
@@ -56,10 +59,32 @@
           </li>
         </ul>
 
-        <div class="d-flex align-items-center gap-2 ms-lg-3">
+        <div class="nav-account-bar d-flex align-items-center gap-2 ms-lg-3">
           <a class="btn btn-light btn-sm px-3" th:if="${!isAuthenticated}" th:href="@{/auth/login}">
             Log In
           </a>
+
+          <a class="btn btn-outline-secondary btn-sm d-lg-none" th:if="${isAuthenticated}" th:href="@{/}">
+            Home
+          </a>
+
+          <a class="btn btn-outline-secondary btn-sm d-lg-none" th:if="${isAuthenticated}" th:href="${profilePath}">
+            Profile
+          </a>
+
+          <form th:if="${isAuthenticated}" th:action="@{/logout}" method="post" class="d-none d-lg-block mb-0">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button class="btn btn-outline-danger btn-sm px-3" type="submit">
+              Log Out
+            </button>
+          </form>
+
+          <form th:if="${isAuthenticated}" th:action="@{/logout}" method="post" class="d-lg-none mb-0">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button class="btn btn-outline-danger btn-sm px-3" type="submit">
+              Log Out
+            </button>
+          </form>
 
           <div class="dropdown" th:if="${isAuthenticated}">
             <button class="btn account-trigger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,6 +107,11 @@
               <li>
                 <a class="dropdown-item" th:href="${profilePath}">
                   <i class="bi bi-person-lines-fill me-2"></i>Profile
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/}">
+                  <i class="bi bi-house-door me-2"></i>Home
                 </a>
               </li>
               <li>
@@ -132,7 +162,7 @@
 
 <footer th:fragment="footer" class="py-4 mt-auto border-top">
   <div class="container text-center text-muted">
-    <p class="mb-0">&copy; 2024 XJTLU Software Engineering Group Project | Specialist Consultation Booking System</p>
+    <p class="mb-0">&copy; 2026 XJTLU Software Engineering Group Project | Specialist Consultation Booking System</p>
     <p class="mb-0 small">CPT202 Group Project - Option B</p>
   </div>
 </footer>

@@ -1,45 +1,80 @@
-$(document).ready(function() {
-  // Toggle password visibility
-  $('#togglePassword').on('click', function() {
-    const $passwordField = $('#password');
-    const fieldType = $passwordField.attr('type');
-    $passwordField.attr('type', fieldType === 'password' ? 'text' : 'password');
-    
-    // Toggle icon
-    $(this).html(
-      fieldType === 'password' 
-        ? '<i class="bi bi-eye-slash"></i>' 
-        : '<i class="bi bi-eye"></i>'
-    );
-  });
+function bindPasswordToggle() {
+  const toggle = document.querySelector("#togglePassword");
+  const passwordField = document.querySelector("#password");
 
-  // Enhanced form validation
-  const form = document.querySelector('.needs-validation');
-  if (form) {
-    form.addEventListener('submit', function(event) {
+  if (!toggle || !passwordField) {
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    const isPassword = passwordField.getAttribute("type") === "password";
+    passwordField.setAttribute("type", isPassword ? "text" : "password");
+    toggle.textContent = isPassword ? "Hide" : "Show";
+  });
+}
+
+function bindFormValidation() {
+  const forms = document.querySelectorAll(".needs-validation");
+  forms.forEach((form) => {
+    form.addEventListener("submit", (event) => {
       if (!form.checkValidity()) {
         event.preventDefault();
         event.stopPropagation();
       }
-      form.classList.add('was-validated');
-    }, false);
-  }
-
-  // Remove transient URL parameters after rendering
-  if (window.history.replaceState) {
-    const url = new URL(window.location);
-    if (url.searchParams.has('error') || url.searchParams.has('logout') || url.searchParams.has('unverified')) {
-      url.searchParams.delete('error');
-      url.searchParams.delete('logout');
-      url.searchParams.delete('unverified');
-      window.history.replaceState(null, null, url.pathname);
-    }
-  }
-
-  // Optional focus styling
-  $('.form-control').on('focus', function() {
-    $(this).closest('.input-group').addClass('shadow-sm');
-  }).on('blur', function() {
-    $(this).closest('.input-group').removeClass('shadow-sm');
+      form.classList.add("was-validated");
+    });
   });
+}
+
+function clearTransientParams() {
+  if (!window.history.replaceState) {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  const transientKeys = ["error", "logout", "unverified"];
+  let changed = false;
+
+  transientKeys.forEach((key) => {
+    if (url.searchParams.has(key)) {
+      url.searchParams.delete(key);
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    const next = url.pathname + (url.search ? url.search : "");
+    window.history.replaceState(null, "", next);
+  }
+}
+
+function bindRoleToggle() {
+  const roleSelect = document.querySelector("#roleSelect");
+  const specialistFields = document.querySelectorAll(".specialist-only");
+  const categorySelect = document.querySelector("#categorySelect");
+
+  if (!roleSelect || specialistFields.length === 0) {
+    return;
+  }
+
+  const toggleFields = () => {
+    const specialistMode = roleSelect.value === "SPECIALIST";
+    specialistFields.forEach((field) => {
+      field.style.display = specialistMode ? "" : "none";
+    });
+
+    if (categorySelect) {
+      categorySelect.required = specialistMode;
+    }
+  };
+
+  toggleFields();
+  roleSelect.addEventListener("change", toggleFields);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  bindPasswordToggle();
+  bindFormValidation();
+  clearTransientParams();
+  bindRoleToggle();
 });

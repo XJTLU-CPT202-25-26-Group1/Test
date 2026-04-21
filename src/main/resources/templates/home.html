@@ -23,31 +23,54 @@
                 </div>
             </div>
             <div class="hero-artboard">
-                <div class="mock-plant"></div>
-                <div class="mock-device">
-                    <div class="mock-screen">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="mock-screen-title">Appointment</div>
-                            <div class="small text-muted">Available Times</div>
+                <div class="preview-panel">
+                    <div class="preview-header">
+                        <div>
+                            <div class="preview-kicker">Booking workflow</div>
+                            <h2 class="preview-title">Simple and traceable from request to completion</h2>
                         </div>
-                        <div class="position-relative">
-                            <div class="mock-calendar">
-                                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-                                <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
-                                <span>14</span><span>15</span><span>16</span><span class="active">17</span><span>18</span><span>19</span><span>20</span>
-                                <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span>
+                        <span class="soft-badge">Structured flow</span>
+                    </div>
+
+                    <div class="preview-steps">
+                        <div class="preview-step">
+                            <div class="preview-step-index">01</div>
+                            <div>
+                                <div class="preview-step-title">Browse specialists</div>
+                                <p class="preview-step-text">Search by category, level, and upcoming availability.</p>
                             </div>
-                            <div class="mock-side-list">
-                                <div class="mock-side-item"></div>
-                                <div class="mock-side-item"></div>
-                                <div class="mock-side-item"></div>
-                                <div class="mock-side-item"></div>
-                                <button class="btn btn-sm btn-primary mock-book-btn" type="button">Book</button>
+                        </div>
+                        <div class="preview-step">
+                            <div class="preview-step-index">02</div>
+                            <div>
+                                <div class="preview-step-title">Submit request</div>
+                                <p class="preview-step-text">Choose a slot and provide the consultation topic and notes.</p>
+                            </div>
+                        </div>
+                        <div class="preview-step">
+                            <div class="preview-step-index">03</div>
+                            <div>
+                                <div class="preview-step-title">Track the result</div>
+                                <p class="preview-step-text">Follow pending, confirmed, cancelled, and completed updates clearly.</p>
                             </div>
                         </div>
                     </div>
+
+                    <div class="preview-stats">
+                        <div class="preview-stat">
+                            <span class="preview-stat-label">Specialists</span>
+                            <strong th:text="${specialistCount}">0</strong>
+                        </div>
+                        <div class="preview-stat">
+                            <span class="preview-stat-label">Categories</span>
+                            <strong th:text="${categoryCount}">0</strong>
+                        </div>
+                        <div class="preview-stat">
+                            <span class="preview-stat-label">Pending review</span>
+                            <strong th:text="${pendingCount}">0</strong>
+                        </div>
+                    </div>
                 </div>
-                <div class="mock-cup"></div>
             </div>
         </div>
     </section>

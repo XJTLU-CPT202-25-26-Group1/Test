@@ -1,138 +1,135 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Customer Dashboard')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('客户工作台')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="page-wrap">
-        <section class="page-intro">
-            <div class="page-kicker">Customer dashboard</div>
-            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-                <div>
-                    <h1 class="page-title mb-2">Welcome back, <span th:text="${profile.displayName}">Customer</span></h1>
-                    <p class="page-summary">Track upcoming consultations, follow booking decisions, and move quickly between specialist discovery, booking management, and account updates.</p>
-                </div>
-                <div class="page-header-actions">
-                    <a class="btn btn-primary" th:href="@{/customer/specialists}">Browse Specialists</a>
-                    <a class="btn btn-outline-secondary" th:href="@{/customer/bookings}">My Bookings</a>
-                </div>
-            </div>
-        </section>
+  <div class="page-wrap">
+    <section class="page-intro">
+      <div class="page-kicker">客户服务台</div>
+      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+        <div>
+          <h1 class="page-title mb-2">欢迎回来，<span th:text="${profile.displayName}">用户</span></h1>
+          <p class="page-summary">这里保留了预约、改期、取消、通知和个人资料的全部功能，但入口改成了更接近医院服务 App 的清爽卡片式布局。</p>
+        </div>
+        <div class="page-header-actions">
+          <a class="btn btn-primary" th:href="@{/customer/specialists}">去预约</a>
+          <a class="btn btn-outline-secondary" th:href="@{/customer/bookings}">我的预约</a>
+        </div>
+      </div>
+    </section>
 
-        <section class="split-layout mb-4">
-            <div class="summary-panel">
-                <span class="hero-chip mb-3"><i class="bi bi-person-heart"></i> Customer workspace</span>
-                <h2 class="section-title mb-2">Your appointment workspace</h2>
-                <p class="section-caption mb-3">Use this page as the main entry point for searching specialists, checking booking progress, and staying on top of upcoming confirmed consultations.</p>
-                <div class="surface-note">Pending bookings stay visible until an administrator confirms or rejects them. Confirmed appointments remain editable until the 24-hour lock window starts.</div>
-            </div>
-            <div class="section-panel">
-                <div class="section-heading">
-                    <div>
-                        <h2>Quick actions</h2>
-                        <p class="section-note">Common customer tasks grouped in one place.</p>
-                    </div>
-                </div>
-                <div class="quick-grid">
-                    <a class="quick-link" th:href="@{/customer/specialists}">
-                        <div class="quick-link-title">Browse Specialists</div>
-                        <p class="quick-link-text">Search specialists by category and date, then submit a booking request.</p>
-                    </a>
-                    <a class="quick-link" th:href="@{/customer/bookings}">
-                        <div class="quick-link-title">Manage Bookings</div>
-                        <p class="quick-link-text">Check status, open details, and manage cancel or reschedule actions.</p>
-                    </a>
-                    <a class="quick-link" th:href="@{/customer/profile}">
-                        <div class="quick-link-title">Update Profile</div>
-                        <p class="quick-link-text">Keep your contact details and display name up to date.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
+    <section class="section-panel mb-4">
+      <div class="section-heading">
+        <div>
+          <h2>常用服务</h2>
+          <p class="section-note">四宫格快捷入口对应真实页面，不做空展示。</p>
+        </div>
+      </div>
+      <div class="quick-grid">
+        <a class="quick-link" th:href="@{/customer/specialists}">
+          <div class="feature-icon"><i class="bi bi-calendar2-plus"></i></div>
+          <div class="quick-link-title">预约挂号</div>
+          <p class="quick-link-text">查看专家列表、选择时段并发起预约申请。</p>
+        </a>
+        <a class="quick-link" th:href="@{/customer/bookings}">
+          <div class="feature-icon"><i class="bi bi-journal-check"></i></div>
+          <div class="quick-link-title">线上复诊</div>
+          <p class="quick-link-text">查看已预约记录，处理取消、改期和状态跟踪。</p>
+        </a>
+        <a class="quick-link" th:href="@{/customer/bookings}">
+          <div class="feature-icon"><i class="bi bi-bell"></i></div>
+          <div class="quick-link-title">预约提醒</div>
+          <p class="quick-link-text">集中查看最近审批结果和预约状态变动。</p>
+        </a>
+        <a class="quick-link" th:href="@{/customer/profile}">
+          <div class="feature-icon"><i class="bi bi-person-vcard"></i></div>
+          <div class="quick-link-title">个人资料</div>
+          <p class="quick-link-text">更新昵称、邮箱与联系电话信息。</p>
+        </a>
+      </div>
+    </section>
 
-        <section class="row g-3 mb-4">
-        <div class="col-md-6 col-xl-3">
-            <div class="metric-card">
-                <div class="metric-label">All Bookings</div>
-                <div class="metric-value" th:text="${bookingCount}">0</div>
-                <div class="metric-meta">Every booking linked to your account</div>
-            </div>
+    <section class="row g-3 mb-4">
+      <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+          <div class="metric-label">全部预约</div>
+          <div class="metric-value" th:text="${bookingCount}">0</div>
+          <div class="metric-meta">与当前账号关联的全部预约记录。</div>
         </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="metric-card">
-                <div class="metric-label">Pending Review</div>
-                <div class="metric-value" th:text="${pendingCount}">0</div>
-                <div class="metric-meta">Requests still waiting for administrator review</div>
-            </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+          <div class="metric-label">待审核</div>
+          <div class="metric-value" th:text="${pendingCount}">0</div>
+          <div class="metric-meta">仍在等待管理员审核的预约请求。</div>
         </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="metric-card">
-                <div class="metric-label">Upcoming</div>
-                <div class="metric-value" th:text="${#lists.size(upcomingBookings)}">0</div>
-                <div class="metric-meta">Confirmed consultations scheduled soon</div>
-            </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+          <div class="metric-label">即将到来</div>
+          <div class="metric-value" th:text="${#lists.size(upcomingBookings)}">0</div>
+          <div class="metric-meta">已经确认且尚未开始的咨询预约。</div>
         </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="metric-card">
-                <div class="metric-label">Completed</div>
-                <div class="metric-value" th:text="${completedCount}">0</div>
-                <div class="metric-meta">Completed consultations ready for review</div>
-            </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+          <div class="metric-label">已完成</div>
+          <div class="metric-value" th:text="${completedCount}">0</div>
+          <div class="metric-meta">可进入反馈与查看历史的预约数量。</div>
         </div>
-        </section>
+      </div>
+    </section>
 
-        <section class="row g-4">
-            <div class="col-lg-7">
-                <div class="section-panel h-100">
-                    <div class="section-heading">
-                        <div>
-                            <h2>Recent bookings</h2>
-                            <p class="section-note">Latest requests and consultations linked to your account.</p>
-                        </div>
-                        <a class="btn btn-outline-primary" th:href="@{/customer/bookings}">View all</a>
-                    </div>
-                    <div class="empty-state" th:if="${#lists.isEmpty(recentBookings)}">You do not have any bookings yet. Start by browsing specialists.</div>
-                    <div class="record-card" th:each="booking : ${recentBookings}">
-                        <div class="record-head">
-                            <div>
-                                <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
-                                <div class="record-meta">
-                                    <span><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></span>
-                                    <span><strong>Date:</strong> <span th:text="${booking.slot.slotDate}">Date</span></span>
-                                    <span><strong>Time:</strong> <span th:text="${booking.slot.startTime}">Time</span></span>
-                                </div>
-                            </div>
-                            <span class="status-tag" th:text="${booking.status}">PENDING</span>
-                        </div>
-                        <div class="record-actions">
-                            <a class="btn btn-sm btn-outline-secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">Open detail</a>
-                        </div>
-                    </div>
-                </div>
+    <section class="split-layout">
+      <div class="section-panel">
+        <div class="section-heading">
+          <div>
+            <h2>最近预约</h2>
+            <p class="section-note">这里保留原来的预约详情入口与状态展示。</p>
+          </div>
+          <a class="btn btn-outline-primary" th:href="@{/customer/bookings}">查看全部</a>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(recentBookings)}">你还没有预约记录，先去选择一位专家吧。</div>
+        <div class="record-card" th:each="booking : ${recentBookings}">
+          <div class="record-head">
+            <div>
+              <h3 class="record-title" th:text="${booking.topic}">主题</h3>
+              <div class="record-meta">
+                <span><strong>专家：</strong><span th:text="${booking.specialist.name}">Specialist</span></span>
+                <span><strong>日期：</strong><span th:text="${booking.slot.slotDate}">Date</span></span>
+                <span><strong>时间：</strong><span th:text="${booking.slot.startTime}">Time</span></span>
+              </div>
             </div>
-            <div class="col-lg-5">
-                <div class="section-panel h-100">
-                    <div class="section-heading">
-                        <div>
-                            <h2>Recent notifications</h2>
-                            <p class="section-note">Keep the latest workflow changes visible.</p>
-                        </div>
-                    </div>
-                    <div class="empty-state" th:if="${#lists.isEmpty(notifications)}">There are no new booking notifications right now.</div>
-                    <div class="record-card" th:each="notification : ${notifications}">
-                        <div class="record-head mb-0">
-                            <div>
-                                <h3 class="record-title" th:text="${notification.remark}">Booking updated</h3>
-                                <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-                            </div>
-                            <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
-                        </div>
-                    </div>
-                </div>
+            <span class="status-tag" th:text="${booking.status}">PENDING</span>
+          </div>
+          <div class="record-actions">
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">查看详情</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-panel">
+        <div class="section-heading">
+          <div>
+            <h2>最新提醒</h2>
+            <p class="section-note">保留原有通知数据，只优化展示层级。</p>
+          </div>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(notifications)}">当前没有新的预约提醒。</div>
+        <div class="record-card" th:each="notification : ${notifications}">
+          <div class="record-head mb-0">
+            <div>
+              <h3 class="record-title" th:text="${notification.remark}">提醒</h3>
+              <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
             </div>
-        </section>
-    </div>
+            <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

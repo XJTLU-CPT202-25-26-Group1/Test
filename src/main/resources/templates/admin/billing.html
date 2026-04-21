@@ -1,65 +1,65 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Billing Overview')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('账单总览')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="page-wrap">
-        <section class="page-intro">
-            <div class="page-kicker">Administrator billing</div>
-            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-                <div>
-                    <h1 class="page-title">Billing Overview</h1>
-                    <p class="page-summary">Review billable consultation counts, confirmed value, completed revenue, and billable booking records.</p>
-                </div>
-                <a class="btn btn-outline-secondary" th:href="@{/admin/dashboard}">Back to Dashboard</a>
-            </div>
-        </section>
+  <div class="page-wrap">
+    <section class="page-intro">
+      <div class="page-kicker">账单中心</div>
+      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+        <div>
+          <h1 class="page-title">账单总览</h1>
+          <p class="page-summary">查看可计费预约数量、已确认金额、已完成收入以及明细列表。</p>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/admin/dashboard}">返回工作台</a>
+      </div>
+    </section>
 
-        <section class="row g-3 mb-4">
-            <div class="col-md-4"><div class="metric-card h-100"><div class="metric-label">Billable Bookings</div><div class="metric-value" th:text="${billableCount}">0</div><div class="metric-meta">Confirmed and completed bookings included in billing visibility.</div></div></div>
-            <div class="col-md-4"><div class="metric-card h-100"><div class="metric-label">Confirmed Value</div><div class="metric-value" th:text="${#numbers.formatDecimal(confirmedValue, 1, 2)}">0.00</div><div class="metric-meta">Current value of confirmed consultations.</div></div></div>
-            <div class="col-md-4"><div class="metric-card h-100"><div class="metric-label">Completed Revenue</div><div class="metric-value" th:text="${#numbers.formatDecimal(completedRevenue, 1, 2)}">0.00</div><div class="metric-meta">Revenue from consultations already completed.</div></div></div>
-        </section>
+    <section class="row g-3 mb-4">
+      <div class="col-md-4"><div class="metric-card h-100"><div class="metric-label">可计费预约</div><div class="metric-value" th:text="${billableCount}">0</div><div class="metric-meta">计入账单总览的已确认和已完成预约。</div></div></div>
+      <div class="col-md-4"><div class="metric-card h-100"><div class="metric-label">已确认金额</div><div class="metric-value" th:text="${#numbers.formatDecimal(confirmedValue, 1, 2)}">0.00</div><div class="metric-meta">当前处于确认状态的咨询总金额。</div></div></div>
+      <div class="col-md-4"><div class="metric-card h-100"><div class="metric-label">已完成收入</div><div class="metric-value" th:text="${#numbers.formatDecimal(completedRevenue, 1, 2)}">0.00</div><div class="metric-meta">已完成咨询产生的收入总额。</div></div></div>
+    </section>
 
-        <section class="section-panel table-panel">
-            <div class="section-heading">
-                <div>
-                    <h2>Billable booking records</h2>
-                    <p class="section-note">Bookings included in fee calculation and billing review.</p>
-                </div>
-            </div>
-            <div class="empty-state" th:if="${#lists.isEmpty(billableBookings)}">No confirmed or completed bookings yet.</div>
-            <div class="table-responsive" th:if="${!#lists.isEmpty(billableBookings)}">
-                <table class="table align-middle plain-table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Customer</th>
-                        <th>Specialist</th>
-                        <th>Slot</th>
-                        <th>Status</th>
-                        <th>Fee</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="booking : ${billableBookings}">
-                        <td th:text="${booking.id}">1</td>
-                        <td th:text="${booking.customerName}">Customer</td>
-                        <td th:text="${booking.specialist.name}">Specialist</td>
-                        <td>
-                            <span th:text="${booking.slot.slotDate}">Date</span>
-                            <span th:text="${booking.slot.startTime}">Start</span>
-                        </td>
-                        <td><span class="status-tag" th:text="${booking.status}">CONFIRMED</span></td>
-                        <td th:text="${#numbers.formatDecimal(booking.calculatedFee, 1, 2)}">0.00</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </div>
+    <section class="section-panel table-panel">
+      <div class="section-heading">
+        <div>
+          <h2>计费明细</h2>
+          <p class="section-note">以下预约纳入费用统计。</p>
+        </div>
+      </div>
+      <div class="empty-state" th:if="${#lists.isEmpty(billableBookings)}">目前还没有可计费的预约。</div>
+      <div class="table-responsive" th:if="${!#lists.isEmpty(billableBookings)}">
+        <table class="table align-middle plain-table">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>客户</th>
+            <th>专家</th>
+            <th>时段</th>
+            <th>状态</th>
+            <th>费用</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="booking : ${billableBookings}">
+            <td th:text="${booking.id}">1</td>
+            <td th:text="${booking.customerName}">Customer</td>
+            <td th:text="${booking.specialist.name}">Specialist</td>
+            <td>
+              <span th:text="${booking.slot.slotDate}">Date</span>
+              <span th:text="${booking.slot.startTime}">Start</span>
+            </td>
+            <td><span class="status-tag" th:text="${booking.status}">CONFIRMED</span></td>
+            <td th:text="${#numbers.formatDecimal(booking.calculatedFee, 1, 2)}">0.00</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

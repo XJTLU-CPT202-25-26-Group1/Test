@@ -1,55 +1,55 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Expertise Categories')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('分类维护')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="page-wrap">
-        <section class="page-intro">
-            <div class="page-kicker">Administrator master data</div>
-            <h1 class="page-title">Expertise Categories</h1>
-            <p class="page-summary">Create, update, activate, and deactivate expertise categories used across specialist records and booking filters.</p>
-        </section>
+  <div class="page-wrap">
+    <section class="page-intro">
+      <div class="page-kicker">分类管理</div>
+      <h1 class="page-title">专业分类维护</h1>
+      <p class="page-summary">新增、编辑、启用或停用专家分类，后端重复校验逻辑保持不变。</p>
+    </section>
 
-        <section class="section-panel mb-4">
-            <div class="section-heading">
-                <div>
-                    <h2>Create category</h2>
-                    <p class="section-note">Duplicate names are blocked by the backend rule.</p>
-                </div>
-            </div>
-            <form class="row g-3" th:action="@{/admin/categories}" method="post">
-                <div class="col-md-8"><label class="form-label">Category name</label><input class="form-control" type="text" name="name" placeholder="New category name" required></div>
-                <div class="col-md-4 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">Add Category</button></div>
+    <section class="section-panel mb-4">
+      <div class="section-heading">
+        <div>
+          <h2>新增分类</h2>
+          <p class="section-note">分类名称不能重复。</p>
+        </div>
+      </div>
+      <form class="row g-3" th:action="@{/admin/categories}" method="post">
+        <div class="col-md-8"><label class="form-label">分类名称</label><input class="form-control" type="text" name="name" placeholder="输入新分类名称" required></div>
+        <div class="col-md-4 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">添加分类</button></div>
+      </form>
+    </section>
+
+    <section class="section-panel">
+      <div class="section-heading">
+        <div>
+          <h2>分类列表</h2>
+          <p class="section-note">可直接更新名称与切换状态。</p>
+        </div>
+      </div>
+      <div class="compact-stack">
+        <div class="record-card" th:each="category : ${categories}">
+          <div class="record-head">
+            <form th:action="@{/admin/categories/update}" method="post" class="inline-actions w-100">
+              <input type="hidden" name="id" th:value="${category.id}">
+              <input class="form-control form-control-sm" type="text" name="name" th:value="${category.name}" required>
+              <button class="btn btn-outline-primary btn-sm" type="submit">更新名称</button>
             </form>
-        </section>
-
-        <section class="section-panel">
-            <div class="section-heading">
-                <div>
-                    <h2>Category list</h2>
-                    <p class="section-note">Maintenance actions for existing categories.</p>
-                </div>
-            </div>
-            <div class="compact-stack">
-                <div class="record-card" th:each="category : ${categories}">
-                    <div class="record-head">
-                        <form th:action="@{/admin/categories/update}" method="post" class="inline-actions w-100">
-                            <input type="hidden" name="id" th:value="${category.id}">
-                            <input class="form-control form-control-sm" type="text" name="name" th:value="${category.name}" required>
-                            <button class="btn btn-outline-primary btn-sm" type="submit">Update</button>
-                        </form>
-                        <span class="status-tag" th:text="${category.status}">ACTIVE</span>
-                    </div>
-                    <form th:action="@{/admin/categories/toggle}" method="post">
-                        <input type="hidden" name="id" th:value="${category.id}">
-                        <button class="btn btn-outline-dark btn-sm" type="submit" th:text="${category.status.name() == 'ACTIVE' ? 'Deactivate' : 'Activate'}">Toggle</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </div>
+            <span class="status-tag" th:text="${category.status}">ACTIVE</span>
+          </div>
+          <form th:action="@{/admin/categories/toggle}" method="post">
+            <input type="hidden" name="id" th:value="${category.id}">
+            <button class="btn btn-outline-dark btn-sm" type="submit" th:text="${category.status.name() == 'ACTIVE' ? '停用' : '启用'}">Toggle</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

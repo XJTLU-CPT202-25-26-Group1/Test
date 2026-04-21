@@ -1,90 +1,90 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Admin Booking Detail')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('审核详情')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="page-wrap">
-        <section class="page-intro">
-            <div class="page-kicker">Administrator workflow</div>
-            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-                <div>
-                    <h1 class="page-title">Booking Review Detail</h1>
-                    <p class="page-summary">Inspect customer, specialist, slot, fee, and workflow information before confirming or rejecting the request.</p>
-                </div>
-                <a class="btn btn-outline-secondary" th:href="@{/admin/bookings}">Back to Booking Review</a>
-            </div>
-        </section>
+  <div class="page-wrap">
+    <section class="page-intro">
+      <div class="page-kicker">审核详情</div>
+      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+        <div>
+          <h1 class="page-title">预约审核详情</h1>
+          <p class="page-summary">查看客户、专家、时段、费用和流程记录，再执行确认或拒绝。</p>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/admin/bookings}">返回审核列表</a>
+      </div>
+    </section>
 
-        <section class="split-layout">
-            <div class="summary-panel">
-                <div class="record-head">
-                    <div>
-                        <h2 class="record-title" th:text="${booking.topic}">Topic</h2>
-                        <div class="record-meta">
-                            <span><strong>Customer:</strong> <span th:text="${booking.customerName}">Customer</span></span>
-                            <span><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></span>
-                        </div>
-                    </div>
-                    <span class="status-tag" th:text="${booking.status}">PENDING</span>
-                </div>
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">Customer email</span>
-                        <span class="detail-value" th:text="${booking.customerEmail}">email</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Fee</span>
-                        <span class="detail-value" th:text="${booking.calculatedFee}">0</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Slot</span>
-                        <span class="detail-value"><span th:text="${booking.slot.slotDate}">2026-01-01</span> <span th:text="${booking.slot.startTime}">10:00</span> - <span th:text="${booking.slot.endTime}">11:00</span></span>
-                    </div>
-                    <div class="detail-item" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}">
-                        <span class="detail-label">Rejection reason</span>
-                        <span class="detail-value" th:text="${booking.rejectionReason}">reason</span>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <h2 class="section-title mb-2">Customer notes</h2>
-                    <p class="record-description mb-0" th:text="${booking.notes}">Notes</p>
-                </div>
-                <div class="form-actions mt-4" th:if="${booking.status.name() == 'PENDING'}">
-                    <form th:action="@{/admin/bookings/confirm}" method="post">
-                        <input type="hidden" name="id" th:value="${booking.id}">
-                        <button class="btn btn-success" type="submit">Confirm</button>
-                    </form>
-                    <form th:action="@{/admin/bookings/reject}" method="post" class="inline-actions">
-                        <input type="hidden" name="id" th:value="${booking.id}">
-                        <input class="form-control" type="text" name="reason" placeholder="Rejection reason" required>
-                        <button class="btn btn-danger" type="submit">Reject</button>
-                    </form>
-                </div>
+    <section class="split-layout">
+      <div class="summary-panel">
+        <div class="record-head">
+          <div>
+            <h2 class="record-title" th:text="${booking.topic}">Topic</h2>
+            <div class="record-meta">
+              <span><strong>客户：</strong><span th:text="${booking.customerName}">Customer</span></span>
+              <span><strong>专家：</strong><span th:text="${booking.specialist.name}">Specialist</span></span>
             </div>
+          </div>
+          <span class="status-tag" th:text="${booking.status}">PENDING</span>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">客户邮箱</span>
+            <span class="detail-value" th:text="${booking.customerEmail}">email</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">费用</span>
+            <span class="detail-value" th:text="${booking.calculatedFee}">0</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">预约时段</span>
+            <span class="detail-value"><span th:text="${booking.slot.slotDate}">2026-01-01</span> <span th:text="${booking.slot.startTime}">10:00</span> - <span th:text="${booking.slot.endTime}">11:00</span></span>
+          </div>
+          <div class="detail-item" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}">
+            <span class="detail-label">拒绝原因</span>
+            <span class="detail-value" th:text="${booking.rejectionReason}">reason</span>
+          </div>
+        </div>
+        <div class="mt-3">
+          <h2 class="section-title mb-2">客户备注</h2>
+          <p class="record-description mb-0" th:text="${booking.notes}">Notes</p>
+        </div>
+        <div class="form-actions mt-4" th:if="${booking.status.name() == 'PENDING'}">
+          <form th:action="@{/admin/bookings/confirm}" method="post">
+            <input type="hidden" name="id" th:value="${booking.id}">
+            <button class="btn btn-success" type="submit">确认预约</button>
+          </form>
+          <form th:action="@{/admin/bookings/reject}" method="post" class="inline-actions">
+            <input type="hidden" name="id" th:value="${booking.id}">
+            <input class="form-control" type="text" name="reason" placeholder="填写拒绝原因" required>
+            <button class="btn btn-danger" type="submit">拒绝预约</button>
+          </form>
+        </div>
+      </div>
 
-            <div class="section-panel">
-                <div class="section-heading">
-                    <div>
-                        <h2>Audit history</h2>
-                        <p class="section-note">Workflow transitions for this booking.</p>
-                    </div>
-                </div>
-                <div class="empty-state" th:if="${#lists.isEmpty(auditLogs)}">No audit records are available for this booking yet.</div>
-                <div class="record-card" th:each="log : ${auditLogs}">
-                    <div class="record-head mb-0">
-                        <div>
-                            <h3 class="record-title" th:text="${log.newStatus}">NEW</h3>
-                            <div class="subtle-text small" th:text="${log.remark}">remark</div>
-                            <div class="subtle-text small" th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-                        </div>
-                        <div class="subtle-text small" th:text="${log.operatorUsername}">operator</div>
-                    </div>
-                </div>
+      <div class="section-panel">
+        <div class="section-heading">
+          <div>
+            <h2>流程记录</h2>
+            <p class="section-note">展示该预约的全部状态流转。</p>
+          </div>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(auditLogs)}">该预约还没有审计记录。</div>
+        <div class="record-card" th:each="log : ${auditLogs}">
+          <div class="record-head mb-0">
+            <div>
+              <h3 class="record-title" th:text="${log.newStatus}">NEW</h3>
+              <div class="subtle-text small" th:text="${log.remark}">remark</div>
+              <div class="subtle-text small" th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
             </div>
-        </section>
-    </div>
+            <div class="subtle-text small" th:text="${log.operatorUsername}">operator</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

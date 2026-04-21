@@ -1,48 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Specialist Booking Detail')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('接诊详情')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="row g-4">
-        <div class="col-lg-7">
-            <div class="panel-card">
-                <h1 class="section-title mb-3">Consultation Booking Detail</h1>
-                <p class="mb-2"><strong>Topic:</strong> <span th:text="${booking.topic}">Topic</span></p>
-                <p class="mb-2"><strong>Customer:</strong> <span th:text="${booking.customerName}">Customer</span></p>
-                <p class="mb-2"><strong>Notes:</strong> <span th:text="${booking.notes}">Notes</span></p>
-                <p class="mb-2"><strong>Slot:</strong>
-                    <span th:text="${booking.slot.slotDate}">2026-01-01</span>
-                    <span th:text="${booking.slot.startTime}">10:00</span> -
-                    <span th:text="${booking.slot.endTime}">11:00</span>
-                </p>
-                <p class="mb-2"><strong>Status:</strong> <span th:text="${booking.status}">CONFIRMED</span></p>
-                <p class="mb-4"><strong>Fee:</strong> <span th:text="${booking.calculatedFee}">0</span></p>
-                <div class="d-flex gap-2 flex-wrap">
-                    <form th:if="${booking.status.name() == 'CONFIRMED'}" th:action="@{/specialist/bookings/complete}" method="post">
-                        <input type="hidden" name="id" th:value="${booking.id}">
-                        <button class="btn btn-success" type="submit">Mark Completed</button>
-                    </form>
-                    <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings}">Back to Schedule</a>
-                </div>
-            </div>
+  <div class="page-wrap">
+    <section class="split-layout">
+      <div class="panel-card">
+        <h1 class="section-title mb-3">接诊详情</h1>
+        <p class="mb-2"><strong>咨询主题：</strong><span th:text="${booking.topic}">Topic</span></p>
+        <p class="mb-2"><strong>客户姓名：</strong><span th:text="${booking.customerName}">Customer</span></p>
+        <p class="mb-2"><strong>客户备注：</strong><span th:text="${booking.notes}">Notes</span></p>
+        <p class="mb-2"><strong>预约时段：</strong>
+          <span th:text="${booking.slot.slotDate}">2026-01-01</span>
+          <span th:text="${booking.slot.startTime}">10:00</span> -
+          <span th:text="${booking.slot.endTime}">11:00</span>
+        </p>
+        <p class="mb-2"><strong>当前状态：</strong><span th:text="${booking.status}">CONFIRMED</span></p>
+        <p class="mb-4"><strong>咨询费用：</strong><span th:text="${booking.calculatedFee}">0</span></p>
+        <div class="d-flex gap-2 flex-wrap">
+          <form th:if="${booking.status.name() == 'CONFIRMED'}" th:action="@{/specialist/bookings/complete}" method="post">
+            <input type="hidden" name="id" th:value="${booking.id}">
+            <button class="btn btn-success" type="submit">标记完成</button>
+          </form>
+          <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings}">返回接诊日程</a>
         </div>
-        <div class="col-lg-5">
-            <div class="panel-card">
-                <h2 class="section-title mb-3">Booking Activity</h2>
-                <div class="alert alert-secondary" th:if="${#lists.isEmpty(auditLogs)}">No booking activity has been recorded yet.</div>
-                <div class="soft-list-item" th:each="log : ${auditLogs}">
-                    <div>
-                        <div class="fw-bold" th:text="${log.newStatus}">STATUS</div>
-                        <div class="text-muted small" th:text="${log.remark}">remark</div>
-                        <div class="text-muted small" th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-                    </div>
-                    <div class="text-muted small" th:text="${log.operatorUsername}">operator</div>
-                </div>
-            </div>
+      </div>
+      <div class="panel-card">
+        <h2 class="section-title mb-3">预约动态</h2>
+        <div class="empty-state" th:if="${#lists.isEmpty(auditLogs)}">当前还没有记录到预约动态。</div>
+        <div class="soft-list-item" th:each="log : ${auditLogs}">
+          <div>
+            <div class="fw-bold" th:text="${log.newStatus}">STATUS</div>
+            <div class="text-muted small" th:text="${log.remark}">remark</div>
+            <div class="text-muted small" th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+          </div>
+          <div class="text-muted small" th:text="${log.operatorUsername}">operator</div>
         </div>
-    </div>
+      </div>
+    </section>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

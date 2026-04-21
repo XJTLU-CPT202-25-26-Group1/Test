@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('403')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('403 无权限')}"></head>
 <body>
   <header th:replace="~{fragments/layout :: header}"></header>
   <main class="site-main">
     <div class="error-shell">
-      <div class="page-kicker">Access control</div>
+      <div class="page-kicker">访问控制</div>
       <div class="error-code">403</div>
-      <h1 class="page-title">You do not have permission to open this page.</h1>
-      <p class="page-summary">Please return to the previous page or go back to the home page and sign in with an account that has the required permissions.</p>
+      <h1 class="page-title">你当前没有权限访问这个页面。</h1>
+      <p class="page-summary">请返回上一级页面，或回到首页使用具备相应权限的账号重新登录。</p>
       <div class="form-actions justify-content-center mt-4">
-        <a class="btn btn-primary" href="/">Go to Home</a>
-        <a class="btn btn-outline-secondary" href="/auth/login">Log In</a>
+        <a class="btn btn-primary" href="/">回到首页</a>
+        <a class="btn btn-outline-secondary" href="/auth/login">前往登录</a>
       </div>
     </div>
   </main>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Resend Verification')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('重发验证邮件')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
@@ -9,28 +9,28 @@
   <div class="page-wrap">
     <section class="auth-shell">
       <div class="auth-panel">
-        <div class="page-kicker">Email verification</div>
-        <h1>Send a fresh verification link.</h1>
-        <p>If the account has been registered but not verified yet, you can request a new email verification link here.</p>
+        <div class="page-kicker">邮箱验证</div>
+        <h1>重新发送验证链接。</h1>
+        <p>如果账号已注册但尚未完成邮箱验证，可以在这里重新发送验证邮件。</p>
       </div>
 
       <div class="auth-card">
-        <div class="page-kicker">Verification request</div>
-        <h1>Resend verification email</h1>
-        <p>Enter the username and the email address originally used during registration.</p>
+        <div class="page-kicker">验证申请</div>
+        <h1>重新发送验证邮件</h1>
+        <p>请输入注册时使用的用户名和邮箱地址。</p>
 
         <form th:action="@{/auth/resend-verification}" method="post">
           <div>
-            <label class="form-label">Username</label>
+            <label class="form-label">用户名</label>
             <input class="form-control" type="text" name="username" required>
           </div>
           <div>
-            <label class="form-label">Registered Email</label>
+            <label class="form-label">注册邮箱</label>
             <input class="form-control" type="email" name="email" required>
           </div>
           <div class="form-actions">
-            <button class="btn btn-primary" type="submit">Send Verification Email</button>
-            <a class="btn btn-outline-secondary" th:href="@{/auth/login}">Back to Login</a>
+            <button class="btn btn-primary" type="submit">发送验证邮件</button>
+            <a class="btn btn-outline-secondary" th:href="@{/auth/login}">返回登录</a>
           </div>
         </form>
       </div>

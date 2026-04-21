@@ -1,116 +1,116 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('My Bookings')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('我的预约')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
-    <div class="page-wrap">
-        <section class="page-intro">
-            <div class="page-kicker">Customer portal</div>
-            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-                <div>
-                    <h1 class="page-title">My Bookings</h1>
-                    <p class="page-summary">View upcoming appointments, search previous requests, track workflow status, and open details for cancellation, rescheduling, or feedback.</p>
-                </div>
-                <a class="btn btn-primary" th:href="@{/customer/specialists}">New Booking</a>
-            </div>
-        </section>
+  <div class="page-wrap">
+    <section class="page-intro">
+      <div class="page-kicker">客户预约中心</div>
+      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+        <div>
+          <h1 class="page-title">我的预约</h1>
+          <p class="page-summary">查看即将到来的预约、搜索历史记录、跟踪状态并进入取消、改期与反馈功能。</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/customer/specialists}">新建预约</a>
+      </div>
+    </section>
 
-        <section class="toolbar-panel mb-4">
-            <form class="filter-grid" method="get" th:action="@{/customer/bookings}">
-                <div>
-                    <label class="form-label">Search bookings</label>
-                    <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by topic, specialist, or status">
-                </div>
-                <div></div>
-                <div></div>
-                <div>
-                    <button class="btn btn-outline-secondary w-100" type="submit">Search</button>
-                </div>
-            </form>
-        </section>
+    <section class="toolbar-panel mb-4">
+      <form class="filter-grid" method="get" th:action="@{/customer/bookings}">
+        <div>
+          <label class="form-label">搜索预约</label>
+          <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="按主题、专家或状态搜索">
+        </div>
+        <div></div>
+        <div></div>
+        <div>
+          <button class="btn btn-outline-secondary w-100" type="submit">搜索</button>
+        </div>
+      </form>
+    </section>
 
-        <section class="section-panel mb-4" th:if="${!#lists.isEmpty(notifications)}">
-            <div class="section-heading">
-                <div>
-                    <h2>Recent Booking Notifications</h2>
-                    <p class="section-note">Latest booking decisions and status changes.</p>
-                </div>
+    <section class="section-panel mb-4" th:if="${!#lists.isEmpty(notifications)}">
+      <div class="section-heading">
+        <div>
+          <h2>最新提醒</h2>
+          <p class="section-note">展示最近的预约审批和状态变化。</p>
+        </div>
+      </div>
+      <div class="notification-list">
+        <div class="record-card" th:each="notification : ${notifications}">
+          <div class="record-head mb-0">
+            <div>
+              <h3 class="record-title" th:text="${notification.remark}">Booking updated</h3>
+              <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
             </div>
-            <div class="notification-list">
-                <div class="record-card" th:each="notification : ${notifications}">
-                    <div class="record-head mb-0">
-                        <div>
-                            <h3 class="record-title" th:text="${notification.remark}">Booking updated</h3>
-                            <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-                        </div>
-                        <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <section class="section-panel mb-4">
-            <div class="section-heading">
-                <div>
-                    <h2>Upcoming Confirmed Appointments</h2>
-                    <p class="section-note">Confirmed consultations scheduled in the future.</p>
-                </div>
+    <section class="section-panel mb-4">
+      <div class="section-heading">
+        <div>
+          <h2>即将到来的已确认预约</h2>
+          <p class="section-note">仅展示未来时间且已确认的咨询。</p>
+        </div>
+      </div>
+      <div class="empty-state" th:if="${#lists.isEmpty(upcomingBookings)}">目前没有即将到来的已确认预约。</div>
+      <div class="record-card" th:each="booking : ${upcomingBookings}">
+        <div class="record-head mb-0">
+          <div>
+            <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
+            <div class="record-meta">
+              <span><strong>日期：</strong><span th:text="${booking.slot.slotDate}">Date</span></span>
+              <span><strong>时间：</strong><span th:text="${booking.slot.startTime}">Time</span></span>
+              <span><strong>专家：</strong><span th:text="${booking.specialist.name}">Specialist</span></span>
             </div>
-            <div class="empty-state" th:if="${#lists.isEmpty(upcomingBookings)}">No upcoming confirmed appointments.</div>
-            <div class="record-card" th:each="booking : ${upcomingBookings}">
-                <div class="record-head mb-0">
-                    <div>
-                        <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
-                        <div class="record-meta">
-                            <span><strong>Date:</strong> <span th:text="${booking.slot.slotDate}">Date</span></span>
-                            <span><strong>Time:</strong> <span th:text="${booking.slot.startTime}">Time</span></span>
-                            <span><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></span>
-                        </div>
-                    </div>
-                    <span class="status-tag success">Upcoming</span>
-                </div>
-            </div>
-        </section>
+          </div>
+          <span class="status-tag success">即将开始</span>
+        </div>
+      </div>
+    </section>
 
-        <section class="section-panel">
-            <div class="section-heading">
-                <div>
-                    <h2>All Bookings</h2>
-                    <p class="section-note">Full booking history with status, fee, and next actions.</p>
-                </div>
+    <section class="section-panel">
+      <div class="section-heading">
+        <div>
+          <h2>全部预约记录</h2>
+          <p class="section-note">保留取消、改期和详情按钮逻辑。</p>
+        </div>
+      </div>
+      <div class="empty-state" th:if="${#lists.isEmpty(bookings)}">当前筛选条件下没有预约记录。</div>
+      <div class="record-card" th:each="booking : ${bookings}">
+        <div class="record-head">
+          <div>
+            <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
+            <div class="record-meta">
+              <span><strong>专家：</strong><span th:text="${booking.specialist.name}">Specialist</span></span>
+              <span><strong>时段：</strong><span th:text="${booking.slot.slotDate}">Date</span> <span th:text="${booking.slot.startTime}">Time</span> - <span th:text="${booking.slot.endTime}">End</span></span>
+              <span><strong>费用：</strong><span th:text="${booking.calculatedFee}">0</span></span>
             </div>
-            <div class="empty-state" th:if="${#lists.isEmpty(bookings)}">No bookings are available for the current filter.</div>
-            <div class="record-card" th:each="booking : ${bookings}">
-                <div class="record-head">
-                    <div>
-                        <h3 class="record-title" th:text="${booking.topic}">Topic</h3>
-                        <div class="record-meta">
-                            <span><strong>Specialist:</strong> <span th:text="${booking.specialist.name}">Specialist</span></span>
-                            <span><strong>Slot:</strong> <span th:text="${booking.slot.slotDate}">Date</span> <span th:text="${booking.slot.startTime}">Time</span> - <span th:text="${booking.slot.endTime}">End</span></span>
-                            <span><strong>Fee:</strong> <span th:text="${booking.calculatedFee}">0</span></span>
-                        </div>
-                    </div>
-                    <span class="status-tag" th:text="${booking.status}">PENDING</span>
-                </div>
-                <p class="record-description mb-2" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}">Reason: <span th:text="${booking.rejectionReason}"></span></p>
-                <p class="record-description mb-3" th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() < 24}">
-                    Self-service cancel or reschedule is disabled within 24 hours of the appointment.
-                </p>
-                <div class="record-actions">
-                    <a class="btn btn-outline-secondary btn-sm" th:href="@{/customer/bookings/detail(id=${booking.id})}">Details</a>
-                    <form th:if="${(booking.status.name() == 'PENDING') or (booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24)}" th:action="@{/customer/bookings/cancel}" method="post">
-                        <input type="hidden" name="id" th:value="${booking.id}">
-                        <button class="btn btn-outline-danger btn-sm" type="submit">Cancel</button>
-                    </form>
-                    <a class="btn btn-outline-primary btn-sm"
-                       th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24}"
-                       th:href="@{/customer/bookings/reschedule(id=${booking.id})}">Reschedule</a>
-                </div>
-            </div>
-        </section>
-    </div>
+          </div>
+          <span class="status-tag" th:text="${booking.status}">PENDING</span>
+        </div>
+        <p class="record-description mb-2" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}">拒绝原因：<span th:text="${booking.rejectionReason}"></span></p>
+        <p class="record-description mb-3" th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() < 24}">
+          预约开始前 24 小时内不可自助取消或改期。
+        </p>
+        <div class="record-actions">
+          <a class="btn btn-outline-secondary btn-sm" th:href="@{/customer/bookings/detail(id=${booking.id})}">详情</a>
+          <form th:if="${(booking.status.name() == 'PENDING') or (booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24)}" th:action="@{/customer/bookings/cancel}" method="post">
+            <input type="hidden" name="id" th:value="${booking.id}">
+            <button class="btn btn-outline-danger btn-sm" type="submit">取消预约</button>
+          </form>
+          <a class="btn btn-outline-primary btn-sm"
+             th:if="${booking.status.name() == 'CONFIRMED' and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), T(java.time.LocalDateTime).of(booking.slot.slotDate, booking.slot.startTime)).toHours() >= 24}"
+             th:href="@{/customer/bookings/reschedule(id=${booking.id})}">改期</a>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

@@ -1,63 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Browse Specialists')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('专家门诊')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <main class="container py-5">
-    <div class="page-wrap">
-        <section class="page-intro">
-            <div class="page-kicker">Customer portal</div>
-            <h1 class="page-title">Browse Specialists</h1>
-            <p class="page-summary">Search specialists by name, expertise category, and available date before opening a profile and choosing an available slot.</p>
-        </section>
+  <div class="page-wrap">
+    <section class="page-intro">
+      <div class="page-kicker">客户门户</div>
+      <h1 class="page-title">专家门诊</h1>
+      <p class="page-summary">按姓名、分类和可预约日期筛选专家，查看详情后直接选择时段发起预约。</p>
+    </section>
 
-        <section class="toolbar-panel mb-4">
-            <form class="filter-grid" method="get" th:action="@{/customer/specialists}">
-                <div>
-                    <label class="form-label">Keyword</label>
-                    <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search by name or category">
-                </div>
-                <div>
-                    <label class="form-label">Category</label>
-                    <select class="form-select" name="categoryId">
-                        <option value="">All categories</option>
-                        <option th:each="category : ${categories}"
-                                th:value="${category.id}"
-                                th:selected="${selectedCategoryId != null and selectedCategoryId == category.id}"
-                                th:text="${category.name}">Category</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="form-label">Available date</label>
-                    <input class="form-control" type="date" name="availableDate" th:value="${availableDate}">
-                </div>
-                <div>
-                    <button class="btn btn-primary w-100" type="submit">Search</button>
-                </div>
-            </form>
-        </section>
+    <section class="toolbar-panel mb-4">
+      <form class="filter-grid" method="get" th:action="@{/customer/specialists}">
+        <div>
+          <label class="form-label">关键词</label>
+          <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="输入专家名或分类">
+        </div>
+        <div>
+          <label class="form-label">分类</label>
+          <select class="form-select" name="categoryId">
+            <option value="">全部分类</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:selected="${selectedCategoryId != null and selectedCategoryId == category.id}"
+                    th:text="${category.name}">Category</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">可预约日期</label>
+          <input class="form-control" type="date" name="availableDate" th:value="${availableDate}">
+        </div>
+        <div>
+          <button class="btn btn-primary w-100" type="submit">筛选专家</button>
+        </div>
+      </form>
+    </section>
 
-        <section class="row g-3">
-            <div class="col-md-6" th:each="specialist : ${specialists}">
-                <div class="record-card h-100">
-                    <div class="record-head">
-                        <div>
-                            <h2 class="record-title" th:text="${specialist.name}">Name</h2>
-                            <div class="record-meta">
-                                <span><strong>Category:</strong> <span th:text="${specialist.category.name}">Category</span></span>
-                                <span><strong>Level:</strong> <span th:text="${specialist.level}">Level</span></span>
-                            </div>
-                        </div>
-                        <span class="status-tag success">Bookable</span>
-                    </div>
-                    <p class="record-description mb-3">Rate: <strong th:text="${specialist.feeRate}">0</strong> per hour</p>
-                    <a class="btn btn-outline-primary" th:href="@{/customer/specialists/detail(id=${specialist.id},availableDate=${availableDate})}">View details</a>
-                </div>
+    <section class="row g-3">
+      <div class="col-md-6" th:each="specialist : ${specialists}">
+        <div class="record-card h-100">
+          <div class="record-head">
+            <div>
+              <h2 class="record-title" th:text="${specialist.name}">Name</h2>
+              <div class="record-meta">
+                <span><strong>分类：</strong><span th:text="${specialist.category.name}">Category</span></span>
+                <span><strong>级别：</strong><span th:text="${specialist.level}">Level</span></span>
+              </div>
             </div>
-        </section>
+            <span class="status-tag success">可预约</span>
+          </div>
+          <p class="record-description mb-3">咨询费：<strong th:text="${specialist.feeRate}">0</strong> / 小时</p>
+          <a class="btn btn-outline-primary" th:href="@{/customer/specialists/detail(id=${specialist.id},availableDate=${availableDate})}">查看详情</a>
+        </div>
+      </div>
+    </section>
 
-        <div th:if="${#lists.isEmpty(specialists)}" class="empty-state mt-4">No specialists matched the current filter.</div>
-    </div>
+    <div th:if="${#lists.isEmpty(specialists)}" class="empty-state mt-4">当前筛选条件下没有匹配的专家。</div>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

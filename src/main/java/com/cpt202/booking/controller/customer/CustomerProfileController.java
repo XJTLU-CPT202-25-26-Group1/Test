@@ -34,7 +34,7 @@ public class CustomerProfileController {
                                 RedirectAttributes redirectAttributes) {
         try {
             userService.updateProfile(authentication.getName(), displayName, email, phone);
-            redirectAttributes.addFlashAttribute("message", "Profile updated. Mock verification assumed successful.");
+            redirectAttributes.addFlashAttribute("message", "Profile updated successfully.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }

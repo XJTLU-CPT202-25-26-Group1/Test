@@ -1,5 +1,6 @@
 package com.cpt202.booking.service;
 
+import com.cpt202.booking.enums.CategoryStatus;
 import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.model.AvailabilitySlot;
 import com.cpt202.booking.model.ExpertiseCategory;
@@ -53,6 +54,19 @@ public class SpecialistService {
                 .collect(Collectors.toList());
     }
 
+    public List<Specialist> searchSpecialistsForAdmin(String keyword, Long categoryId, SpecialistStatus status) {
+        return specialistRepository.findAll()
+                .stream()
+                .filter(specialist -> keyword == null || keyword.isBlank()
+                        || specialist.getName().toLowerCase().contains(keyword.toLowerCase())
+                        || (specialist.getCategory() != null
+                        && specialist.getCategory().getName().toLowerCase().contains(keyword.toLowerCase())))
+                .filter(specialist -> categoryId == null
+                        || (specialist.getCategory() != null && categoryId.equals(specialist.getCategory().getId())))
+                .filter(specialist -> status == null || specialist.getStatus() == status)
+                .collect(Collectors.toList());
+    }
+
     public Specialist getSpecialistById(Long id) {
         return specialistRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
@@ -66,6 +80,9 @@ public class SpecialistService {
     public Specialist createSpecialist(String name, String level, Double feeRate, String description, Long categoryId) {
         ExpertiseCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found."));
+        if (category.getStatus() != CategoryStatus.ACTIVE) {
+            throw new IllegalArgumentException("Inactive category cannot be assigned to a specialist.");
+        }
 
         if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(name, categoryId)) {
             throw new IllegalArgumentException("Duplicate specialist name and category combination.");
@@ -85,6 +102,9 @@ public class SpecialistService {
         Specialist specialist = getSpecialistById(id);
         ExpertiseCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found."));
+        if (category.getStatus() != CategoryStatus.ACTIVE) {
+            throw new IllegalArgumentException("Inactive category cannot be assigned to a specialist.");
+        }
 
         if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(name, categoryId)
                 && (!specialist.getName().equalsIgnoreCase(name) || specialist.getCategory() == null || !specialist.getCategory().getId().equals(categoryId))) {

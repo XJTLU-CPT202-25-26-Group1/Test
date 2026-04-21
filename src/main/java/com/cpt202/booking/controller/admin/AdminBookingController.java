@@ -27,6 +27,13 @@ public class AdminBookingController {
         return "admin/bookings";
     }
 
+    @GetMapping("/detail")
+    public String bookingDetail(@RequestParam Long id, Model model) {
+        model.addAttribute("booking", bookingService.getBookingDetail(id));
+        model.addAttribute("auditLogs", bookingService.getAuditLogsForBooking(id));
+        return "admin/booking-detail";
+    }
+
     @PostMapping("/confirm")
     public String confirm(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {

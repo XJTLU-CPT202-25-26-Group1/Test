@@ -5,169 +5,179 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 
-<main class="container py-5">
+<main class="container py-5 page-wrap">
     <section class="hero-shell p-4 p-lg-5 mb-5">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7">
+        <div class="hero-grid">
+            <div>
                 <span class="hero-chip mb-3">
                     <i class="bi bi-heart-pulse"></i>
-                    Consultation Services
+                    Appointment Platform
                 </span>
-                <h1 class="hero-title mb-3">One platform for booking requests, specialist scheduling, and administrator review</h1>
+                <h1 class="hero-title mb-3">Find the right expert, book with ease.</h1>
                 <p class="hero-subtitle mb-4">
-                    The Specialist Consultation Booking System is designed around clear role-based workflows for customers, specialists, and administrators, so booking requests, status updates, and consultation delivery all stay easy to follow.
+                    Expert Appointment connects you with qualified specialists across multiple fields and makes appointment booking simple, structured, and secure.
                 </p>
                 <div class="d-flex gap-3 flex-wrap">
-                    <a class="btn btn-primary btn-lg px-4" th:href="@{/auth/login}">Enter Platform</a>
-                    <a class="btn btn-outline-primary btn-lg px-4" th:href="@{/auth/register}">Create Account</a>
-                    <a class="btn btn-outline-secondary btn-lg px-4" th:href="@{/auth/forgot-password}">Recover Password</a>
+                    <a class="btn btn-primary btn-lg px-4" th:href="@{/customer/specialists}">Browse Specialists</a>
+                    <a class="btn btn-outline-primary btn-lg px-4" th:href="@{/auth/login}">Log In</a>
                 </div>
             </div>
-            <div class="col-lg-5">
-                <div class="dashboard-surface p-4">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <div class="metric-card">
-                                <div class="metric-label">Active Specialists</div>
-                                <div class="metric-value" th:text="${specialistCount}">0</div>
-                                <div class="metric-meta">Specialists currently available for search and booking</div>
-                            </div>
+            <div class="hero-artboard">
+                <div class="mock-plant"></div>
+                <div class="mock-device">
+                    <div class="mock-screen">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="mock-screen-title">Appointment</div>
+                            <div class="small text-muted">Available Times</div>
                         </div>
-                        <div class="col-6">
-                            <div class="metric-card">
-                                <div class="metric-label">Categories</div>
-                                <div class="metric-value" th:text="${categoryCount}">0</div>
-                                <div class="metric-meta">Expertise categories available for filtering</div>
+                        <div class="position-relative">
+                            <div class="mock-calendar">
+                                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                                <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+                                <span>14</span><span>15</span><span>16</span><span class="active">17</span><span>18</span><span>19</span><span>20</span>
+                                <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span>
                             </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="metric-card">
-                                <div class="metric-label">Bookings</div>
-                                <div class="metric-value" th:text="${bookingCount}">0</div>
-                                <div class="metric-meta">Total booking records in the platform</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="metric-card">
-                                <div class="metric-label">Pending Review</div>
-                                <div class="metric-value" th:text="${pendingCount}">0</div>
-                                <div class="metric-meta">Requests waiting for administrator action</div>
+                            <div class="mock-side-list">
+                                <div class="mock-side-item"></div>
+                                <div class="mock-side-item"></div>
+                                <div class="mock-side-item"></div>
+                                <div class="mock-side-item"></div>
+                                <button class="btn btn-sm btn-primary mock-book-btn" type="button">Book</button>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="mock-cup"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5 page-intro text-center">
+        <div class="page-kicker">Role Access</div>
+        <h2 class="page-title mb-2">Who are you?</h2>
+        <p class="page-summary mx-auto">Choose your role to get started with the right workspace and the tools you need.</p>
+    </section>
+    <section class="mb-5">
+        <div class="role-grid">
+            <div class="role-card">
+                <div class="feature-icon"><i class="bi bi-person-fill"></i></div>
+                <h3 class="section-title">Customer</h3>
+                <p class="section-caption">Find the right specialist, make a request, and keep track of your appointments with clear status updates.</p>
+                <a class="btn btn-link px-0 text-decoration-none" th:href="@{/customer/dashboard}">Learn more <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+            <div class="role-card">
+                <div class="feature-icon"><i class="bi bi-person-badge"></i></div>
+                <h3 class="section-title">Specialist</h3>
+                <p class="section-caption">Manage your profile, availability, and consultation schedule while staying connected to customer feedback.</p>
+                <a class="btn btn-link px-0 text-decoration-none" th:href="@{/specialist/dashboard}">Learn more <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+            <div class="role-card">
+                <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
+                <h3 class="section-title">Administrator</h3>
+                <p class="section-caption">Oversee platform operations, manage users and categories, and keep the workflow running smoothly.</p>
+                <a class="btn btn-link px-0 text-decoration-none" th:href="@{/admin/dashboard}">Learn more <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="metric-strip">
+            <div class="metric-card">
+                <div class="metric-label">Specialists</div>
+                <div class="metric-value" th:text="${specialistCount}">0</div>
+                <div class="metric-meta">Qualified experts currently available for booking.</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Categories</div>
+                <div class="metric-value" th:text="${categoryCount}">0</div>
+                <div class="metric-meta">Consultation categories available for filtering.</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Bookings</div>
+                <div class="metric-value" th:text="${bookingCount}">0</div>
+                <div class="metric-meta">Appointment requests and consultation records.</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Pending Review</div>
+                <div class="metric-value" th:text="${pendingCount}">0</div>
+                <div class="metric-meta">Requests currently waiting for review.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="section-panel">
+            <div class="section-heading">
+                <div>
+                    <h2>Featured Specialists</h2>
+                    <p class="section-note">Preview a few specialists and their fee levels before signing in.</p>
+                </div>
+                <a class="btn btn-outline-primary" th:href="@{/customer/specialists}">Browse Specialists</a>
+            </div>
+            <div class="soft-list-item" th:each="specialist : ${featuredSpecialists}">
+                <div>
+                    <div class="fw-bold" th:text="${specialist.name}">Name</div>
+                    <div class="text-muted small">
+                        <span th:text="${specialist.category != null ? specialist.category.name : 'N/A'}">Category</span>
+                        ·
+                        <span th:text="${specialist.level}">Level</span>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="soft-badge" th:text="${specialist.feeRate + ' / h'}">0 / h</div>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="mb-5">
-        <div class="mb-4">
-            <h2 class="hero-title fs-2 mb-2">Dedicated dashboards for each role</h2>
-            <p class="section-caption mb-0">Every signed-in user lands on a focused workspace with the right actions, metrics, and recent activity for that role.</p>
-        </div>
-        <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="bi bi-person-heart"></i></div>
-                    <h3 class="section-title">Customer Dashboard</h3>
-                    <p class="section-caption">Track booking progress, browse specialists, submit requests, monitor status changes, and leave feedback after a completed consultation.</p>
-                    <div class="quick-grid mt-4">
-                        <a class="quick-link" th:href="@{/auth/login}">
-                            <div class="quick-link-title">Customer workspace</div>
-                            <p class="quick-link-text">See bookings, reminders, and profile shortcuts at a glance.</p>
-                        </a>
-                    </div>
+        <div class="section-panel">
+            <div class="section-heading">
+                <div>
+                    <h2>How it works</h2>
+                    <p class="section-note">The workflow is intentionally simple and easy to follow.</p>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="bi bi-calendar2-week"></i></div>
-                    <h3 class="section-title">Specialist Dashboard</h3>
-                    <p class="section-caption">Manage open slots, review upcoming consultations, work through confirmed bookings, and keep track of customer feedback.</p>
-                    <div class="quick-grid mt-4">
-                        <a class="quick-link" th:href="@{/auth/login}">
-                            <div class="quick-link-title">Specialist workspace</div>
-                            <p class="quick-link-text">Keep scheduling, bookings, and feedback in one clear operational view.</p>
-                        </a>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="role-card h-100">
+                        <div class="fw-bold mb-2">1. Request</div>
+                        <p class="section-caption mb-0">Customers search specialists, choose an open slot, and submit a request.</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
-                    <h3 class="section-title">Admin Dashboard</h3>
-                    <p class="section-caption">Monitor pending requests, maintain specialist and category data, and stay on top of the latest workflow activity.</p>
-                    <div class="quick-grid mt-4">
-                        <a class="quick-link" th:href="@{/auth/login}">
-                            <div class="quick-link-title">Administrator workspace</div>
-                            <p class="quick-link-text">Review the platform from an operational point of view.</p>
-                        </a>
+                <div class="col-md-6 col-lg-3">
+                    <div class="role-card h-100">
+                        <div class="fw-bold mb-2">2. Review</div>
+                        <p class="section-caption mb-0">Administrators confirm or reject requests and maintain workflow visibility.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="role-card h-100">
+                        <div class="fw-bold mb-2">3. Consult</div>
+                        <p class="section-caption mb-0">Specialists manage their schedules and complete confirmed consultations.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="role-card h-100">
+                        <div class="fw-bold mb-2">4. Track</div>
+                        <p class="section-caption mb-0">Customers open booking details, track updates, and leave feedback after completion.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="row g-4">
-        <div class="col-lg-7">
-            <div class="panel-card">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-                    <div>
-                        <h2 class="section-title mb-1">Featured Specialists</h2>
-                        <p class="section-caption mb-0">Preview available specialist resources and pricing before signing in.</p>
-                    </div>
-                    <a class="btn btn-outline-primary" th:href="@{/auth/login}">Log in to view all specialists</a>
-                </div>
-                <div class="soft-list-item" th:each="specialist : ${featuredSpecialists}">
-                    <div>
-                        <div class="fw-bold" th:text="${specialist.name}">Name</div>
-                        <div class="text-muted small">
-                            <span th:text="${specialist.category != null ? specialist.category.name : 'N/A'}">Category</span>
-                            ·
-                            <span th:text="${specialist.level}">Level</span>
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <div class="soft-badge">
-                            <i class="bi bi-cash-stack"></i>
-                            <span th:text="${specialist.feeRate + ' / h'}">0 / h</span>
-                        </div>
-                    </div>
-                </div>
+    <section class="cta-bar">
+        <div class="cta-copy">
+            <i class="bi bi-calendar2-check"></i>
+            <div>
+                <div class="fw-bold">Ready to get started?</div>
+                <div class="text-muted">Browse specialists and submit your first appointment request today.</div>
             </div>
         </div>
-        <div class="col-lg-5">
-            <div class="timeline-card">
-                <h2 class="section-title mb-3">Booking flow in four clear steps</h2>
-                <div class="soft-list-item">
-                    <div>
-                        <div class="fw-bold">1. Customer submits a request</div>
-                        <div class="text-muted small">Search specialists, review available slots, and submit a booking request.</div>
-                    </div>
-                    <span class="soft-badge">Pending</span>
-                </div>
-                <div class="soft-list-item">
-                    <div>
-                        <div class="fw-bold">2. Administrator reviews the request</div>
-                        <div class="text-muted small">Confirm or reject the booking, update the workflow, and capture a reason when needed.</div>
-                    </div>
-                    <span class="soft-badge">Confirmed / Cancelled</span>
-                </div>
-                <div class="soft-list-item">
-                    <div>
-                        <div class="fw-bold">3. Specialist delivers the consultation</div>
-                        <div class="text-muted small">Handle the confirmed booking from the schedule and mark it as completed afterwards.</div>
-                    </div>
-                    <span class="soft-badge">Completed</span>
-                </div>
-                <div class="soft-list-item">
-                    <div>
-                        <div class="fw-bold">4. Customer tracks and reviews</div>
-                        <div class="text-muted small">Open booking details, receive updates, and submit feedback after completion.</div>
-                    </div>
-                    <span class="soft-badge">Feedback</span>
-                </div>
-            </div>
+        <div class="cta-actions">
+            <a class="btn btn-primary" th:href="@{/customer/specialists}">Browse Specialists</a>
+            <a class="btn btn-link text-decoration-none" th:href="@{/auth/forgot-password}">Forgot Password?</a>
         </div>
     </section>
 </main>

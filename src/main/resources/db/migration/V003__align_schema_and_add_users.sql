@@ -89,9 +89,6 @@ CREATE TABLE IF NOT EXISTS app_user (
     CONSTRAINT fk_app_user_specialist FOREIGN KEY (specialist_id) REFERENCES specialist (id)
 );
 
-ALTER TABLE app_user ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255);
-ALTER TABLE app_user ADD COLUMN IF NOT EXISTS email_verified BIT NOT NULL DEFAULT 0;
-
 CREATE INDEX idx_slot_specialist_date ON availability_slot (specialist_id, slot_date, booked);
 CREATE INDEX idx_booking_customer_email ON booking (customer_email);
 CREATE INDEX idx_booking_specialist_status ON booking (specialist_id, status);

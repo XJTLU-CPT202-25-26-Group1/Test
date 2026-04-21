@@ -5,21 +5,23 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
 
-<main class="container py-5 page-wrap">
-    <section class="hero-shell p-4 p-lg-5 mb-5">
+<main class="site-main">
+    <div class="page-wrap">
+    <section class="hero-shell mb-4">
         <div class="hero-grid">
             <div>
                 <span class="hero-chip mb-3">
                     <i class="bi bi-heart-pulse"></i>
-                    Appointment Platform
+                    Specialist consultation booking
                 </span>
-                <h1 class="hero-title mb-3">Find the right expert, book with ease.</h1>
-                <p class="hero-subtitle mb-4">
-                    Expert Appointment connects you with qualified specialists across multiple fields and makes appointment booking simple, structured, and secure.
+                <h1 class="hero-title">Find the right expert and manage appointments with clarity.</h1>
+                <p class="hero-subtitle">
+                    A clean booking platform for customers, specialists, and administrators. Search specialists, reserve available slots, and keep every booking stage visible from request to completion.
                 </p>
-                <div class="d-flex gap-3 flex-wrap">
-                    <a class="btn btn-primary btn-lg px-4" th:href="@{/customer/specialists}">Browse Specialists</a>
-                    <a class="btn btn-outline-primary btn-lg px-4" th:href="@{/auth/login}">Log In</a>
+                <div class="page-header-actions mt-4">
+                    <a class="btn btn-primary btn-lg" th:href="@{/customer/specialists}">Browse Specialists</a>
+                    <a class="btn btn-outline-primary btn-lg" th:href="@{/auth/login}">Log In</a>
+                    <a class="btn btn-outline-secondary btn-lg" th:href="@{/auth/register}">Create Account</a>
                 </div>
             </div>
             <div class="hero-artboard">
@@ -75,12 +77,12 @@
         </div>
     </section>
 
-    <section class="mb-5 page-intro text-center">
+    <section class="mb-4 page-intro text-center">
         <div class="page-kicker">Role Access</div>
-        <h2 class="page-title mb-2">Who are you?</h2>
+        <h2 class="page-title mb-2">Choose the workspace that matches your role</h2>
         <p class="page-summary mx-auto">Choose your role to get started with the right workspace and the tools you need.</p>
     </section>
-    <section class="mb-5">
+    <section class="mb-4">
         <div class="role-grid">
             <div class="role-card">
                 <div class="feature-icon"><i class="bi bi-person-fill"></i></div>
@@ -103,7 +105,7 @@
         </div>
     </section>
 
-    <section class="mb-5">
+    <section class="mb-4">
         <div class="metric-strip">
             <div class="metric-card">
                 <div class="metric-label">Specialists</div>
@@ -128,12 +130,12 @@
         </div>
     </section>
 
-    <section class="mb-5">
+    <section class="mb-4">
         <div class="section-panel">
             <div class="section-heading">
                 <div>
-                    <h2>Featured Specialists</h2>
-                    <p class="section-note">Preview a few specialists and their fee levels before signing in.</p>
+                    <h2>Featured specialists</h2>
+                    <p class="section-note">Preview specialist profiles and pricing before signing in.</p>
                 </div>
                 <a class="btn btn-outline-primary" th:href="@{/customer/specialists}">Browse Specialists</a>
             </div>
@@ -153,12 +155,12 @@
         </div>
     </section>
 
-    <section class="mb-5">
+    <section class="mb-4">
         <div class="section-panel">
             <div class="section-heading">
                 <div>
-                    <h2>How it works</h2>
-                    <p class="section-note">The workflow is intentionally simple and easy to follow.</p>
+                    <h2>How the platform works</h2>
+                    <p class="section-note">Each role gets a clear path and a dedicated dashboard.</p>
                 </div>
             </div>
             <div class="row g-4">
@@ -203,6 +205,7 @@
             <a class="btn btn-link text-decoration-none" th:href="@{/auth/forgot-password}">Forgot Password?</a>
         </div>
     </section>
+    </div>
 </main>
 
 <footer th:replace="~{fragments/layout :: footer}"></footer>

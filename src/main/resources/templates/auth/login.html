@@ -2,88 +2,70 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Log In')}"></head>
 <body>
-  <header th:replace="~{fragments/layout :: header}"></header>
-  
-  <main class="container my-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-5">
-        <div class="card shadow-sm rounded-4">
-          <div class="card-header text-center py-4">
-            <h3 class="mb-0 fw-bold">
-              <i class="bi bi-person-circle me-2"></i>Account Login
-            </h3>
-          </div>
-          
-          <div class="card-body p-4">
-            <div th:replace="~{fragments/layout :: alerts}"></div>
-            
-            <form th:action="@{/auth/login}" method="post" class="needs-validation" novalidate>
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-              
-              <div class="mb-4">
-                <label for="username" class="form-label fw-bold">Username</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-person"></i></span>
-                  <input type="text" 
-                         class="form-control form-control-lg" 
-                         id="username" 
-                         name="username" 
-                         required 
-                         autofocus
-                         th:value="${param.username}">
-                  <div class="invalid-feedback">Please enter a username.</div>
-                </div>
-              </div>
-              
-              <div class="mb-4">
-                <label for="password" class="form-label fw-bold">Password</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                  <input type="password" 
-                         class="form-control form-control-lg" 
-                         id="password" 
-                         name="password" 
-                         required>
-                  <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                  <div class="invalid-feedback">Please enter a password.</div>
-                </div>
-              </div>
-              
-              <div class="d-grid mb-3">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3">
-                  <i class="bi bi-box-arrow-in-right me-2"></i>Log In
-                </button>
-              </div>
-              
-              <div class="text-center">
-                <a th:href="@{/auth/register}" class="text-decoration-none fw-bold text-primary">
-                  <i class="bi bi-person-plus me-1"></i>Need an account? Register now
-                </a>
-                <div class="mt-2">
-                  <a th:href="@{/auth/forgot-password}" class="text-decoration-none">Forgot your password?</a>
-                </div>
-                <div class="mt-2">
-                  <a th:href="@{/auth/resend-verification}" class="text-decoration-none">Need a new verification email?</a>
-                </div>
-                <div class="mt-3 text-muted small">
-                  <p class="mb-1">Default demo accounts:</p>
-                  <p class="mb-0">Administrator: admin / admin123</p>
-                  <p class="mb-0">Specialist: specialist / specialist123</p>
-                  <p class="mb-0">Customer: customer / customer123</p>
-                  <p class="mb-0 mt-2">Newly registered customer and specialist accounts must verify their email before signing in.</p>
-                </div>
-              </div>
-            </form>
-          </div>
+<header th:replace="~{fragments/layout :: header}"></header>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+
+<main class="site-main">
+  <div class="page-wrap">
+    <section class="auth-shell">
+      <div class="auth-panel">
+        <div class="page-kicker">Access your workspace</div>
+        <h1>Sign in to continue with your booking tasks.</h1>
+        <p>Customers can track booking requests, specialists can manage schedules, and administrators can review workflow actions from their own dashboards.</p>
+
+        <div class="support-note">
+          <strong>Default demo accounts</strong>
+          <ul class="helper-list mt-2">
+            <li>Administrator: <strong>admin</strong> / <strong>admin123</strong></li>
+            <li>Specialist: <strong>specialist</strong> / <strong>specialist123</strong></li>
+            <li>Customer: <strong>customer</strong> / <strong>customer123</strong></li>
+          </ul>
+        </div>
+
+        <div class="support-note">
+          New customer and specialist accounts must verify their email address before the first login.
         </div>
       </div>
-    </div>
-  </main>
 
-  <footer th:replace="~{fragments/layout :: footer}"></footer>
-  
-  <script th:src="@{/js/auth.js}"></script>
+      <div class="auth-card">
+        <div class="page-kicker">Account login</div>
+        <h1>Welcome back</h1>
+        <p>Enter your username and password to open your dashboard.</p>
+
+        <form th:action="@{/auth/login}" method="post" class="needs-validation" novalidate>
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+          <div>
+            <label for="username" class="form-label">Username</label>
+            <input id="username" class="form-control" type="text" name="username" required autofocus th:value="${param.username}">
+            <div class="invalid-feedback">Please enter your username.</div>
+          </div>
+
+          <div>
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <input id="password" class="form-control" type="password" name="password" required>
+              <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+            </div>
+            <div class="invalid-feedback">Please enter your password.</div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Log In</button>
+            <a class="btn btn-outline-secondary" th:href="@{/auth/register}">Register</a>
+          </div>
+
+          <div class="compact-stack">
+            <a th:href="@{/auth/forgot-password}" class="text-decoration-none">Forgot your password?</a>
+            <a th:href="@{/auth/resend-verification}" class="text-decoration-none">Need a new verification email?</a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script defer th:src="@{/js/auth.js}"></script>
 </body>
 </html>

@@ -1,48 +1,134 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('编辑资料')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Profile Settings', null)}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-<main class="site-main">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">账户设置</div>
-      <h1 class="page-title">编辑资料</h1>
-      <p class="page-summary">更新显示名称、邮箱和电话，方便接收预约通知与流程提醒。</p>
-    </section>
-
-    <section class="auth-card" th:if="${profile != null}">
-      <form th:action="@{/auth/profile-edit}" method="post">
-        <div class="field-grid">
-          <div>
-            <label class="form-label">显示名称</label>
-            <input class="form-control" type="text" name="displayName" th:value="${profile.displayName}" required>
-          </div>
-          <div>
-            <label class="form-label">邮箱</label>
-            <input class="form-control" type="email" name="email" th:value="${profile.email}" required>
-          </div>
-          <div>
-            <label class="form-label">联系电话</label>
-            <input class="form-control" type="text" name="phone" th:value="${profile.phone}" required>
-          </div>
-        </div>
-
-        <div class="form-actions mt-4">
-          <button class="btn btn-primary" type="submit">保存修改</button>
-          <a class="btn btn-outline-secondary" th:href="${dashboardPath}">返回工作台</a>
-        </div>
-      </form>
-    </section>
-
-    <div class="empty-state" th:if="${profile == null}">
-      请先登录后再编辑资料。
+    <div th:if="${isAdmin or isSpecialist}" class="shell-body">
+        <aside th:replace="~{fragments/layout :: sideNav}"></aside>
+        <main class="page-content stack">
+            <section class="page-header">
+                <div>
+                    <h1>Account profile settings</h1>
+                    <p>Update the shared account information used across the system.</p>
+                </div>
+            </section>
+            <section class="two-column">
+                <article class="panel">
+                    <div class="section-header">
+                        <div>
+                            <h2>Edit account details</h2>
+                            <p class="section-subtitle">This updates your account display name, email, and phone.</p>
+                        </div>
+                    </div>
+                    <form class="stack" th:action="@{/auth/profile-edit}" method="post">
+                        <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="displayName">Display name</label>
+                                <input id="displayName" name="displayName" type="text" th:value="${profile.displayName}" required>
+                            </div>
+                            <div class="field">
+                                <label for="phone">Phone</label>
+                                <input id="phone" name="phone" type="tel" th:value="${profile.phone}" required>
+                            </div>
+                            <div class="field field--full">
+                                <label for="email">Email</label>
+                                <input id="email" name="email" type="email" th:value="${profile.email}" required>
+                            </div>
+                        </div>
+                        <button class="button button--primary" type="submit">Save account changes</button>
+                    </form>
+                </article>
+                <article class="panel">
+                    <div class="section-header">
+                        <div>
+                            <h2>Current account summary</h2>
+                            <p class="section-subtitle">Read-only information resolved from the authenticated session.</p>
+                        </div>
+                    </div>
+                    <div class="detail-list">
+                        <div class="detail-list__item">
+                            <span class="detail-list__label">Username</span>
+                            <span class="detail-list__value" th:text="${profile.username}">admin</span>
+                        </div>
+                        <div class="detail-list__item">
+                            <span class="detail-list__label">Role</span>
+                            <span class="detail-list__value" th:text="${profile.role}">ADMIN</span>
+                        </div>
+                        <div class="detail-list__item">
+                            <span class="detail-list__label">Email verified</span>
+                            <span class="detail-list__value" th:text="${profile.emailVerified ? 'Verified' : 'Pending verification'}">Verified</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
     </div>
-  </div>
-</main>
 
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <main th:if="${!isAdmin and !isSpecialist}" class="page-content--centered stack">
+        <section class="page-header">
+            <div>
+                <h1>Account profile settings</h1>
+                <p>Update the shared account information used across the system.</p>
+            </div>
+        </section>
+        <section class="two-column">
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Edit account details</h2>
+                        <p class="section-subtitle">This updates your account display name, email, and phone.</p>
+                    </div>
+                </div>
+                <form class="stack" th:action="@{/auth/profile-edit}" method="post">
+                    <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="customerDisplayName">Display name</label>
+                            <input id="customerDisplayName" name="displayName" type="text" th:value="${profile.displayName}" required>
+                        </div>
+                        <div class="field">
+                            <label for="customerPhone">Phone</label>
+                            <input id="customerPhone" name="phone" type="tel" th:value="${profile.phone}" required>
+                        </div>
+                        <div class="field field--full">
+                            <label for="customerEmail">Email</label>
+                            <input id="customerEmail" name="email" type="email" th:value="${profile.email}" required>
+                        </div>
+                    </div>
+                    <button class="button button--primary" type="submit">Save account changes</button>
+                </form>
+            </article>
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Current account summary</h2>
+                        <p class="section-subtitle">Read-only information resolved from the authenticated session.</p>
+                    </div>
+                </div>
+                <div class="detail-list">
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Username</span>
+                        <span class="detail-list__value" th:text="${profile.username}">customer</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Role</span>
+                        <span class="detail-list__value" th:text="${profile.role}">CUSTOMER</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Email verified</span>
+                        <span class="detail-list__value" th:text="${profile.emailVerified ? 'Verified' : 'Pending verification'}">Verified</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/auth.js')}"></th:block>
 </body>
 </html>

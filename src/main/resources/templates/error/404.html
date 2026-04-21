@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('404 页面不存在')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Page Not Found', null)}"></head>
 <body>
-  <header th:replace="~{fragments/layout :: header}"></header>
-  <main class="site-main">
-    <div class="error-shell">
-      <div class="page-kicker">页面不存在</div>
-      <div class="error-code">404</div>
-      <h1 class="page-title">你访问的页面不存在。</h1>
-      <p class="page-summary">可能是地址已失效、页面已移动，或当前请求不再有效。你可以使用下面的入口继续操作。</p>
-      <div class="form-actions justify-content-center mt-4">
-        <a class="btn btn-primary" href="/">回到首页</a>
-        <a class="btn btn-outline-secondary" href="/auth/login">前往登录</a>
-      </div>
-    </div>
-  </main>
-  <footer th:replace="~{fragments/layout :: footer}"></footer>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <main class="page-content--centered stack">
+        <section class="hero-card">
+            <div class="eyebrow">404 error</div>
+            <h1>The page you requested could not be found.</h1>
+            <p>The route may have moved, or the link may no longer be valid. Use the navigation above to continue working in the system.</p>
+            <div class="hero-actions">
+                <a class="button button--primary" th:href="@{${dashboardPath}}">Go to dashboard</a>
+                <a class="button button--ghost" th:href="@{/}">Back to home</a>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts(null)}"></th:block>
 </body>
 </html>

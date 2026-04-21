@@ -1,47 +1,92 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('接诊详情')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Specialist Booking Detail', '/css/specialist/bookings.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="split-layout">
-      <div class="panel-card">
-        <h1 class="section-title mb-3">接诊详情</h1>
-        <p class="mb-2"><strong>咨询主题：</strong><span th:text="${booking.topic}">Topic</span></p>
-        <p class="mb-2"><strong>客户姓名：</strong><span th:text="${booking.customerName}">Customer</span></p>
-        <p class="mb-2"><strong>客户备注：</strong><span th:text="${booking.notes}">Notes</span></p>
-        <p class="mb-2"><strong>预约时段：</strong>
-          <span th:text="${booking.slot.slotDate}">2026-01-01</span>
-          <span th:text="${booking.slot.startTime}">10:00</span> -
-          <span th:text="${booking.slot.endTime}">11:00</span>
-        </p>
-        <p class="mb-2"><strong>当前状态：</strong><span th:text="${booking.status}">CONFIRMED</span></p>
-        <p class="mb-4"><strong>咨询费用：</strong><span th:text="${booking.calculatedFee}">0</span></p>
-        <div class="d-flex gap-2 flex-wrap">
-          <form th:if="${booking.status.name() == 'CONFIRMED'}" th:action="@{/specialist/bookings/complete}" method="post">
-            <input type="hidden" name="id" th:value="${booking.id}">
-            <button class="btn btn-success" type="submit">标记完成</button>
-          </form>
-          <a class="btn btn-outline-secondary" th:href="@{/specialist/bookings}">返回接诊日程</a>
-        </div>
-      </div>
-      <div class="panel-card">
-        <h2 class="section-title mb-3">预约动态</h2>
-        <div class="empty-state" th:if="${#lists.isEmpty(auditLogs)}">当前还没有记录到预约动态。</div>
-        <div class="soft-list-item" th:each="log : ${auditLogs}">
-          <div>
-            <div class="fw-bold" th:text="${log.newStatus}">STATUS</div>
-            <div class="text-muted small" th:text="${log.remark}">remark</div>
-            <div class="text-muted small" th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-          </div>
-          <div class="text-muted small" th:text="${log.operatorUsername}">operator</div>
-        </div>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
+
+    <div class="shell-body">
+        <aside th:replace="~{fragments/layout :: sideNav}"></aside>
+        <main class="page-content stack">
+            <section class="page-header">
+                <div>
+                    <h1 th:text="${'Booking #' + booking.id}">Booking #1</h1>
+                    <p>Review customer information, session details, and audit history before taking action.</p>
+                </div>
+                <span class="status-badge" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}"
+                      th:text="${booking.status}">CONFIRMED</span>
+            </section>
+
+            <section class="two-column">
+                <article class="panel">
+                    <div class="section-header">
+                        <div>
+                            <h2>Consultation summary</h2>
+                            <p class="section-subtitle">Operational details for the selected booking.</p>
+                        </div>
+                    </div>
+                    <div class="detail-list">
+                        <div class="detail-list__item">
+                            <span class="detail-list__label">Customer</span>
+                            <span class="detail-list__value" th:text="${booking.customerName + ' • ' + booking.customerEmail}">Demo Customer</span>
+                        </div>
+                        <div class="detail-list__item">
+                            <span class="detail-list__label">Topic</span>
+                            <span class="detail-list__value" th:text="${booking.topic}">Topic</span>
+                        </div>
+                        <div class="detail-list__item">
+                            <span class="detail-list__label">Session slot</span>
+                            <span class="detail-list__value"
+                                  th:text="${#temporals.format(booking.slot.slotDate, 'dd MMM yyyy') + ', ' + #temporals.format(booking.slot.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.slot.endTime, 'HH:mm')}">
+                                24 Apr 2026, 10:00 - 11:00
+                            </span>
+                        </div>
+                        <div class="detail-list__item" th:if="${booking.notes != null and !booking.notes.isBlank()}">
+                            <span class="detail-list__label">Customer notes</span>
+                            <span class="detail-list__value" th:text="${booking.notes}">Notes</span>
+                        </div>
+                        <div class="detail-list__item">
+                            <span class="detail-list__label">Calculated fee</span>
+                            <span class="detail-list__value" th:text="${booking.calculatedFee != null ? '$' + #numbers.formatDecimal(booking.calculatedFee, 1, 2) : 'Pending calculation'}">$300.00</span>
+                        </div>
+                        <div class="detail-list__item" th:if="${booking.status.name() == 'CONFIRMED'}">
+                            <span class="detail-list__label">Action</span>
+                            <form th:action="@{/specialist/bookings/complete}" method="post">
+                                <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                                <input type="hidden" name="id" th:value="${booking.id}">
+                                <button class="button button--success js-confirm-action" data-confirm-message="Mark this booking as completed?" type="submit">Mark as completed</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel">
+                    <div class="section-header">
+                        <div>
+                            <h2>Audit history</h2>
+                            <p class="section-subtitle">System workflow history for this booking.</p>
+                        </div>
+                    </div>
+                    <div class="timeline" th:if="${!#lists.isEmpty(auditLogs)}">
+                        <div class="timeline__item" th:each="log : ${auditLogs}">
+                            <div class="timeline__title">
+                                <span th:text="${(log.oldStatus != null ? log.oldStatus + ' → ' : '') + log.newStatus}">PENDING → CONFIRMED</span>
+                                <span th:text="${#temporals.format(log.operatedAt, 'dd MMM yyyy HH:mm')}">21 Apr 2026 10:22</span>
+                            </div>
+                            <p class="timeline__meta" th:text="${log.operatorUsername + ' • ' + log.remark}">admin • Booking confirmed</p>
+                        </div>
+                    </div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(auditLogs)}">
+                        No audit log records available.
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/specialist/bookings.js')}"></th:block>
 </body>
 </html>

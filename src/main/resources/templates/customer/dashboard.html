@@ -1,136 +1,129 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('客户工作台')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Customer Dashboard', '/css/customer/dashboard.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">客户服务台</div>
-      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-        <div>
-          <h1 class="page-title mb-2">欢迎回来，<span th:text="${profile.displayName}">用户</span></h1>
-          <p class="page-summary">这里保留了预约、改期、取消、通知和个人资料的全部功能，但入口改成了更接近医院服务 App 的清爽卡片式布局。</p>
-        </div>
-        <div class="page-header-actions">
-          <a class="btn btn-primary" th:href="@{/customer/specialists}">去预约</a>
-          <a class="btn btn-outline-secondary" th:href="@{/customer/bookings}">我的预约</a>
-        </div>
-      </div>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="section-panel mb-4">
-      <div class="section-heading">
-        <div>
-          <h2>常用服务</h2>
-          <p class="section-note">四宫格快捷入口对应真实页面，不做空展示。</p>
-        </div>
-      </div>
-      <div class="quick-grid">
-        <a class="quick-link" th:href="@{/customer/specialists}">
-          <div class="feature-icon"><i class="bi bi-calendar2-plus"></i></div>
-          <div class="quick-link-title">预约挂号</div>
-          <p class="quick-link-text">查看专家列表、选择时段并发起预约申请。</p>
-        </a>
-        <a class="quick-link" th:href="@{/customer/bookings}">
-          <div class="feature-icon"><i class="bi bi-journal-check"></i></div>
-          <div class="quick-link-title">线上复诊</div>
-          <p class="quick-link-text">查看已预约记录，处理取消、改期和状态跟踪。</p>
-        </a>
-        <a class="quick-link" th:href="@{/customer/bookings}">
-          <div class="feature-icon"><i class="bi bi-bell"></i></div>
-          <div class="quick-link-title">预约提醒</div>
-          <p class="quick-link-text">集中查看最近审批结果和预约状态变动。</p>
-        </a>
-        <a class="quick-link" th:href="@{/customer/profile}">
-          <div class="feature-icon"><i class="bi bi-person-vcard"></i></div>
-          <div class="quick-link-title">个人资料</div>
-          <p class="quick-link-text">更新昵称、邮箱与联系电话信息。</p>
-        </a>
-      </div>
-    </section>
-
-    <section class="row g-3 mb-4">
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">全部预约</div>
-          <div class="metric-value" th:text="${bookingCount}">0</div>
-          <div class="metric-meta">与当前账号关联的全部预约记录。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">待审核</div>
-          <div class="metric-value" th:text="${pendingCount}">0</div>
-          <div class="metric-meta">仍在等待管理员审核的预约请求。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">即将到来</div>
-          <div class="metric-value" th:text="${#lists.size(upcomingBookings)}">0</div>
-          <div class="metric-meta">已经确认且尚未开始的咨询预约。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">已完成</div>
-          <div class="metric-value" th:text="${completedCount}">0</div>
-          <div class="metric-meta">可进入反馈与查看历史的预约数量。</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="split-layout">
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>最近预约</h2>
-            <p class="section-note">这里保留原来的预约详情入口与状态展示。</p>
-          </div>
-          <a class="btn btn-outline-primary" th:href="@{/customer/bookings}">查看全部</a>
-        </div>
-        <div class="empty-state" th:if="${#lists.isEmpty(recentBookings)}">你还没有预约记录，先去选择一位专家吧。</div>
-        <div class="record-card" th:each="booking : ${recentBookings}">
-          <div class="record-head">
-            <div>
-              <h3 class="record-title" th:text="${booking.topic}">主题</h3>
-              <div class="record-meta">
-                <span><strong>专家：</strong><span th:text="${booking.specialist.name}">Specialist</span></span>
-                <span><strong>日期：</strong><span th:text="${booking.slot.slotDate}">Date</span></span>
-                <span><strong>时间：</strong><span th:text="${booking.slot.startTime}">Time</span></span>
-              </div>
+    <main class="page-content--centered stack">
+        <section class="hero-card dashboard-hero">
+            <div class="eyebrow">Customer portal</div>
+            <h1 th:text="${'Welcome back, ' + profile.displayName + '.'}">Welcome back.</h1>
+            <p>Track your consultation requests, monitor status changes, and keep upcoming sessions organized in one place.</p>
+            <div class="summary-strip">
+                <span class="tag"><strong th:text="${bookingCount}">0</strong>&nbsp;total bookings</span>
+                <span class="tag"><strong th:text="${pendingCount}">0</strong>&nbsp;pending</span>
+                <span class="tag"><strong th:text="${completedCount}">0</strong>&nbsp;completed</span>
             </div>
-            <span class="status-tag" th:text="${booking.status}">PENDING</span>
-          </div>
-          <div class="record-actions">
-            <a class="btn btn-sm btn-outline-secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">查看详情</a>
-          </div>
-        </div>
-      </div>
+        </section>
 
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>最新提醒</h2>
-            <p class="section-note">保留原有通知数据，只优化展示层级。</p>
-          </div>
-        </div>
-        <div class="empty-state" th:if="${#lists.isEmpty(notifications)}">当前没有新的预约提醒。</div>
-        <div class="record-card" th:each="notification : ${notifications}">
-          <div class="record-head mb-0">
-            <div>
-              <h3 class="record-title" th:text="${notification.remark}">提醒</h3>
-              <div class="subtle-text small" th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
+        <section class="stats-grid">
+            <article class="metric-card">
+                <span class="metric-card__label">All requests</span>
+                <strong class="metric-card__value" th:text="${bookingCount}">0</strong>
+                <span class="metric-card__hint">Every booking you have submitted.</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-card__label">Pending review</span>
+                <strong class="metric-card__value" th:text="${pendingCount}">0</strong>
+                <span class="metric-card__hint">Waiting for administrator confirmation.</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-card__label">Completed sessions</span>
+                <strong class="metric-card__value" th:text="${completedCount}">0</strong>
+                <span class="metric-card__hint">Finished consultations eligible for feedback.</span>
+            </article>
+        </section>
+
+        <section class="dashboard-grid">
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Upcoming confirmed bookings</h2>
+                        <p class="section-subtitle">Your next confirmed consultation sessions.</p>
+                    </div>
+                    <a class="button button--ghost" th:href="@{/customer/bookings}">View all bookings</a>
+                </div>
+                <div class="cards-grid" th:if="${!#lists.isEmpty(upcomingBookings)}">
+                    <article class="list-card" th:each="booking : ${upcomingBookings}">
+                        <span class="status-badge status-confirmed">CONFIRMED</span>
+                        <h3 th:text="${booking.topic}">Consultation topic</h3>
+                        <p th:text="${booking.specialist.name + ' • ' + booking.specialist.category.name}">Specialist</p>
+                        <div class="summary-strip">
+                            <span class="tag" th:text="${#temporals.format(booking.slot.slotDate, 'dd MMM yyyy')}">23 Apr 2026</span>
+                            <span class="tag" th:text="${#temporals.format(booking.slot.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.slot.endTime, 'HH:mm')}">10:00 - 11:00</span>
+                        </div>
+                        <div class="card-actions">
+                            <a class="button button--secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">Open details</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(upcomingBookings)}">
+                    No confirmed future bookings yet. Start by browsing available specialists.
+                </div>
+            </article>
+
+            <article class="panel dashboard-sidecard">
+                <div class="section-header">
+                    <div>
+                        <h2>Recent notifications</h2>
+                        <p class="section-subtitle">Latest audit updates for your bookings.</p>
+                    </div>
+                </div>
+                <div class="activity-feed" th:if="${!#lists.isEmpty(notifications)}">
+                    <div class="activity-feed__item" th:each="log : ${notifications}">
+                        <strong th:text="${'Booking #' + log.bookingId + ' → ' + log.newStatus}">Booking update</strong>
+                        <span th:text="${log.remark}">Remark</span>
+                        <small th:text="${#temporals.format(log.operatedAt, 'dd MMM yyyy HH:mm')}">21 Apr 2026 09:30</small>
+                    </div>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(notifications)}">
+                    Notifications will appear once your bookings change status.
+                </div>
+            </article>
+        </section>
+
+        <section class="table-card">
+            <div class="section-header">
+                <div>
+                    <h2>Recent bookings</h2>
+                    <p class="section-subtitle">A quick view of the latest requests from your account.</p>
+                </div>
             </div>
-            <span class="status-tag" th:text="${notification.newStatus}">STATUS</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+            <div class="table-scroll" th:if="${!#lists.isEmpty(recentBookings)}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Specialist</th>
+                        <th>Status</th>
+                        <th>Session time</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="booking : ${recentBookings}">
+                        <td th:text="${booking.topic}">Contract review</td>
+                        <td th:text="${booking.specialist.name}">Alice Chen</td>
+                        <td>
+                            <span class="status-badge" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}"
+                                  th:text="${booking.status}">PENDING</span>
+                        </td>
+                        <td th:text="${#temporals.format(booking.slot.slotDate, 'dd MMM yyyy') + ', ' + #temporals.format(booking.slot.startTime, 'HH:mm')}">23 Apr 2026, 10:00</td>
+                        <td><a class="button button--ghost" th:href="@{/customer/bookings/detail(id=${booking.id})}">Details</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="empty-state" th:if="${#lists.isEmpty(recentBookings)}">
+                No bookings yet. Start your first request from the specialist search page.
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/customer/dashboard.js')}"></th:block>
 </body>
 </html>

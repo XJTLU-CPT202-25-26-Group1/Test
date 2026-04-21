@@ -1,208 +1,113 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('首页')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Home', null)}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-<main class="site-main">
-  <div class="page-wrap">
-    <section class="hero-shell mb-4">
-      <div class="hero-grid">
-        <div>
-          <span class="hero-chip mb-3">
-            <i class="bi bi-hospital"></i>
-            官方就诊服务平台
-          </span>
-          <h1 class="hero-title">像医院服务 App 一样清晰的专家咨询预约入口。</h1>
-          <p class="hero-subtitle">
-            统一展示找专家、提交预约、排班管理、预约审核与账单概览。整个系统保持前后端原有流程不变，只把入口、信息层级和视觉风格重构得更清楚。
-          </p>
-          <div class="page-header-actions mt-4">
-            <a class="btn btn-primary btn-lg" th:href="@{/customer/specialists}">立即预约</a>
-            <a class="btn btn-outline-primary btn-lg" th:href="${isAuthenticated ? dashboardPath : '/auth/login'}">进入工作台</a>
-            <a class="btn btn-outline-secondary btn-lg" th:if="${!isAuthenticated}" th:href="@{/auth/register}">新用户注册</a>
-          </div>
-        </div>
-
-        <div class="preview-panel">
-          <div class="preview-header">
-            <div>
-              <div class="preview-kicker">服务流程</div>
-              <h2 class="preview-title">从找专家到完成咨询，全流程状态都能追踪</h2>
+    <main class="page-content--centered stack">
+        <section class="hero-card dashboard-hero">
+            <div class="eyebrow">Role-based consultation platform</div>
+            <h1>Move from specialist discovery to confirmed booking in one clear workflow.</h1>
+            <p>
+                Search specialists, submit booking requests, review approvals, manage weekly schedules, and track
+                billing with one English-language portal designed for demonstration-ready clarity.
+            </p>
+            <div class="hero-actions">
+                <a class="button button--primary" th:href="@{/auth/login}">Sign in</a>
+                <a class="button button--ghost" th:href="@{/auth/register}">Create an account</a>
+                <a class="button button--secondary" th:href="@{/customer/specialists}">Browse specialists</a>
             </div>
-            <span class="soft-badge">医院服务风格</span>
-          </div>
-
-          <div class="preview-steps">
-            <div class="preview-step">
-              <div class="preview-step-index">01</div>
-              <div>
-                <div class="preview-step-title">选择专家</div>
-                <p class="preview-step-text">按分类、日期与关键词筛选可预约专家。</p>
-              </div>
+            <div class="summary-strip">
+                <span class="tag"><strong th:text="${specialistCount}">0</strong>&nbsp;specialists</span>
+                <span class="tag"><strong th:text="${categoryCount}">0</strong>&nbsp;categories</span>
+                <span class="tag"><strong th:text="${bookingCount}">0</strong>&nbsp;bookings processed</span>
+                <span class="tag"><strong th:text="${pendingCount}">0</strong>&nbsp;pending reviews</span>
             </div>
-            <div class="preview-step">
-              <div class="preview-step-index">02</div>
-              <div>
-                <div class="preview-step-title">提交预约</div>
-                <p class="preview-step-text">选择可用时段并填写咨询主题与备注。</p>
-              </div>
-            </div>
-            <div class="preview-step">
-              <div class="preview-step-index">03</div>
-              <div>
-                <div class="preview-step-title">审核与接诊</div>
-                <p class="preview-step-text">管理员审核后，专家即可按排班完成咨询。</p>
-              </div>
-            </div>
-          </div>
+        </section>
 
-          <div class="preview-stats">
-            <div class="preview-stat">
-              <span class="preview-stat-label">专家人数</span>
-              <strong th:text="${specialistCount}">0</strong>
-            </div>
-            <div class="preview-stat">
-              <span class="preview-stat-label">服务分类</span>
-              <strong th:text="${categoryCount}">0</strong>
-            </div>
-            <div class="preview-stat">
-              <span class="preview-stat-label">待审核</span>
-              <strong th:text="${pendingCount}">0</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        <section class="stats-grid">
+            <article class="metric-card">
+                <span class="metric-card__label">Customer flow</span>
+                <strong class="metric-card__value">Search</strong>
+                <span class="metric-card__hint">Filter by keyword, category, and date.</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-card__label">Specialist flow</span>
+                <strong class="metric-card__value">Schedule</strong>
+                <span class="metric-card__hint">Publish time slots and mark sessions complete.</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-card__label">Admin flow</span>
+                <strong class="metric-card__value">Review</strong>
+                <span class="metric-card__hint">Approve requests, manage master data, and monitor billing.</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-card__label">Delivery style</span>
+                <strong class="metric-card__value">MVC</strong>
+                <span class="metric-card__hint">Server-rendered screens that match Spring Boot workflows.</span>
+            </article>
+        </section>
 
-    <section class="section-panel mb-4">
-      <div class="section-heading">
-        <div>
-          <div class="page-kicker">快捷服务</div>
-          <h2>高频入口</h2>
-          <p class="section-note">参考你给的医院首页做成四宫格服务区，每个入口都连接到真实可用页面。</p>
-        </div>
-      </div>
-      <div class="quick-grid">
-        <a class="quick-link" th:href="@{/customer/specialists}">
-          <div class="feature-icon"><i class="bi bi-calendar2-plus"></i></div>
-          <div class="quick-link-title">预约挂号</div>
-          <p class="quick-link-text">浏览专家、选择时段并发起咨询预约。</p>
-        </a>
-        <a class="quick-link" th:href="${isAuthenticated ? dashboardPath : '/auth/login'}">
-          <div class="feature-icon"><i class="bi bi-grid"></i></div>
-          <div class="quick-link-title">进入工作台</div>
-          <p class="quick-link-text">按当前角色进入客户、专家或管理员主页。</p>
-        </a>
-        <a class="quick-link" th:href="${isAuthenticated ? profilePath : '/auth/register'}">
-          <div class="feature-icon"><i class="bi bi-person-vcard"></i></div>
-          <div class="quick-link-title">资料管理</div>
-          <p class="quick-link-text">维护账户信息、联系方式与角色资料。</p>
-        </a>
-        <a class="quick-link" th:href="${isAuthenticated ? dashboardPath : '/auth/login'}">
-          <div class="feature-icon"><i class="bi bi-chat-dots"></i></div>
-          <div class="quick-link-title">流程提醒</div>
-          <p class="quick-link-text">查看最近通知、状态变更和待处理事项。</p>
-        </a>
-      </div>
-    </section>
+        <section class="feature-grid">
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Featured specialists</h2>
+                        <p class="section-subtitle">Sample profiles surfaced on the public home page.</p>
+                    </div>
+                    <a class="button button--ghost" th:href="@{/customer/specialists}">See all</a>
+                </div>
+                <div class="cards-grid" th:if="${!#lists.isEmpty(featuredSpecialists)}">
+                    <article class="list-card" th:each="specialist : ${featuredSpecialists}">
+                        <span class="status-badge" th:classappend="' status-' + ${#strings.toLowerCase(specialist.status.name())}"
+                              th:text="${specialist.status}">ACTIVE</span>
+                        <h3 th:text="${specialist.name}">Alice Chen</h3>
+                        <p th:text="${specialist.profileDescription}">Profile</p>
+                        <div class="summary-strip">
+                            <span class="tag" th:text="${specialist.category != null ? specialist.category.name : 'Unassigned category'}">Category</span>
+                            <span class="tag" th:text="${specialist.level}">Senior</span>
+                            <span class="tag" th:text="${'$' + #numbers.formatDecimal(specialist.feeRate, 1, 2)} + '/hour'">$300.00/hour</span>
+                        </div>
+                    </article>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(featuredSpecialists)}">
+                    Specialists will appear here once seed data or registrations are available.
+                </div>
+            </article>
 
-    <section class="mb-4 page-intro text-center">
-      <div class="page-kicker">角色入口</div>
-      <h2 class="page-title mb-2">不同角色，进入不同服务台</h2>
-      <p class="page-summary mx-auto">保留原有权限和路由逻辑，通过更直观的卡片方式组织客户、专家和管理员的工作入口。</p>
-    </section>
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Core workflow</h2>
+                        <p class="section-subtitle">A concise journey that matches the backend modules.</p>
+                    </div>
+                </div>
+                <div class="timeline">
+                    <div class="timeline__item">
+                        <div class="timeline__title"><span>1. Search and compare</span><span>Customer</span></div>
+                        <p class="timeline__meta">Find the right specialist by expertise, availability date, and consultation rate.</p>
+                    </div>
+                    <div class="timeline__item">
+                        <div class="timeline__title"><span>2. Submit booking request</span><span>Customer</span></div>
+                        <p class="timeline__meta">Pick an available slot, define the consultation topic, and send the request for review.</p>
+                    </div>
+                    <div class="timeline__item">
+                        <div class="timeline__title"><span>3. Confirm or reject</span><span>Administrator</span></div>
+                        <p class="timeline__meta">Review pending requests, approve valid bookings, or reject them with an audit reason.</p>
+                    </div>
+                    <div class="timeline__item">
+                        <div class="timeline__title"><span>4. Deliver and complete</span><span>Specialist</span></div>
+                        <p class="timeline__meta">Run the consultation, mark it complete, and collect feedback for service quality visibility.</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
 
-    <section class="mb-4">
-      <div class="role-grid">
-        <div class="role-card">
-          <div class="feature-icon"><i class="bi bi-person-heart"></i></div>
-          <h3 class="section-title">客户端</h3>
-          <p class="section-caption">查找专家、提交预约、管理改期与取消、查看咨询反馈。</p>
-          <a class="btn btn-link px-0 text-decoration-none" th:href="@{/customer/dashboard}">打开客户工作台</a>
-        </div>
-        <div class="role-card">
-          <div class="feature-icon"><i class="bi bi-journal-medical"></i></div>
-          <h3 class="section-title">专家端</h3>
-          <p class="section-caption">管理排班、查看预约、完成咨询并查看患者反馈。</p>
-          <a class="btn btn-link px-0 text-decoration-none" th:href="@{/specialist/dashboard}">打开专家工作台</a>
-        </div>
-        <div class="role-card">
-          <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
-          <h3 class="section-title">管理员端</h3>
-          <p class="section-caption">审核预约、维护专家与分类、查看账单总览与审计记录。</p>
-          <a class="btn btn-link px-0 text-decoration-none" th:href="@{/admin/dashboard}">打开管理控制台</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-4">
-      <div class="metric-strip">
-        <div class="metric-card">
-          <div class="metric-label">专家总数</div>
-          <div class="metric-value" th:text="${specialistCount}">0</div>
-          <div class="metric-meta">当前平台内可管理、可展示的专家数量。</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">分类数量</div>
-          <div class="metric-value" th:text="${categoryCount}">0</div>
-          <div class="metric-meta">支持筛选和维护的咨询分类数量。</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">预约总量</div>
-          <div class="metric-value" th:text="${bookingCount}">0</div>
-          <div class="metric-meta">平台内所有预约请求和咨询记录。</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">待审核</div>
-          <div class="metric-value" th:text="${pendingCount}">0</div>
-          <div class="metric-meta">当前仍在等待管理员处理的预约数。</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-4">
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>推荐专家</h2>
-            <p class="section-note">未登录也能先查看专家概况、专业方向和价格。</p>
-          </div>
-          <a class="btn btn-outline-primary" th:href="@{/customer/specialists}">查看全部专家</a>
-        </div>
-        <div class="soft-list-item" th:each="specialist : ${featuredSpecialists}">
-          <div>
-            <div class="fw-bold" th:text="${specialist.name}">Name</div>
-            <div class="text-muted small">
-              <span th:text="${specialist.category != null ? specialist.category.name : '未分类'}">Category</span>
-              ·
-              <span th:text="${specialist.level}">Level</span>
-            </div>
-          </div>
-          <div class="text-end">
-            <div class="soft-badge" th:text="${specialist.feeRate + ' / 小时'}">0 / 小时</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta-bar">
-      <div class="cta-copy">
-        <i class="bi bi-calendar2-check"></i>
-        <div>
-          <div class="fw-bold">准备开始了吗？</div>
-          <div class="text-muted">现在就进入专家列表，提交第一条预约请求。</div>
-        </div>
-      </div>
-      <div class="cta-actions">
-        <a class="btn btn-primary" th:href="@{/customer/specialists}">开始预约</a>
-        <a class="btn btn-link text-decoration-none" th:href="@{/auth/forgot-password}">忘记密码</a>
-      </div>
-    </section>
-  </div>
-</main>
-
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts(null)}"></th:block>
 </body>
 </html>

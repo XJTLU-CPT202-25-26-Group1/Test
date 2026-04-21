@@ -1,71 +1,79 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('登录')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Login', '/css/auth.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-<main class="site-main">
-  <div class="page-wrap">
-    <section class="auth-shell">
-      <div class="auth-panel">
-        <div class="page-kicker">账号登录</div>
-        <h1>登录后进入对应角色的医疗服务工作台。</h1>
-        <p>客户可以管理预约与反馈，专家可以维护排班与接诊日程，管理员可以执行审核和主数据维护。</p>
-
-        <div class="support-note">
-          <strong>默认演示账号</strong>
-          <ul class="helper-list mt-2">
-            <li>管理员：<strong>admin</strong> / <strong>admin123</strong></li>
-            <li>专家：<strong>specialist</strong> / <strong>specialist123</strong></li>
-            <li>客户：<strong>customer</strong> / <strong>customer123</strong></li>
-          </ul>
-        </div>
-
-        <div class="support-note">
-          新注册的客户和专家账户需要先完成邮箱验证才能首次登录。
-        </div>
-      </div>
-
-      <div class="auth-card">
-        <div class="page-kicker">登录表单</div>
-        <h1>欢迎回来</h1>
-        <p>请输入用户名和密码，进入你的专属工作台。</p>
-
-        <form th:action="@{/auth/login}" method="post" class="needs-validation" novalidate>
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-          <div>
-            <label for="username" class="form-label">用户名</label>
-            <input id="username" class="form-control" type="text" name="username" required autofocus th:value="${param.username}">
-            <div class="invalid-feedback">请输入用户名。</div>
-          </div>
-
-          <div>
-            <label for="password" class="form-label">密码</label>
-            <div class="input-group">
-              <input id="password" class="form-control" type="password" name="password" required>
-              <button class="btn btn-outline-secondary" type="button" id="togglePassword">显示</button>
+    <main class="auth-shell">
+        <section class="hero-card auth-hero">
+            <div>
+                <div class="eyebrow">Welcome back</div>
+                <h1>Sign in to manage consultation bookings by role.</h1>
+                <p>
+                    The platform supports customer booking journeys, specialist scheduling, and administrator review
+                    workflows in one shared system.
+                </p>
             </div>
-            <div class="invalid-feedback">请输入密码。</div>
-          </div>
+            <div class="feature-grid">
+                <article class="list-card">
+                    <h3>Customer</h3>
+                    <p>Track request status, upcoming sessions, and follow-up feedback.</p>
+                </article>
+                <article class="list-card">
+                    <h3>Specialist</h3>
+                    <p>Maintain availability, weekly schedule visibility, and consultation completion.</p>
+                </article>
+                <article class="list-card">
+                    <h3>Administrator</h3>
+                    <p>Approve bookings, manage categories, monitor specialists, and review billing.</p>
+                </article>
+            </div>
+        </section>
 
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">登录</button>
-            <a class="btn btn-outline-secondary" th:href="@{/auth/register}">注册账户</a>
-          </div>
+        <section class="auth-card">
+            <div class="section-header">
+                <div>
+                    <h2>Login</h2>
+                    <p class="section-subtitle">Use your username and password to continue.</p>
+                </div>
+            </div>
 
-          <div class="compact-stack">
-            <a th:href="@{/auth/forgot-password}" class="text-decoration-none">忘记密码？</a>
-            <a th:href="@{/auth/resend-verification}" class="text-decoration-none">重新发送验证邮件</a>
-          </div>
-        </form>
-      </div>
-    </section>
-  </div>
-</main>
+            <div class="flash flash--info" th:if="${param.logout}">
+                <span>You have been signed out successfully.</span>
+            </div>
+            <div class="flash flash--info" th:if="${param.error}">
+                <span>Login failed. Please check your credentials and try again.</span>
+            </div>
+            <div class="flash flash--info" th:if="${param.unverified}">
+                <span>Your email has not been verified yet. Please verify your account before signing in.</span>
+            </div>
 
-<footer th:replace="~{fragments/layout :: footer}"></footer>
-<script defer th:src="@{/js/auth.js}"></script>
+            <form class="stack" th:action="@{/auth/login}" method="post">
+                <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" autocomplete="username" required placeholder="Enter your username">
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+                </div>
+                <button class="button button--primary" type="submit">Login</button>
+            </form>
+
+            <div class="divider"></div>
+            <div class="auth-links">
+                <a th:href="@{/auth/register}">Create a new account</a>
+                <a th:href="@{/auth/forgot-password}">Forgot password?</a>
+                <a th:href="@{/auth/resend-verification}">Resend verification email</a>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/auth.js')}"></th:block>
 </body>
 </html>

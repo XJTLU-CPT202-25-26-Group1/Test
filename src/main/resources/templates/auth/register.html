@@ -1,98 +1,116 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('注册')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Register', '/css/auth.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-<main class="site-main">
-  <div class="page-wrap">
-    <section class="auth-shell">
-      <div class="auth-panel">
-        <div class="page-kicker">创建账户</div>
-        <h1>注册客户或专家账号，进入统一医疗服务平台。</h1>
-        <p>客户可直接发起预约；专家注册时会同时创建专家资料，因此会额外填写分类、级别、收费与简介。</p>
-
-        <div class="support-note">
-          <strong>注册说明</strong>
-          <ul class="helper-list mt-2">
-            <li>管理员账号由系统内部维护，不在此处开放注册。</li>
-            <li>客户和专家账号注册后需要先完成邮箱验证。</li>
-            <li>只有选择专家角色时才需要填写专家专属字段。</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="auth-card">
-        <div class="page-kicker">注册表单</div>
-        <h1>填写账户信息</h1>
-        <p>请完成基础资料与角色信息，系统会按角色跳转到对应工作台。</p>
-
-        <form th:action="@{/auth/register}" method="post">
-          <div class="field-grid">
+    <main class="auth-shell">
+        <section class="hero-card auth-hero">
             <div>
-              <label class="form-label">用户名</label>
-              <input class="form-control" type="text" name="username" required>
+                <div class="eyebrow">Join the platform</div>
+                <h1>Create a customer or specialist account in a single registration flow.</h1>
+                <p>
+                    Customer accounts focus on booking and tracking, while specialist accounts additionally require a
+                    category, level, fee rate, and profile description.
+                </p>
             </div>
-            <div>
-              <label class="form-label">密码</label>
-              <input class="form-control" type="password" name="password" minlength="6" required>
+            <div class="timeline">
+                <div class="timeline__item">
+                    <div class="timeline__title"><span>Step 1</span><span>Identity</span></div>
+                    <p class="timeline__meta">Provide username, password, and contact information.</p>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__title"><span>Step 2</span><span>Role</span></div>
+                    <p class="timeline__meta">Choose whether you want to use the platform as a customer or specialist.</p>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__title"><span>Step 3</span><span>Verification</span></div>
+                    <p class="timeline__meta">Verify your email before logging in and accessing protected pages.</p>
+                </div>
             </div>
-            <div>
-              <label class="form-label">显示名称</label>
-              <input class="form-control" type="text" name="displayName" required>
-            </div>
-            <div>
-              <label class="form-label">联系电话</label>
-              <input class="form-control" type="text" name="phone" required>
-            </div>
-            <div>
-              <label class="form-label">邮箱</label>
-              <input class="form-control" type="email" name="email" required>
-            </div>
-            <div>
-              <label class="form-label">角色</label>
-              <select class="form-select" name="role" id="roleSelect" required>
-                <option th:each="role : ${roles}" th:value="${role.name()}" th:text="${role.name()}"></option>
-              </select>
+        </section>
+
+        <section class="auth-card">
+            <div class="section-header">
+                <div>
+                    <h2>Register account</h2>
+                    <p class="section-subtitle">All fields are required unless noted otherwise.</p>
+                </div>
             </div>
 
-            <div class="field-full support-note">
-              当角色选择为 <strong>SPECIALIST</strong> 时，下方会展开专家资料字段，仍然沿用原有后端注册逻辑。
-            </div>
+            <form class="stack" th:action="@{/auth/register}" method="post">
+                <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="username">Username</label>
+                        <input id="username" name="username" type="text" required placeholder="e.g. emily.chen">
+                    </div>
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input id="password" name="password" type="password" minlength="6" required placeholder="At least 6 characters">
+                    </div>
+                    <div class="field">
+                        <label for="displayName">Display name</label>
+                        <input id="displayName" name="displayName" type="text" required placeholder="Your full name">
+                    </div>
+                    <div class="field">
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="phone" type="tel" required placeholder="Mobile or office number">
+                    </div>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" required placeholder="name@example.com">
+                    </div>
+                    <div class="field">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" required data-role-select>
+                            <option value="">Select a role</option>
+                            <option th:each="role : ${roles}" th:value="${role.name()}" th:text="${role.name()}">CUSTOMER</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div class="specialist-only">
-              <label class="form-label">专业分类</label>
-              <select class="form-select" name="categoryId" id="categorySelect">
-                <option value="">请选择分类</option>
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-              </select>
-            </div>
-            <div class="specialist-only">
-              <label class="form-label">级别</label>
-              <input class="form-control" type="text" name="level" placeholder="例如 Associate / Senior / Consultant">
-            </div>
-            <div class="specialist-only">
-              <label class="form-label">时薪</label>
-              <input class="form-control" type="number" step="0.01" min="0" name="feeRate" placeholder="例如 200">
-            </div>
-            <div class="specialist-only field-full">
-              <label class="form-label">专家简介</label>
-              <textarea class="form-control" name="description" rows="4" placeholder="填写专业方向、经验和擅长内容"></textarea>
-            </div>
-          </div>
+                <section class="panel hidden" data-specialist-fields>
+                    <div class="section-header">
+                        <div>
+                            <h3>Specialist profile details</h3>
+                            <p class="section-subtitle">These fields appear only when registering as a specialist.</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="categoryId">Expertise category</label>
+                            <select id="categoryId" name="categoryId" data-specialist-required="true">
+                                <option value="">Choose a category</option>
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">Legal</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="level">Level</label>
+                            <input id="level" name="level" type="text" placeholder="Associate / Consultant / Senior" data-specialist-required="true">
+                        </div>
+                        <div class="field">
+                            <label for="feeRate">Fee rate per hour</label>
+                            <input id="feeRate" name="feeRate" type="number" min="0" step="0.01" placeholder="200.00" data-specialist-required="true">
+                        </div>
+                        <div class="field field--full">
+                            <label for="description">Profile description</label>
+                            <textarea id="description" name="description" placeholder="Describe the specialist's focus and consultation strengths." data-specialist-required="true"></textarea>
+                        </div>
+                    </div>
+                </section>
 
-          <div class="form-actions mt-4">
-            <button class="btn btn-primary" type="submit">创建账户</button>
-            <a class="btn btn-outline-secondary" th:href="@{/auth/login}">返回登录</a>
-          </div>
-        </form>
-      </div>
-    </section>
-  </div>
-</main>
+                <button class="button button--primary" type="submit">Create account</button>
+            </form>
 
-<footer th:replace="~{fragments/layout :: footer}"></footer>
-<script defer th:src="@{/js/auth.js}"></script>
+            <p class="auth-note">Already registered? <a th:href="@{/auth/login}">Go to login</a>.</p>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/auth.js')}"></th:block>
 </body>
 </html>

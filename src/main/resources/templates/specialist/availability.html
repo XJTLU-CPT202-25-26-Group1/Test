@@ -1,79 +1,133 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('排班管理')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Availability', '/css/specialist/availability.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">专家排班</div>
-      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-        <div>
-          <h1 class="page-title">排班管理：<span th:text="${specialist.name}">Specialist</span></h1>
-          <p class="page-summary">添加开放时段、修改未预约时段，并让已预约时段保持锁定。</p>
-        </div>
-        <a class="btn btn-outline-secondary" th:href="@{/specialist/dashboard}">返回工作台</a>
-      </div>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="toolbar-panel mb-4">
-      <div class="section-heading">
-        <div>
-          <h2>新增排班时段</h2>
-          <p class="section-note">每次创建一个时段，后端会阻止时间冲突。</p>
-        </div>
-      </div>
-      <form class="row g-3" th:action="@{/specialist/availability}" method="post">
-        <div class="col-md-3"><label class="form-label">日期</label><input class="form-control" type="date" name="date" required></div>
-        <div class="col-md-3"><label class="form-label">开始时间</label><input class="form-control" type="time" name="startTime" required></div>
-        <div class="col-md-3"><label class="form-label">结束时间</label><input class="form-control" type="time" name="endTime" required></div>
-        <div class="col-md-3 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">新增时段</button></div>
-      </form>
-    </section>
+    <div class="shell-body">
+        <aside th:replace="~{fragments/layout :: sideNav}"></aside>
+        <main class="page-content stack">
+            <section class="page-header">
+                <div>
+                    <h1>Manage availability</h1>
+                    <p>Create, update, or remove future time slots that customers can book.</p>
+                </div>
+            </section>
 
-    <section class="section-panel table-panel">
-      <div class="section-heading">
-        <div>
-          <h2>当前排班表</h2>
-          <p class="section-note">已预约的行会保持可见，但不可编辑和删除。</p>
-        </div>
-      </div>
-      <div class="table-responsive">
-        <table class="table plain-table align-middle">
-          <thead><tr><th>日期</th><th>开始</th><th>结束</th><th>状态</th><th>时段 ID</th><th>操作</th></tr></thead>
-          <tbody>
-          <tr th:each="slot : ${slots}">
-            <td th:text="${slot.slotDate}">2026-01-01</td>
-            <td th:text="${slot.startTime}">10:00</td>
-            <td th:text="${slot.endTime}">11:00</td>
-            <td>
-              <span class="status-tag" th:classappend="${slot.booked} ? ' warning' : ' success'" th:text="${slot.booked ? '已预约' : '可预约'}">Available</span>
-            </td>
-            <td th:text="${slot.id}">1</td>
-            <td>
-              <div th:if="${!slot.booked}" class="compact-stack">
-                <form th:action="@{/specialist/availability/update}" method="post" class="row g-2">
-                  <input type="hidden" name="slotId" th:value="${slot.id}">
-                  <div class="col-12"><input class="form-control form-control-sm" type="date" name="date" th:value="${slot.slotDate}" required></div>
-                  <div class="col-6"><input class="form-control form-control-sm" type="time" name="startTime" th:value="${slot.startTime}" required></div>
-                  <div class="col-6"><input class="form-control form-control-sm" type="time" name="endTime" th:value="${slot.endTime}" required></div>
-                  <div class="col-12"><button class="btn btn-outline-primary btn-sm w-100" type="submit">更新</button></div>
-                </form>
-                <form th:action="@{/specialist/availability/delete}" method="post">
-                  <input type="hidden" name="slotId" th:value="${slot.id}">
-                  <button class="btn btn-outline-danger btn-sm w-100" type="submit">删除</button>
-                </form>
-              </div>
-              <span th:if="${slot.booked}" class="subtle-text small">已预约时段不可编辑。</span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+            <section class="two-column">
+                <article class="panel">
+                    <div class="section-header">
+                        <div>
+                            <h2>Create a slot</h2>
+                            <p class="section-subtitle">New slots must be in the future and cannot overlap existing ones.</p>
+                        </div>
+                    </div>
+                    <form class="stack" th:action="@{/specialist/availability}" method="post">
+                        <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="date">Date</label>
+                                <input id="date" name="date" type="date" required>
+                            </div>
+                            <div class="field">
+                                <label for="startTime">Start time</label>
+                                <input id="startTime" name="startTime" type="time" required>
+                            </div>
+                            <div class="field">
+                                <label for="endTime">End time</label>
+                                <input id="endTime" name="endTime" type="time" required>
+                            </div>
+                        </div>
+                        <button class="button button--primary" type="submit">Add slot</button>
+                    </form>
+                </article>
+
+                <article class="panel">
+                    <div class="section-header">
+                        <div>
+                            <h2>Edit selected slot</h2>
+                            <p class="section-subtitle">Booked slots cannot be edited or deleted.</p>
+                        </div>
+                    </div>
+                    <form class="stack" th:action="@{/specialist/availability/update}" method="post" data-slot-edit-form>
+                        <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                        <input type="hidden" name="slotId" id="slotId">
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="editDate">Date</label>
+                                <input id="editDate" name="date" type="date" required>
+                            </div>
+                            <div class="field">
+                                <label for="editStartTime">Start time</label>
+                                <input id="editStartTime" name="startTime" type="time" required>
+                            </div>
+                            <div class="field">
+                                <label for="editEndTime">End time</label>
+                                <input id="editEndTime" name="endTime" type="time" required>
+                            </div>
+                        </div>
+                        <button class="button button--secondary" type="submit">Update selected slot</button>
+                    </form>
+                    <p class="field-hint">Use the “Edit” button in the table below to load a slot into this form.</p>
+                </article>
+            </section>
+
+            <section class="table-card">
+                <div class="section-header">
+                    <div>
+                        <h2>Availability slots</h2>
+                        <p class="section-subtitle">All slots linked to your specialist profile.</p>
+                    </div>
+                </div>
+                <div class="table-scroll" th:if="${!#lists.isEmpty(slots)}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="slot : ${slots}">
+                            <td th:text="${#temporals.format(slot.slotDate, 'dd MMM yyyy')}">24 Apr 2026</td>
+                            <td th:text="${#temporals.format(slot.startTime, 'HH:mm') + ' - ' + #temporals.format(slot.endTime, 'HH:mm')}">10:00 - 11:00</td>
+                            <td>
+                                <span class="status-badge" th:classappend="${slot.booked} ? ' status-confirmed' : ' status-active'"
+                                      th:text="${slot.booked ? 'Booked' : 'Available'}">Available</span>
+                            </td>
+                            <td>
+                                <div class="inline-actions">
+                                    <button type="button"
+                                            class="button button--ghost"
+                                            th:disabled="${slot.booked}"
+                                            data-slot-edit-trigger
+                                            th:attr="data-slot-id=${slot.id},data-slot-date=${slot.slotDate},data-slot-start=${slot.startTime},data-slot-end=${slot.endTime}">
+                                        Edit
+                                    </button>
+                                    <form th:action="@{/specialist/availability/delete}" method="post">
+                                        <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                                        <input type="hidden" name="slotId" th:value="${slot.id}">
+                                        <button class="button button--danger js-confirm-action" data-confirm-message="Delete this slot?" type="submit" th:disabled="${slot.booked}">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(slots)}">
+                    No availability slots yet. Add your first future slot above.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/specialist/availability.js')}"></th:block>
 </body>
 </html>

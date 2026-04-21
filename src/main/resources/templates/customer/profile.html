@@ -1,39 +1,74 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('个人资料')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Customer Profile', '/css/customer/profile.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">个人资料</div>
-      <h1 class="page-title">客户资料维护</h1>
-      <p class="page-summary">更新昵称、邮箱和联系电话，后端保存逻辑保持不变。</p>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="auth-card">
-      <form class="row g-3" th:action="@{/customer/profile}" method="post">
-        <div class="col-md-6">
-          <label class="form-label">显示名称</label>
-          <input class="form-control" type="text" name="displayName" th:value="${profile.displayName}" required>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">邮箱</label>
-          <input class="form-control" type="email" name="email" th:value="${profile.email}" required>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">联系电话</label>
-          <input class="form-control" type="text" name="phone" th:value="${profile.phone}" required>
-        </div>
-        <div class="col-12 form-actions">
-          <button class="btn btn-primary" type="submit">保存资料</button>
-          <a class="btn btn-outline-secondary" th:href="@{/customer/dashboard}">返回工作台</a>
-        </div>
-      </form>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <main class="page-content--centered stack">
+        <section class="page-header">
+            <div>
+                <h1>Customer profile</h1>
+                <p>Maintain the account details used for booking communication and notifications.</p>
+            </div>
+        </section>
+
+        <section class="two-column">
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Edit customer details</h2>
+                        <p class="section-subtitle">Changes are saved directly to your customer account.</p>
+                    </div>
+                </div>
+                <form class="stack" th:action="@{/customer/profile}" method="post">
+                    <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="displayName">Display name</label>
+                            <input id="displayName" name="displayName" type="text" th:value="${profile.displayName}" required>
+                        </div>
+                        <div class="field">
+                            <label for="phone">Phone</label>
+                            <input id="phone" name="phone" type="tel" th:value="${profile.phone}" required>
+                        </div>
+                        <div class="field field--full">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" type="email" th:value="${profile.email}" required>
+                        </div>
+                    </div>
+                    <button class="button button--primary" type="submit">Save profile</button>
+                </form>
+            </article>
+
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Account overview</h2>
+                        <p class="section-subtitle">Useful for verifying the identity attached to your bookings.</p>
+                    </div>
+                </div>
+                <div class="detail-list">
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Username</span>
+                        <span class="detail-list__value" th:text="${profile.username}">customer</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Role</span>
+                        <span class="detail-list__value" th:text="${profile.role}">CUSTOMER</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Email status</span>
+                        <span class="detail-list__value" th:text="${profile.emailVerified ? 'Verified' : 'Pending verification'}">Verified</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/customer/profile.js')}"></th:block>
 </body>
 </html>

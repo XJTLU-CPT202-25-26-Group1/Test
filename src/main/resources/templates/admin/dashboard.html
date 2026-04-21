@@ -1,138 +1,81 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('管理员工作台')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Dashboard', '/css/admin/dashboard.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<div th:replace="~{fragments/layout :: alerts}"></div>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">管理控制台</div>
-      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-        <div>
-          <h1 class="page-title mb-2">运营审核与主数据总览</h1>
-          <p class="page-summary">管理员端保留审核、专家管理、分类维护、账单总览与审计记录等全部功能，并改造成更接近业务中台的卡片化布局。</p>
-        </div>
-        <div class="page-header-actions">
-          <a class="btn btn-primary" th:href="@{/admin/bookings}">去审核预约</a>
-          <a class="btn btn-outline-secondary" th:href="@{/admin/specialists}">管理专家</a>
-        </div>
-      </div>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="section-panel mb-4">
-      <div class="section-heading">
-        <div>
-          <h2>快捷管理</h2>
-          <p class="section-note">把管理员常用动作放到一层展示，减少跳转成本。</p>
-        </div>
-      </div>
-      <div class="quick-grid">
-        <a class="quick-link" th:href="@{/admin/bookings}">
-          <div class="feature-icon"><i class="bi bi-clipboard2-pulse"></i></div>
-          <div class="quick-link-title">预约审核</div>
-          <p class="quick-link-text">处理待确认、待拒绝的预约申请并查看流程详情。</p>
-        </a>
-        <a class="quick-link" th:href="@{/admin/specialists}">
-          <div class="feature-icon"><i class="bi bi-people"></i></div>
-          <div class="quick-link-title">专家管理</div>
-          <p class="quick-link-text">维护专家资料、状态、价格和分类信息。</p>
-        </a>
-        <a class="quick-link" th:href="@{/admin/categories}">
-          <div class="feature-icon"><i class="bi bi-tags"></i></div>
-          <div class="quick-link-title">分类维护</div>
-          <p class="quick-link-text">新增分类、更新名称并控制启停状态。</p>
-        </a>
-        <a class="quick-link" th:href="@{/admin/billing}">
-          <div class="feature-icon"><i class="bi bi-cash-stack"></i></div>
-          <div class="quick-link-title">账单总览</div>
-          <p class="quick-link-text">查看可计费预约、确认金额和完成收入。</p>
-        </a>
-      </div>
-    </section>
+    <div class="shell-body">
+        <aside th:replace="~{fragments/layout :: sideNav}"></aside>
+        <main class="page-content stack">
+            <section class="hero-card dashboard-hero">
+                <div class="eyebrow">Administrator console</div>
+                <h1>Supervise booking workflow, master data, and operational visibility.</h1>
+                <p>Use the admin workspace to keep specialist data clean, move bookings through review, and monitor revenue-ready sessions.</p>
+            </section>
 
-    <section class="row g-3 mb-4">
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">待审核</div>
-          <div class="metric-value" th:text="${pendingCount}">0</div>
-          <div class="metric-meta">仍等待管理员决策的预约数量。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">全部预约</div>
-          <div class="metric-value" th:text="${bookingCount}">0</div>
-          <div class="metric-meta">系统内的预约总量。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">专家数量</div>
-          <div class="metric-value" th:text="${specialistCount}">0</div>
-          <div class="metric-meta">当前平台维护中的专家总数。</div>
-        </div>
-      </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="metric-card">
-          <div class="metric-label">分类数量</div>
-          <div class="metric-value" th:text="${categoryCount}">0</div>
-          <div class="metric-meta">当前可用的咨询分类数量。</div>
-        </div>
-      </div>
-    </section>
+            <section class="stats-grid">
+                <article class="metric-card">
+                    <span class="metric-card__label">Pending bookings</span>
+                    <strong class="metric-card__value" th:text="${pendingCount}">0</strong>
+                    <span class="metric-card__hint">Requests currently awaiting review.</span>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-card__label">All bookings</span>
+                    <strong class="metric-card__value" th:text="${bookingCount}">0</strong>
+                    <span class="metric-card__hint">Every booking stored in the system.</span>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-card__label">Specialists</span>
+                    <strong class="metric-card__value" th:text="${specialistCount}">0</strong>
+                    <span class="metric-card__hint">Profiles available to customers and admins.</span>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-card__label">Categories</span>
+                    <strong class="metric-card__value" th:text="${categoryCount}">0</strong>
+                    <span class="metric-card__hint">Expertise categories in the master data list.</span>
+                </article>
+            </section>
 
-    <section class="split-layout">
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>核心管理模块</h2>
-            <p class="section-note">保留原有路由和功能，只重新组织视觉入口。</p>
-          </div>
-        </div>
-        <div class="quick-grid">
-          <a class="quick-link" th:href="@{/admin/bookings}">
-            <div class="quick-link-title">预约流程</div>
-            <p class="quick-link-text">查看待审核列表、详情页与审计记录。</p>
-          </a>
-          <a class="quick-link" th:href="@{/admin/specialists}">
-            <div class="quick-link-title">专家库</div>
-            <p class="quick-link-text">创建、编辑、搜索与启停专家资料。</p>
-          </a>
-          <a class="quick-link" th:href="@{/admin/categories}">
-            <div class="quick-link-title">分类库</div>
-            <p class="quick-link-text">防止重复分类并支持启停控制。</p>
-          </a>
-          <a class="quick-link" th:href="@{/admin/billing}">
-            <div class="quick-link-title">费用总览</div>
-            <p class="quick-link-text">查看计费相关预约和金额汇总。</p>
-          </a>
-        </div>
-      </div>
+            <section class="table-card">
+                <div class="section-header">
+                    <div>
+                        <h2>Recent audit events</h2>
+                        <p class="section-subtitle">System-level activity across booking state transitions.</p>
+                    </div>
+                </div>
+                <div class="table-scroll" th:if="${!#lists.isEmpty(recentAuditLogs)}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Transition</th>
+                            <th>Operator</th>
+                            <th>Remark</th>
+                            <th>Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="log : ${recentAuditLogs}">
+                            <td th:text="${log.bookingId}">1</td>
+                            <td th:text="${(log.oldStatus != null ? log.oldStatus + ' → ' : '') + log.newStatus}">PENDING → CONFIRMED</td>
+                            <td th:text="${log.operatorUsername}">admin</td>
+                            <td th:text="${log.remark}">Booking confirmed</td>
+                            <td th:text="${#temporals.format(log.operatedAt, 'dd MMM yyyy HH:mm')}">21 Apr 2026 10:22</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(recentAuditLogs)}">
+                    No audit records yet.
+                </div>
+            </section>
+        </main>
+    </div>
 
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>最近流程动态</h2>
-            <p class="section-note">展示最近的状态变化和操作人。</p>
-          </div>
-        </div>
-        <div class="empty-state" th:if="${#lists.isEmpty(recentAuditLogs)}">目前还没有新的流程动态。</div>
-        <div class="record-card" th:each="log : ${recentAuditLogs}">
-          <div class="record-head mb-1">
-            <div>
-              <h3 class="record-title">预约 #<span th:text="${log.bookingId}">0</span></h3>
-              <div class="subtle-text small" th:text="${log.remark}">remark</div>
-              <div class="subtle-text small" th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">time</div>
-            </div>
-            <span class="status-tag" th:text="${log.newStatus}">STATUS</span>
-          </div>
-          <div class="subtle-text small">操作人：<span th:text="${log.operatorUsername}">operator</span></div>
-        </div>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/admin/dashboard.js')}"></th:block>
 </body>
 </html>

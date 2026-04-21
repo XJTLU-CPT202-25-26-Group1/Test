@@ -1,98 +1,124 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('预约详情')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Booking Detail', '/css/customer/bookings.css')}"></head>
 <body>
-<header th:replace="~{fragments/layout :: header}"></header>
-<main class="container py-5">
-  <div class="page-wrap">
-    <section class="page-intro">
-      <div class="page-kicker">预约详情</div>
-      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-        <div>
-          <h1 class="page-title">查看预约信息</h1>
-          <p class="page-summary">确认专家、时间、费用、状态以及反馈提交情况。</p>
-        </div>
-        <a class="btn btn-outline-secondary" th:href="@{/customer/bookings}">返回预约列表</a>
-      </div>
-    </section>
+<div class="page-shell">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <section th:replace="~{fragments/layout :: flash}"></section>
 
-    <section class="split-layout">
-      <div class="summary-panel">
-        <div class="record-head">
-          <div>
-            <h2 class="record-title" th:text="${booking.topic}">Topic</h2>
-            <div class="record-meta">
-              <span><strong>专家：</strong><span th:text="${booking.specialist.name}">Specialist</span></span>
-              <span><strong>分类：</strong><span th:text="${booking.specialist.category.name}">Category</span></span>
+    <main class="page-content--centered stack">
+        <section class="page-header">
+            <div>
+                <h1 th:text="${'Booking #' + booking.id}">Booking #1</h1>
+                <p>Review the selected specialist, slot, workflow status, and any available customer actions.</p>
             </div>
-          </div>
-          <span class="status-tag" th:text="${booking.status}">PENDING</span>
-        </div>
-        <div class="detail-grid">
-          <div class="detail-item">
-            <span class="detail-label">日期</span>
-            <span class="detail-value" th:text="${booking.slot.slotDate}">Date</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">时间</span>
-            <span class="detail-value"><span th:text="${booking.slot.startTime}">Start</span> - <span th:text="${booking.slot.endTime}">End</span></span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">费用</span>
-            <span class="detail-value" th:text="${booking.calculatedFee}">0</span>
-          </div>
-          <div class="detail-item" th:if="${booking.rejectionReason != null and !booking.rejectionReason.isBlank()}">
-            <span class="detail-label">拒绝原因</span>
-            <span class="detail-value" th:text="${booking.rejectionReason}">reason</span>
-          </div>
-        </div>
-        <div class="mt-3">
-          <h2 class="section-title mb-2">客户备注</h2>
-          <p class="record-description mb-0" th:text="${booking.notes}">Notes</p>
-        </div>
-      </div>
+            <div class="inline-actions">
+                <span class="status-badge" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}"
+                      th:text="${booking.status}">PENDING</span>
+            </div>
+        </section>
 
-      <div class="section-panel">
-        <div class="section-heading">
-          <div>
-            <h2>咨询反馈</h2>
-            <p class="section-note">预约完成后可在此提交评分和评价。</p>
-          </div>
-        </div>
-        <div class="empty-state" th:if="${booking.status.name() != 'COMPLETED'}">
-          只有在预约完成后才能提交反馈。
-        </div>
-        <div th:if="${existingFeedback != null}" class="record-card">
-          <div class="record-meta mb-2">
-            <span><strong>评分：</strong><span th:text="${existingFeedback.rating}"></span> / 5</span>
-          </div>
-          <p class="record-description mb-0"><strong>评价：</strong><span th:text="${existingFeedback.comment}"></span></p>
-        </div>
-        <form th:if="${booking.status.name() == 'COMPLETED' and existingFeedback == null}" th:action="@{/customer/bookings/feedback}" method="post" class="row g-3">
-          <input type="hidden" name="bookingId" th:value="${booking.id}">
-          <div class="col-12">
-            <label class="form-label">评分</label>
-            <select class="form-select" name="rating" required>
-              <option value="">请选择评分</option>
-              <option value="5">5 - 非常满意</option>
-              <option value="4">4 - 满意</option>
-              <option value="3">3 - 一般</option>
-              <option value="2">2 - 不满意</option>
-              <option value="1">1 - 非常不满意</option>
-            </select>
-          </div>
-          <div class="col-12">
-            <label class="form-label">评价内容</label>
-            <textarea class="form-control" name="comment" rows="4" placeholder="分享你的咨询体验" required></textarea>
-          </div>
-          <div class="col-12">
-            <button class="btn btn-success" type="submit">提交反馈</button>
-          </div>
-        </form>
-      </div>
-    </section>
-  </div>
-</main>
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+        <section class="two-column">
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Booking summary</h2>
+                        <p class="section-subtitle">Key details resolved from the booking and slot records.</p>
+                    </div>
+                </div>
+                <div class="detail-list">
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Topic</span>
+                        <span class="detail-list__value" th:text="${booking.topic}">Contract review</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Specialist</span>
+                        <span class="detail-list__value" th:text="${booking.specialist.name}">Alice Chen</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Category</span>
+                        <span class="detail-list__value" th:text="${booking.specialist.category != null ? booking.specialist.category.name : 'Unassigned category'}">Legal</span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Session slot</span>
+                        <span class="detail-list__value"
+                              th:text="${#temporals.format(booking.slot.slotDate, 'dd MMM yyyy') + ', ' + #temporals.format(booking.slot.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.slot.endTime, 'HH:mm')}">
+                            24 Apr 2026, 10:00 - 11:00
+                        </span>
+                    </div>
+                    <div class="detail-list__item">
+                        <span class="detail-list__label">Calculated fee</span>
+                        <span class="detail-list__value" th:text="${booking.calculatedFee != null ? '$' + #numbers.formatDecimal(booking.calculatedFee, 1, 2) : 'Pending calculation'}">$300.00</span>
+                    </div>
+                    <div class="detail-list__item" th:if="${booking.notes}">
+                        <span class="detail-list__label">Notes</span>
+                        <span class="detail-list__value" th:text="${booking.notes}">Notes</span>
+                    </div>
+                    <div class="detail-list__item" th:if="${booking.rejectionReason}">
+                        <span class="detail-list__label">Rejection reason</span>
+                        <span class="detail-list__value" th:text="${booking.rejectionReason}">Reason</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Available actions</h2>
+                        <p class="section-subtitle">Actions remain subject to backend workflow rules and timing constraints.</p>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div class="inline-actions" th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'CONFIRMED'}">
+                        <form th:action="@{/customer/bookings/cancel}" method="post">
+                            <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                            <input type="hidden" name="id" th:value="${booking.id}">
+                            <button class="button button--danger js-confirm-action" data-confirm-message="Cancel this booking?" type="submit">Cancel booking</button>
+                        </form>
+                        <a class="button button--ghost" th:if="${booking.status.name() == 'CONFIRMED'}"
+                           th:href="@{/customer/bookings/reschedule(id=${booking.id})}">Request reschedule</a>
+                    </div>
+
+                    <div th:if="${booking.status.name() == 'COMPLETED'}">
+                        <div th:if="${existingFeedback == null}" class="stack">
+                            <p class="muted">This consultation is complete. You can now leave feedback for the specialist.</p>
+                            <form class="stack" th:action="@{/customer/bookings/feedback}" method="post">
+                                <th:block th:replace="~{fragments/layout :: csrf}"></th:block>
+                                <input type="hidden" name="bookingId" th:value="${booking.id}">
+                                <div class="field">
+                                    <label for="rating">Rating</label>
+                                    <select id="rating" name="rating" required>
+                                        <option value="">Select a rating</option>
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Very good</option>
+                                        <option value="3">3 - Good</option>
+                                        <option value="2">2 - Fair</option>
+                                        <option value="1">1 - Poor</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="comment">Comment</label>
+                                    <textarea id="comment" name="comment" required placeholder="Describe your consultation experience"></textarea>
+                                </div>
+                                <button class="button button--primary" type="submit">Submit feedback</button>
+                            </form>
+                        </div>
+
+                        <div th:if="${existingFeedback != null}" class="stack">
+                            <span class="tag rating" th:text="${'Rating: ' + existingFeedback.rating + ' / 5'}">Rating: 5 / 5</span>
+                            <p th:text="${existingFeedback.comment}">Comment</p>
+                            <small class="muted" th:text="${'Submitted on ' + #temporals.format(existingFeedback.createdAt, 'dd MMM yyyy HH:mm')}">Submitted on 21 Apr 2026 16:00</small>
+                        </div>
+                    </div>
+
+                    <a class="button button--secondary" th:href="@{/customer/bookings}">Back to bookings</a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts('/js/customer/bookings.js')}"></th:block>
 </body>
 </html>

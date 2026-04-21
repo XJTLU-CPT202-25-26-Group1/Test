@@ -1,1 +1,41 @@
+.auth-hero {
+    min-height: 100%;
+    display: grid;
+    gap: 20px;
+}
 
+.auth-hero .feature-grid {
+    margin-top: 12px;
+}
+
+.auth-hero .list-card {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+.auth-hero .list-card p,
+.auth-hero .list-card h3 {
+    color: #fff;
+}
+
+.auth-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 0.94rem;
+}
+
+.auth-links a {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.auth-note {
+    margin: 0;
+    color: var(--text-soft);
+}
+
+.auth-card .section-header {
+    margin-bottom: 22px;
+}

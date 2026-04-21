@@ -1,81 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Specialist Detail')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('专家详情')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <main class="container py-5">
-    <div class="page-wrap">
-        <section class="page-intro">
-            <div class="page-kicker">Specialist directory</div>
-            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-                <div>
-                    <h1 class="page-title" th:text="${specialist.name}">Name</h1>
-                    <p class="page-summary">Review the specialist profile and choose one open time slot to start a booking request.</p>
-                </div>
-                <a class="btn btn-outline-secondary" th:href="@{/customer/specialists}">Back to Specialists</a>
-            </div>
-        </section>
-
-        <section class="split-layout">
-            <div class="summary-panel">
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">Category</span>
-                        <span class="detail-value" th:text="${specialist.category.name}">Category</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Level</span>
-                        <span class="detail-value" th:text="${specialist.level}">Level</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Hourly rate</span>
-                        <span class="detail-value" th:text="${specialist.feeRate}">0</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Status</span>
-                        <span class="detail-value">Available for booking</span>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <h2 class="section-title mb-2">Profile summary</h2>
-                    <p class="record-description" th:text="${specialist.profileDescription}">Description</p>
-                </div>
-            </div>
-
-            <div class="section-panel">
-                <div class="section-heading">
-                    <div>
-                        <h2>Available Slots</h2>
-                        <p class="section-note">Filter the visible slots by date before creating a booking request.</p>
-                    </div>
-                </div>
-                <form class="filter-grid mb-4" method="get" th:action="@{/customer/specialists/detail}">
-                    <input type="hidden" name="id" th:value="${specialist.id}">
-                    <div>
-                        <label class="form-label">Selected date</label>
-                        <input class="form-control" type="date" name="availableDate" th:value="${availableDate}">
-                    </div>
-                    <div></div>
-                    <div></div>
-                    <div>
-                        <button class="btn btn-outline-secondary w-100" type="submit">Filter Slots</button>
-                    </div>
-                </form>
-
-                <div class="slot-list">
-                    <div class="slot-choice" th:each="slot : ${slots}">
-                        <div>
-                            <div class="record-title" th:text="${slot.slotDate}">2026-01-01</div>
-                            <div class="subtle-text"><span th:text="${slot.startTime}">10:00</span> - <span th:text="${slot.endTime}">11:00</span></div>
-                        </div>
-                        <a class="btn btn-primary" th:href="@{/customer/bookings/create(specialistId=${specialist.id},slotId=${slot.id})}">Book This Slot</a>
-                    </div>
-                </div>
-
-                <div th:if="${#lists.isEmpty(slots)}" class="empty-state">No available slots for the current date filter.</div>
-            </div>
+  <div class="page-wrap">
+    <section class="page-intro">
+      <div class="page-kicker">专家详情</div>
+      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+        <div>
+          <h1 class="page-title" th:text="${specialist.name}">Name</h1>
+          <p class="page-summary">查看专家资料后选择一个开放时段，直接进入预约创建页面。</p>
         </div>
-    </div>
+        <a class="btn btn-outline-secondary" th:href="@{/customer/specialists}">返回专家列表</a>
+      </div>
+    </section>
+
+    <section class="split-layout">
+      <div class="summary-panel">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">专业分类</span>
+            <span class="detail-value" th:text="${specialist.category.name}">Category</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">专家级别</span>
+            <span class="detail-value" th:text="${specialist.level}">Level</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">咨询费</span>
+            <span class="detail-value" th:text="${specialist.feeRate}">0</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">服务状态</span>
+            <span class="detail-value">当前可预约</span>
+          </div>
+        </div>
+        <div class="mt-3">
+          <h2 class="section-title mb-2">专家简介</h2>
+          <p class="record-description" th:text="${specialist.profileDescription}">Description</p>
+        </div>
+      </div>
+
+      <div class="section-panel">
+        <div class="section-heading">
+          <div>
+            <h2>可预约时段</h2>
+            <p class="section-note">可按日期过滤当前显示的时段。</p>
+          </div>
+        </div>
+        <form class="filter-grid mb-4" method="get" th:action="@{/customer/specialists/detail}">
+          <input type="hidden" name="id" th:value="${specialist.id}">
+          <div>
+            <label class="form-label">预约日期</label>
+            <input class="form-control" type="date" name="availableDate" th:value="${availableDate}">
+          </div>
+          <div></div>
+          <div></div>
+          <div>
+            <button class="btn btn-outline-secondary w-100" type="submit">筛选时段</button>
+          </div>
+        </form>
+
+        <div class="slot-list">
+          <div class="slot-choice" th:each="slot : ${slots}">
+            <div>
+              <div class="record-title" th:text="${slot.slotDate}">2026-01-01</div>
+              <div class="subtle-text"><span th:text="${slot.startTime}">10:00</span> - <span th:text="${slot.endTime}">11:00</span></div>
+            </div>
+            <a class="btn btn-primary" th:href="@{/customer/bookings/create(specialistId=${specialist.id},slotId=${slot.id})}">预约该时段</a>
+          </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(slots)}" class="empty-state">当前日期下没有可预约时段。</div>
+      </div>
+    </section>
+  </div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

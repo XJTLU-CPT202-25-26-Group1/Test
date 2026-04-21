@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Edit Profile')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('编辑资料')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
@@ -8,37 +8,37 @@
 <main class="site-main">
   <div class="page-wrap">
     <section class="page-intro">
-      <div class="page-kicker">Account settings</div>
-      <h1 class="page-title">Edit profile</h1>
-      <p class="page-summary">Keep your display name, email, and phone number up to date for booking communications and workflow notifications.</p>
+      <div class="page-kicker">账户设置</div>
+      <h1 class="page-title">编辑资料</h1>
+      <p class="page-summary">更新显示名称、邮箱和电话，方便接收预约通知与流程提醒。</p>
     </section>
 
     <section class="auth-card" th:if="${profile != null}">
       <form th:action="@{/auth/profile-edit}" method="post">
         <div class="field-grid">
           <div>
-            <label class="form-label">Display Name</label>
+            <label class="form-label">显示名称</label>
             <input class="form-control" type="text" name="displayName" th:value="${profile.displayName}" required>
           </div>
           <div>
-            <label class="form-label">Email</label>
+            <label class="form-label">邮箱</label>
             <input class="form-control" type="email" name="email" th:value="${profile.email}" required>
           </div>
           <div>
-            <label class="form-label">Phone</label>
+            <label class="form-label">联系电话</label>
             <input class="form-control" type="text" name="phone" th:value="${profile.phone}" required>
           </div>
         </div>
 
         <div class="form-actions mt-4">
-          <button class="btn btn-primary" type="submit">Save Changes</button>
-          <a class="btn btn-outline-secondary" th:href="${dashboardPath}">Back to Dashboard</a>
+          <button class="btn btn-primary" type="submit">保存修改</button>
+          <a class="btn btn-outline-secondary" th:href="${dashboardPath}">返回工作台</a>
         </div>
       </form>
     </section>
 
     <div class="empty-state" th:if="${profile == null}">
-      Please log in first to update your profile.
+      请先登录后再编辑资料。
     </div>
   </div>
 </main>

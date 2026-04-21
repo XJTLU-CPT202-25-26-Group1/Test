@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('404')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('404 页面不存在')}"></head>
 <body>
   <header th:replace="~{fragments/layout :: header}"></header>
   <main class="site-main">
     <div class="error-shell">
-      <div class="page-kicker">Page not found</div>
+      <div class="page-kicker">页面不存在</div>
       <div class="error-code">404</div>
-      <h1 class="page-title">The page you requested could not be found.</h1>
-      <p class="page-summary">The address may be outdated, the page may have moved, or the request may no longer be valid. Use the links below to continue.</p>
+      <h1 class="page-title">你访问的页面不存在。</h1>
+      <p class="page-summary">可能是地址已失效、页面已移动，或当前请求不再有效。你可以使用下面的入口继续操作。</p>
       <div class="form-actions justify-content-center mt-4">
-        <a class="btn btn-primary" href="/">Go to Home</a>
-        <a class="btn btn-outline-secondary" href="/auth/login">Log In</a>
+        <a class="btn btn-primary" href="/">回到首页</a>
+        <a class="btn btn-outline-secondary" href="/auth/login">前往登录</a>
       </div>
     </div>
   </main>

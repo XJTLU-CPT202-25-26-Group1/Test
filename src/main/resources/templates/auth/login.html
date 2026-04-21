@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Log In')}"></head>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('登录')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 <div th:replace="~{fragments/layout :: alerts}"></div>
@@ -9,55 +9,55 @@
   <div class="page-wrap">
     <section class="auth-shell">
       <div class="auth-panel">
-        <div class="page-kicker">Access your workspace</div>
-        <h1>Sign in to continue with your booking tasks.</h1>
-        <p>Customers can track booking requests, specialists can manage schedules, and administrators can review workflow actions from their own dashboards.</p>
+        <div class="page-kicker">账号登录</div>
+        <h1>登录后进入对应角色的医疗服务工作台。</h1>
+        <p>客户可以管理预约与反馈，专家可以维护排班与接诊日程，管理员可以执行审核和主数据维护。</p>
 
         <div class="support-note">
-          <strong>Default demo accounts</strong>
+          <strong>默认演示账号</strong>
           <ul class="helper-list mt-2">
-            <li>Administrator: <strong>admin</strong> / <strong>admin123</strong></li>
-            <li>Specialist: <strong>specialist</strong> / <strong>specialist123</strong></li>
-            <li>Customer: <strong>customer</strong> / <strong>customer123</strong></li>
+            <li>管理员：<strong>admin</strong> / <strong>admin123</strong></li>
+            <li>专家：<strong>specialist</strong> / <strong>specialist123</strong></li>
+            <li>客户：<strong>customer</strong> / <strong>customer123</strong></li>
           </ul>
         </div>
 
         <div class="support-note">
-          New customer and specialist accounts must verify their email address before the first login.
+          新注册的客户和专家账户需要先完成邮箱验证才能首次登录。
         </div>
       </div>
 
       <div class="auth-card">
-        <div class="page-kicker">Account login</div>
-        <h1>Welcome back</h1>
-        <p>Enter your username and password to open your dashboard.</p>
+        <div class="page-kicker">登录表单</div>
+        <h1>欢迎回来</h1>
+        <p>请输入用户名和密码，进入你的专属工作台。</p>
 
         <form th:action="@{/auth/login}" method="post" class="needs-validation" novalidate>
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
           <div>
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label">用户名</label>
             <input id="username" class="form-control" type="text" name="username" required autofocus th:value="${param.username}">
-            <div class="invalid-feedback">Please enter your username.</div>
+            <div class="invalid-feedback">请输入用户名。</div>
           </div>
 
           <div>
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">密码</label>
             <div class="input-group">
               <input id="password" class="form-control" type="password" name="password" required>
-              <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+              <button class="btn btn-outline-secondary" type="button" id="togglePassword">显示</button>
             </div>
-            <div class="invalid-feedback">Please enter your password.</div>
+            <div class="invalid-feedback">请输入密码。</div>
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Log In</button>
-            <a class="btn btn-outline-secondary" th:href="@{/auth/register}">Register</a>
+            <button type="submit" class="btn btn-primary">登录</button>
+            <a class="btn btn-outline-secondary" th:href="@{/auth/register}">注册账户</a>
           </div>
 
           <div class="compact-stack">
-            <a th:href="@{/auth/forgot-password}" class="text-decoration-none">Forgot your password?</a>
-            <a th:href="@{/auth/resend-verification}" class="text-decoration-none">Need a new verification email?</a>
+            <a th:href="@{/auth/forgot-password}" class="text-decoration-none">忘记密码？</a>
+            <a th:href="@{/auth/resend-verification}" class="text-decoration-none">重新发送验证邮件</a>
           </div>
         </form>
       </div>

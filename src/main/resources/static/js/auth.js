@@ -9,7 +9,7 @@ function bindPasswordToggle() {
   toggle.addEventListener("click", () => {
     const isPassword = passwordField.getAttribute("type") === "password";
     passwordField.setAttribute("type", isPassword ? "text" : "password");
-    toggle.textContent = isPassword ? "Hide" : "Show";
+    toggle.textContent = isPassword ? "隐藏" : "显示";
   });
 }
 

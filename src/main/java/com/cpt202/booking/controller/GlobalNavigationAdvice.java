@@ -3,6 +3,7 @@ package com.cpt202.booking.controller;
 import com.cpt202.booking.enums.RoleType;
 import com.cpt202.booking.model.User;
 import com.cpt202.booking.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +20,9 @@ public class GlobalNavigationAdvice {
     }
 
     @ModelAttribute
-    public void populateNavigation(Authentication authentication, Model model) {
+    public void populateNavigation(Authentication authentication, HttpServletRequest request, Model model) {
         boolean authenticated = authentication != null && authentication.isAuthenticated();
+        model.addAttribute("currentPath", request.getRequestURI());
         model.addAttribute("isAuthenticated", authenticated);
         model.addAttribute("isAdmin", false);
         model.addAttribute("isCustomer", false);

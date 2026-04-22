@@ -15,7 +15,9 @@
     <header class="topbar">
         <div class="topbar__inner">
             <a class="brand" th:href="${isAuthenticated} ? ${dashboardPath} : @{/}">
-                <img class="brand__logo" th:src="@{/images/logo.png}" alt="System logo">
+                <span class="brand__logo-wrap">
+                    <img class="brand__logo" th:src="@{/images/logo.png}" alt="System logo">
+                </span>
                 <div class="brand__text">
                     <span class="brand__title">XJTLU Specialist Booking</span>
                     <span class="brand__subtitle">Consultation and Scheduling Portal</span>

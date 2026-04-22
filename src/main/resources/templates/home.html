@@ -17,20 +17,30 @@
         <article class="home-hero__banner">
             <div class="home-hero__overlay">
                 <div class="home-hero__copy">
-                    <span class="eyebrow">Structured Like a Real Service Portal</span>
-                    <h1 class="home-hero__title">A specialist booking homepage with clear paths, visible trust signals, and fast access to the next action.</h1>
+                    <span class="eyebrow home-hero__eyebrow">XJTLU Specialist Booking Portal</span>
+                    <h1 class="home-hero__title">A clearer, more credible specialist booking homepage with direct access to the next step.</h1>
                     <p class="home-hero__text">
-                        Search specialists, compare expertise categories, understand the booking process,
-                        and move into registration or login without getting lost in the workflow.
+                        Search specialists, review expertise categories, understand the booking workflow,
+                        and move into registration or login through a homepage that feels structured and trustworthy.
                     </p>
 
                     <div class="cta-row">
                         <a class="btn btn-primary" th:href="@{/auth/register}">Create an Account</a>
                         <a class="btn btn-secondary" th:href="@{/auth/login}">Sign In</a>
                     </div>
+
+                    <div class="home-hero__trust">
+                        <span class="home-hero__trust-item">Customer booking access</span>
+                        <span class="home-hero__trust-item">Specialist scheduling tools</span>
+                        <span class="home-hero__trust-item">Admin workflow control</span>
+                    </div>
                 </div>
 
                 <aside class="home-hero__metrics card">
+                    <div class="home-hero__metrics-head">
+                        <span class="section-kicker section-kicker--light">Portal Snapshot</span>
+                        <p>Key system counts stay visible before users enter the workflow.</p>
+                    </div>
                     <div class="home-hero__metric">
                         <span class="home-hero__metric-label">Active specialists</span>
                         <strong th:text="${specialistCount}">0</strong>
@@ -80,6 +90,7 @@
     <section class="home-news">
         <div class="page-header">
             <div>
+                <span class="section-kicker">Information Center</span>
                 <h2 class="page-title home-section-title">Information Blocks</h2>
                 <p class="page-subtitle">This section borrows the three-column information rhythm from your reference image, but maps it to your booking system.</p>
             </div>
@@ -136,6 +147,7 @@
     <section class="home-specialists">
         <div class="page-header">
             <div>
+                <span class="section-kicker">Specialist Directory</span>
                 <h2 class="page-title home-section-title">Featured Specialists</h2>
                 <p class="page-subtitle">A structured row of cards inspired by the portrait strip in your reference, adapted to text-first system data.</p>
             </div>
@@ -168,6 +180,7 @@
     <section class="home-categories">
         <div class="page-header">
             <div>
+                <span class="section-kicker">Department Access</span>
                 <h2 class="page-title home-section-title">Expertise Navigation</h2>
                 <p class="page-subtitle">A category navigation block inspired by the departmental navigation structure in your reference image.</p>
             </div>
@@ -177,10 +190,11 @@
             <article class="home-category-card" th:each="category : ${activeCategories}">
                 <span class="home-category-card__icon"
                       th:text="${#strings.substring(category.name, 0, 1)}">C</span>
-                <div>
+                <div class="home-category-card__body">
                     <h3 th:text="${category.name}">Category</h3>
                     <p>Available for specialist registration and booking-side filtering.</p>
                 </div>
+                <span class="home-category-card__arrow">+</span>
             </article>
         </div>
 
@@ -194,6 +208,7 @@
             <article class="card">
                 <div class="page-header">
                     <div>
+                        <span class="section-kicker">Booking Flow</span>
                         <h2 class="page-title home-section-title">Consultation Journey</h2>
                         <p class="page-subtitle">A clean process section that helps the homepage feel more complete without needing more backend data.</p>
                     </div>
@@ -220,6 +235,7 @@
             <article class="card">
                 <div class="page-header">
                     <div>
+                        <span class="section-kicker">System Bulletin</span>
                         <h2 class="page-title home-section-title">Operational Updates</h2>
                         <p class="page-subtitle">A right-column list block to echo the lower information bands in your reference layout.</p>
                     </div>

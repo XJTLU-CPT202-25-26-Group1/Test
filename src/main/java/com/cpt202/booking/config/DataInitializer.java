@@ -1,6 +1,7 @@
 package com.cpt202.booking.config;
 
 import com.cpt202.booking.enums.CategoryStatus;
+import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
 import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.model.AvailabilitySlot;
@@ -55,9 +56,9 @@ public class DataInitializer {
                 slotRepository.save(createSlot(bob, 3, 16, 0, 17, 0));
             }
 
-            seedUser(userRepository, passwordEncoder, "admin", "admin123", "System Admin", "admin@demo.local", "13800000001", RoleType.ADMIN, null);
-            seedUser(userRepository, passwordEncoder, "specialist", "specialist123", "Demo Specialist", "specialist@demo.local", "13800000002", RoleType.SPECIALIST, alice.getId());
-            seedUser(userRepository, passwordEncoder, "customer", "customer123", "Demo Customer", "customer@demo.local", "13800000003", RoleType.CUSTOMER, null);
+            seedUser(userRepository, passwordEncoder, "admin", "admin123", "System Admin", "admin@demo.local", "13800000001", GenderType.UNSPECIFIED, RoleType.ADMIN, null);
+            seedUser(userRepository, passwordEncoder, "specialist", "specialist123", "Demo Specialist", "specialist@demo.local", "13800000002", GenderType.MALE, RoleType.SPECIALIST, alice.getId());
+            seedUser(userRepository, passwordEncoder, "customer", "customer123", "Demo Customer", "customer@demo.local", "13800000003", GenderType.FEMALE, RoleType.CUSTOMER, null);
         };
     }
 
@@ -68,6 +69,7 @@ public class DataInitializer {
                           String displayName,
                           String email,
                           String phone,
+                          GenderType gender,
                           RoleType role,
                           Long specialistId) {
         User existing = userRepository.findByUsernameIgnoreCase(username).orElse(null);
@@ -75,6 +77,7 @@ public class DataInitializer {
             existing.setDisplayName(displayName);
             existing.setEmail(email);
             existing.setPhone(phone);
+            existing.setGender(gender);
             existing.setRole(role);
             existing.setSpecialistId(specialistId);
             existing.setEmailVerified(true);
@@ -85,7 +88,7 @@ public class DataInitializer {
             userRepository.save(existing);
             return;
         }
-        User user = new User(username, passwordEncoder.encode(rawPassword), displayName, email, phone, role);
+        User user = new User(username, passwordEncoder.encode(rawPassword), displayName, email, phone, gender, role);
         user.setSpecialistId(specialistId);
         user.setEmailVerified(true);
         user.setVerificationToken(null);

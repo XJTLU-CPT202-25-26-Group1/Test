@@ -1,5 +1,6 @@
 package com.cpt202.booking.controller.auth;
 
+import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
 import com.cpt202.booking.model.User;
 import com.cpt202.booking.service.EmailService;
@@ -37,6 +38,7 @@ public class AuthController {
     @GetMapping("/auth/register")
     public String register(Model model) {
         model.addAttribute("categories", categoryService.getActiveCategories());
+        model.addAttribute("genders", GenderType.values());
         model.addAttribute("roles", new RoleType[]{RoleType.CUSTOMER, RoleType.SPECIALIST});
         return "auth/register";
     }
@@ -66,6 +68,7 @@ public class AuthController {
                                @RequestParam String displayName,
                                @RequestParam String email,
                                @RequestParam String phone,
+                               @RequestParam GenderType gender,
                                @RequestParam RoleType role,
                                @RequestParam(required = false) Long categoryId,
                                @RequestParam(required = false) String level,
@@ -74,7 +77,7 @@ public class AuthController {
                                RedirectAttributes redirectAttributes) {
         User user;
         try {
-            user = userService.registerUser(username, password, displayName, email, phone, role, categoryId, level, feeRate, description);
+            user = userService.registerUser(username, password, displayName, email, phone, gender, role, categoryId, level, feeRate, description);
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/auth/register";

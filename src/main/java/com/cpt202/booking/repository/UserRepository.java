@@ -3,6 +3,8 @@ package com.cpt202.booking.repository;
 import com.cpt202.booking.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmailIgnoreCase(String email);
 
     boolean existsByEmailIgnoreCaseAndUsernameNotIgnoreCase(String email, String username);
+
+    List<User> findAllBySpecialistIdIn(Collection<Long> specialistIds);
 }

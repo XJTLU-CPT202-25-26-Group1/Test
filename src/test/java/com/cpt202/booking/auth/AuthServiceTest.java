@@ -1,5 +1,6 @@
 package com.cpt202.booking.auth;
 
+import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
 import com.cpt202.booking.model.User;
 import com.cpt202.booking.repository.ExpertiseCategoryRepository;
@@ -39,6 +40,7 @@ class AuthServiceTest {
                 "New Customer",
                 "newcustomer@example.com",
                 "13800001111",
+                GenderType.UNSPECIFIED,
                 RoleType.CUSTOMER,
                 null,
                 null,
@@ -64,6 +66,7 @@ class AuthServiceTest {
                 "New Specialist",
                 "newspecialist@example.com",
                 "13800002222",
+                GenderType.FEMALE,
                 RoleType.SPECIALIST,
                 categoryId,
                 "Senior",
@@ -97,7 +100,7 @@ class AuthServiceTest {
     @Test
     void resolveSpecialistIdRejectsUnlinkedSpecialistAccount() {
         User user = new User("orphan-specialist", passwordEncoder.encode("password123"), "Orphan Specialist",
-                "orphan-specialist@example.com", "13800003333", RoleType.SPECIALIST);
+                "orphan-specialist@example.com", "13800003333", GenderType.MALE, RoleType.SPECIALIST);
         user.setEmailVerified(true);
         userRepository.save(user);
 

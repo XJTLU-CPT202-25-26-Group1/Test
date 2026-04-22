@@ -1,5 +1,6 @@
 package com.cpt202.booking.service;
 
+import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
 import com.cpt202.booking.model.Specialist;
 import com.cpt202.booking.model.User;
@@ -11,7 +12,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -47,6 +52,7 @@ public class UserService implements UserDetailsService {
                              String displayName,
                              String email,
                              String phone,
+                             GenderType gender,
                              RoleType role,
                              Long categoryId,
                              String level,
@@ -74,6 +80,7 @@ public class UserService implements UserDetailsService {
                 normalizeRequiredText(displayName, "Display name"),
                 normalizedEmail,
                 normalizeRequiredText(phone, "Phone"),
+                normalizeGender(gender),
                 role
         );
         user.setVerificationToken(generateToken());
@@ -151,6 +158,20 @@ public class UserService implements UserDetailsService {
         return specialistService.getSpecialistById(user.getSpecialistId()).getId();
     }
 
+    public Map<Long, String> buildSpecialistAvatarMap(List<Long> specialistIds) {
+        if (specialistIds == null || specialistIds.isEmpty()) {
+            return Map.of();
+        }
+
+        Map<Long, GenderType> gendersBySpecialistId = userRepository.findAllBySpecialistIdIn(specialistIds).stream()
+                .filter(user -> user.getSpecialistId() != null)
+                .collect(Collectors.toMap(User::getSpecialistId, User::getGender, (left, right) -> left));
+
+        return specialistIds.stream()
+                .distinct()
+                .collect(Collectors.toMap(Function.identity(), id -> resolveAvatarPath(gendersBySpecialistId.get(id))));
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsernameIgnoreCase(normalizeUsername(username))
@@ -195,6 +216,20 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException(fieldName + " is required.");
         }
         return value.trim();
+    }
+
+    private GenderType normalizeGender(GenderType gender) {
+        return gender == null ? GenderType.UNSPECIFIED : gender;
+    }
+
+    private String resolveAvatarPath(GenderType gender) {
+        if (gender == GenderType.FEMALE) {
+            return "/images/avatar-female.svg";
+        }
+        if (gender == GenderType.MALE) {
+            return "/images/avatar-male.svg";
+        }
+        return "/images/avatar-neutral.svg";
     }
 
     private String generateToken() {

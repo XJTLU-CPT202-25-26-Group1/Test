@@ -1,5 +1,6 @@
 package com.cpt202.booking.model;
 
+import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +36,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private GenderType gender = GenderType.UNSPECIFIED;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RoleType role;
 
     @Column(name = "specialist_id")
@@ -53,11 +58,22 @@ public class User {
     }
 
     public User(String username, String password, String displayName, String email, String phone, RoleType role) {
+        this(username, password, displayName, email, phone, GenderType.UNSPECIFIED, role);
+    }
+
+    public User(String username,
+                String password,
+                String displayName,
+                String email,
+                String phone,
+                GenderType gender,
+                RoleType role) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
         this.email = email;
         this.phone = phone;
+        this.gender = gender;
         this.role = role;
     }
 
@@ -83,6 +99,10 @@ public class User {
 
     public String getPhone() {
         return phone;
+    }
+
+    public GenderType getGender() {
+        return gender;
     }
 
     public RoleType getRole() {
@@ -127,6 +147,10 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setGender(GenderType gender) {
+        this.gender = gender == null ? GenderType.UNSPECIFIED : gender;
     }
 
     public void setRole(RoleType role) {

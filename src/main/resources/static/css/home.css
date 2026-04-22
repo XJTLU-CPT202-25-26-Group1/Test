@@ -103,6 +103,8 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
+    max-width: 980px;
+    margin: 0 auto;
 }
 
 .home-shortcut {
@@ -113,7 +115,7 @@
     flex-direction: column;
     justify-content: flex-end;
     gap: 8px;
-    border-radius: 20px;
+    border-radius: 6px;
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-fast), filter var(--transition-fast);
 }
@@ -176,11 +178,13 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
 }
 
 .home-specialist-card {
     border: 1px solid rgba(208, 213, 221, 0.9);
-    border-radius: 18px;
+    border-radius: 6px;
     overflow: hidden;
     background: var(--surface);
     box-shadow: var(--shadow-sm);
@@ -226,6 +230,8 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
+    max-width: 1080px;
+    margin: 0 auto;
 }
 
 .home-category-card {
@@ -235,7 +241,7 @@
     padding: 18px;
     background: rgba(255, 255, 255, 0.94);
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-radius: 6px;
     box-shadow: var(--shadow-sm);
 }
 
@@ -246,7 +252,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
+    border-radius: 4px;
     background: rgba(15, 118, 110, 0.12);
     color: var(--primary);
     font-size: 1.1rem;

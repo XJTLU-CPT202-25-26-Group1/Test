@@ -10,6 +10,7 @@
 
 .auth-card {
     width: min(100%, 560px);
+    margin: 0 auto;
 }
 
 .auth-card--compact {
@@ -32,6 +33,7 @@
 
 .auth-actions {
     margin-top: 6px;
+    justify-content: center;
 }
 
 .auth-links {

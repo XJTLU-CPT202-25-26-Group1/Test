@@ -546,6 +546,7 @@ textarea {
 .form-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: var(--space-3);
     margin-top: var(--space-2);
@@ -559,7 +560,7 @@ textarea {
     min-height: 42px;
     padding: 0 16px;
     border: 1px solid transparent;
-    border-radius: 12px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
     transition:

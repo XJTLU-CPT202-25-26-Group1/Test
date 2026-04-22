@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,5 +51,18 @@ class SpecialistServiceTest {
         List<Specialist> specialists = specialistService.searchSpecialistsForAdmin("", null, SpecialistStatus.INACTIVE);
 
         assertTrue(specialists.stream().anyMatch(item -> item.getId().equals(specialist.getId())));
+    }
+
+    @Test
+    void createSpecialistRejectsTrimmedDuplicateNameAndCategory() {
+        ExpertiseCategory category = categoryRepository.findByNameIgnoreCase("Legal").orElseThrow();
+
+        assertThrows(IllegalArgumentException.class, () -> specialistService.createSpecialist(
+                "  Alice Chen  ",
+                "Senior",
+                300.0,
+                "Duplicate specialist",
+                category.getId()
+        ));
     }
 }

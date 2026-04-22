@@ -29,25 +29,28 @@ public class ExpertiseCategoryService {
     }
 
     public ExpertiseCategory createCategory(String name) {
-        expertiseCategoryRepository.findByNameIgnoreCase(name)
+        String normalizedName = normalizeName(name);
+
+        expertiseCategoryRepository.findByNameIgnoreCase(normalizedName)
                 .ifPresent(existing -> {
                     throw new IllegalArgumentException("Category already exists.");
                 });
 
-        return expertiseCategoryRepository.save(new ExpertiseCategory(name, CategoryStatus.ACTIVE));
+        return expertiseCategoryRepository.save(new ExpertiseCategory(normalizedName, CategoryStatus.ACTIVE));
     }
 
     public ExpertiseCategory updateCategory(Long id, String name) {
         ExpertiseCategory category = expertiseCategoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found."));
+        String normalizedName = normalizeName(name);
 
-        expertiseCategoryRepository.findByNameIgnoreCase(name)
+        expertiseCategoryRepository.findByNameIgnoreCase(normalizedName)
                 .filter(existing -> !existing.getId().equals(id))
                 .ifPresent(existing -> {
                     throw new IllegalArgumentException("Category already exists.");
                 });
 
-        category.setName(name);
+        category.setName(normalizedName);
         return expertiseCategoryRepository.save(category);
     }
 
@@ -56,5 +59,12 @@ public class ExpertiseCategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("Category not found."));
         category.setStatus(category.getStatus() == CategoryStatus.ACTIVE ? CategoryStatus.INACTIVE : CategoryStatus.ACTIVE);
         return expertiseCategoryRepository.save(category);
+    }
+
+    private String normalizeName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Category name is required.");
+        }
+        return name.trim();
     }
 }

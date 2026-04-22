@@ -1,7 +1,6 @@
 package com.cpt202.booking.service;
 
 import com.cpt202.booking.enums.RoleType;
-import com.cpt202.booking.model.ExpertiseCategory;
 import com.cpt202.booking.model.Specialist;
 import com.cpt202.booking.model.User;
 import com.cpt202.booking.repository.UserRepository;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,16 +18,13 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final SpecialistService specialistService;
-    private final ExpertiseCategoryService categoryService;
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
                        SpecialistService specialistService,
-                       ExpertiseCategoryService categoryService,
                        PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.specialistService = specialistService;
-        this.categoryService = categoryService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -111,8 +106,10 @@ public class UserService implements UserDetailsService {
         if (!user.getEmail().equalsIgnoreCase(normalizeEmail(email))) {
             throw new IllegalArgumentException("Username and email do not match.");
         }
+        if (user.isEmailVerified()) {
+            throw new IllegalStateException("Email is already verified.");
+        }
         user.setVerificationToken(generateToken());
-        user.setEmailVerified(false);
         return userRepository.save(user);
     }
 
@@ -148,30 +145,10 @@ public class UserService implements UserDetailsService {
         if (user.getRole() != RoleType.SPECIALIST) {
             throw new IllegalArgumentException("Current account is not a specialist.");
         }
-        if (user.getSpecialistId() != null) {
-            return user.getSpecialistId();
+        if (user.getSpecialistId() == null) {
+            throw new IllegalStateException("Specialist account is not linked to a specialist profile.");
         }
-        List<Specialist> specialists = specialistService.getAllSpecialists();
-        if (specialists.isEmpty()) {
-            List<ExpertiseCategory> categories = categoryService.getActiveCategories();
-            Long categoryId = categories.isEmpty() ? null : categories.get(0).getId();
-            if (categoryId == null) {
-                throw new IllegalStateException("No expertise category is available for specialist initialization.");
-            }
-            Specialist created = specialistService.createSpecialist(
-                    user.getDisplayName(),
-                    "Associate",
-                    200.0,
-                    "Auto-created profile for specialist account.",
-                    categoryId
-            );
-            user.setSpecialistId(created.getId());
-            userRepository.save(user);
-            return created.getId();
-        }
-        user.setSpecialistId(specialists.get(0).getId());
-        userRepository.save(user);
-        return user.getSpecialistId();
+        return specialistService.getSpecialistById(user.getSpecialistId()).getId();
     }
 
     @Override

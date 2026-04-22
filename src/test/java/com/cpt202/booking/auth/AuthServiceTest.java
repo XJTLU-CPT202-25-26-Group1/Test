@@ -84,4 +84,26 @@ class AuthServiceTest {
         assertNull(stored.getResetToken());
         assertTrue(passwordEncoder.matches("newpass123", stored.getPassword()));
     }
+
+    @Test
+    void resendVerificationRejectsAlreadyVerifiedUser() {
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+                () -> userService.resendVerificationToken("customer", "customer@demo.local"));
+
+        assertEquals("Email is already verified.", error.getMessage());
+        assertTrue(userRepository.findByUsernameIgnoreCase("customer").orElseThrow().isEmailVerified());
+    }
+
+    @Test
+    void resolveSpecialistIdRejectsUnlinkedSpecialistAccount() {
+        User user = new User("orphan-specialist", passwordEncoder.encode("password123"), "Orphan Specialist",
+                "orphan-specialist@example.com", "13800003333", RoleType.SPECIALIST);
+        user.setEmailVerified(true);
+        userRepository.save(user);
+
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+                () -> userService.resolveSpecialistId("orphan-specialist"));
+
+        assertEquals("Specialist account is not linked to a specialist profile.", error.getMessage());
+    }
 }

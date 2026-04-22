@@ -5,8 +5,10 @@ import com.cpt202.booking.model.Specialist;
 import com.cpt202.booking.repository.AvailabilitySlotRepository;
 import com.cpt202.booking.repository.SpecialistRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -29,16 +31,22 @@ public class AvailabilityService {
         return availabilitySlotRepository.findBySpecialistIdAndBookedFalseAndSlotDateGreaterThanEqualOrderBySlotDateAscStartTimeAsc(
                 specialistId,
                 LocalDate.now()
-        );
+        ).stream()
+                .filter(this::isSlotInFuture)
+                .toList();
     }
 
     public List<AvailabilitySlot> getAvailableSlots(Long specialistId, LocalDate slotDate) {
         if (slotDate == null) {
             return getAvailableSlots(specialistId);
         }
-        return availabilitySlotRepository.findBySpecialistIdAndBookedFalseAndSlotDateOrderByStartTimeAsc(specialistId, slotDate);
+        return availabilitySlotRepository.findBySpecialistIdAndBookedFalseAndSlotDateOrderByStartTimeAsc(specialistId, slotDate)
+                .stream()
+                .filter(this::isSlotInFuture)
+                .toList();
     }
 
+    @Transactional
     public AvailabilitySlot createSlot(Long specialistId, LocalDate slotDate, LocalTime startTime, LocalTime endTime) {
         if (slotDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Slot date cannot be in the past.");
@@ -46,8 +54,9 @@ public class AvailabilityService {
         if (endTime.isBefore(startTime) || endTime.equals(startTime)) {
             throw new IllegalArgumentException("End time must be later than start time.");
         }
+        validateSlotStartsInFuture(slotDate, startTime);
 
-        Specialist specialist = specialistRepository.findById(specialistId)
+        Specialist specialist = specialistRepository.findByIdForUpdate(specialistId)
                 .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
 
         List<AvailabilitySlot> existingSlots = availabilitySlotRepository.findBySpecialistIdOrderBySlotDateAscStartTimeAsc(specialistId);
@@ -62,6 +71,7 @@ public class AvailabilityService {
         return availabilitySlotRepository.save(slot);
     }
 
+    @Transactional
     public AvailabilitySlot updateSlot(Long specialistId, Long slotId, LocalDate slotDate, LocalTime startTime, LocalTime endTime) {
         if (slotDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Slot date cannot be in the past.");
@@ -69,8 +79,12 @@ public class AvailabilityService {
         if (endTime.isBefore(startTime) || endTime.equals(startTime)) {
             throw new IllegalArgumentException("End time must be later than start time.");
         }
+        validateSlotStartsInFuture(slotDate, startTime);
 
-        AvailabilitySlot slot = availabilitySlotRepository.findByIdAndSpecialistId(slotId, specialistId)
+        specialistRepository.findByIdForUpdate(specialistId)
+                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+
+        AvailabilitySlot slot = availabilitySlotRepository.findByIdAndSpecialistIdForUpdate(slotId, specialistId)
                 .orElseThrow(() -> new IllegalArgumentException("Slot not found."));
 
         if (slot.isBooked()) {
@@ -86,8 +100,12 @@ public class AvailabilityService {
         return availabilitySlotRepository.save(slot);
     }
 
+    @Transactional
     public void deleteSlot(Long specialistId, Long slotId) {
-        AvailabilitySlot slot = availabilitySlotRepository.findByIdAndSpecialistId(slotId, specialistId)
+        specialistRepository.findByIdForUpdate(specialistId)
+                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+
+        AvailabilitySlot slot = availabilitySlotRepository.findByIdAndSpecialistIdForUpdate(slotId, specialistId)
                 .orElseThrow(() -> new IllegalArgumentException("Slot not found."));
 
         if (slot.isBooked()) {
@@ -114,5 +132,17 @@ public class AvailabilityService {
                 throw new IllegalArgumentException("Slot overlaps with an existing slot.");
             }
         }
+    }
+
+    private void validateSlotStartsInFuture(LocalDate slotDate, LocalTime startTime) {
+        if (!LocalDateTime.of(slotDate, startTime).isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Slot start time must be in the future.");
+        }
+    }
+
+    private boolean isSlotInFuture(AvailabilitySlot slot) {
+        return slot.getSlotDate() != null
+                && slot.getStartTime() != null
+                && LocalDateTime.of(slot.getSlotDate(), slot.getStartTime()).isAfter(LocalDateTime.now());
     }
 }

@@ -9,6 +9,7 @@ import com.cpt202.booking.repository.AvailabilitySlotRepository;
 import com.cpt202.booking.repository.ExpertiseCategoryRepository;
 import com.cpt202.booking.repository.SpecialistRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -77,51 +78,77 @@ public class SpecialistService {
         return !slots.isEmpty();
     }
 
+    @Transactional
     public Specialist createSpecialist(String name, String level, Double feeRate, String description, Long categoryId) {
-        ExpertiseCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found."));
-        if (category.getStatus() != CategoryStatus.ACTIVE) {
-            throw new IllegalArgumentException("Inactive category cannot be assigned to a specialist.");
-        }
+        String normalizedName = normalizeRequiredText(name, "Specialist name");
+        String normalizedLevel = normalizeRequiredText(level, "Specialist level");
+        String normalizedDescription = normalizeRequiredText(description, "Specialist description");
+        double normalizedFeeRate = normalizeFeeRate(feeRate);
+        ExpertiseCategory category = requireActiveCategory(categoryId);
 
-        if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(name, categoryId)) {
+        if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(normalizedName, categoryId)) {
             throw new IllegalArgumentException("Duplicate specialist name and category combination.");
         }
 
         Specialist specialist = new Specialist();
-        specialist.setName(name);
-        specialist.setLevel(level);
-        specialist.setFeeRate(feeRate);
-        specialist.setProfileDescription(description);
+        specialist.setName(normalizedName);
+        specialist.setLevel(normalizedLevel);
+        specialist.setFeeRate(normalizedFeeRate);
+        specialist.setProfileDescription(normalizedDescription);
         specialist.setStatus(SpecialistStatus.ACTIVE);
         specialist.setCategory(category);
         return specialistRepository.save(specialist);
     }
 
+    @Transactional
     public Specialist updateSpecialist(Long id, String name, String level, Double feeRate, String description, Long categoryId) {
         Specialist specialist = getSpecialistById(id);
+        String normalizedName = normalizeRequiredText(name, "Specialist name");
+        String normalizedLevel = normalizeRequiredText(level, "Specialist level");
+        String normalizedDescription = normalizeRequiredText(description, "Specialist description");
+        double normalizedFeeRate = normalizeFeeRate(feeRate);
+        ExpertiseCategory category = requireActiveCategory(categoryId);
+
+        if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(normalizedName, categoryId)
+                && (!specialist.getName().equalsIgnoreCase(normalizedName) || specialist.getCategory() == null || !specialist.getCategory().getId().equals(categoryId))) {
+            throw new IllegalArgumentException("Duplicate specialist name and category combination.");
+        }
+
+        specialist.setName(normalizedName);
+        specialist.setLevel(normalizedLevel);
+        specialist.setFeeRate(normalizedFeeRate);
+        specialist.setProfileDescription(normalizedDescription);
+        specialist.setCategory(category);
+        return specialistRepository.save(specialist);
+    }
+
+    @Transactional
+    public Specialist toggleStatus(Long id) {
+        Specialist specialist = getSpecialistById(id);
+        specialist.setStatus(specialist.getStatus() == SpecialistStatus.ACTIVE ? SpecialistStatus.INACTIVE : SpecialistStatus.ACTIVE);
+        return specialistRepository.save(specialist);
+    }
+
+    private ExpertiseCategory requireActiveCategory(Long categoryId) {
         ExpertiseCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found."));
         if (category.getStatus() != CategoryStatus.ACTIVE) {
             throw new IllegalArgumentException("Inactive category cannot be assigned to a specialist.");
         }
-
-        if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(name, categoryId)
-                && (!specialist.getName().equalsIgnoreCase(name) || specialist.getCategory() == null || !specialist.getCategory().getId().equals(categoryId))) {
-            throw new IllegalArgumentException("Duplicate specialist name and category combination.");
-        }
-
-        specialist.setName(name);
-        specialist.setLevel(level);
-        specialist.setFeeRate(feeRate);
-        specialist.setProfileDescription(description);
-        specialist.setCategory(category);
-        return specialistRepository.save(specialist);
+        return category;
     }
 
-    public Specialist toggleStatus(Long id) {
-        Specialist specialist = getSpecialistById(id);
-        specialist.setStatus(specialist.getStatus() == SpecialistStatus.ACTIVE ? SpecialistStatus.INACTIVE : SpecialistStatus.ACTIVE);
-        return specialistRepository.save(specialist);
+    private String normalizeRequiredText(String value, String fieldName) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " is required.");
+        }
+        return value.trim();
+    }
+
+    private double normalizeFeeRate(Double feeRate) {
+        if (feeRate == null || feeRate <= 0) {
+            throw new IllegalArgumentException("Fee rate must be greater than 0.");
+        }
+        return feeRate;
     }
 }

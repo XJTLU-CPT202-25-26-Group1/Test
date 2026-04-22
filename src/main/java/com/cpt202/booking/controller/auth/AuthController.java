@@ -72,15 +72,22 @@ public class AuthController {
                                @RequestParam(required = false) Double feeRate,
                                @RequestParam(required = false) String description,
                                RedirectAttributes redirectAttributes) {
+        User user;
         try {
-            User user = userService.registerUser(username, password, displayName, email, phone, role, categoryId, level, feeRate, description);
-            emailService.sendVerificationEmail(user);
-            redirectAttributes.addFlashAttribute("message", "Registration successful. Please verify your email before logging in.");
-            return "redirect:/auth/login";
+            user = userService.registerUser(username, password, displayName, email, phone, role, categoryId, level, feeRate, description);
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/auth/register";
         }
+
+        try {
+            emailService.sendVerificationEmail(user);
+            redirectAttributes.addFlashAttribute("message", "Registration successful. Please verify your email before logging in.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Registration successful, but the verification email could not be sent. Please use resend verification.");
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/auth/verify-email")

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="appLayout(pageTitle, content, extraStyles, extraScripts)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Specialist Consultation Booking System</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:replace="${extraStyles}"></th:block>
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <div class="topbar__inner">
+            <a class="brand" th:href="${isAuthenticated} ? ${dashboardPath} : @{/}">
+                <img class="brand__logo" th:src="@{/images/logo.png}" alt="System logo">
+                <div class="brand__text">
+                    <span class="brand__title">Specialist Consultation</span>
+                    <span class="brand__subtitle">Booking System</span>
+                </div>
+            </a>
+
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" data-nav-toggle>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" data-nav-menu>
+                <ul class="main-nav__links">
+                    <li>
+                        <a th:href="${isAuthenticated} ? ${dashboardPath} : @{/}"
+                           th:classappend="${currentPath == '/' or currentPath == dashboardPath} ? 'is-active' : ''">
+                            <span th:text="${isAuthenticated} ? 'Dashboard' : 'Home'">Home</span>
+                        </a>
+                    </li>
+
+                    <li th:if="${!isAuthenticated}">
+                        <a th:href="@{/auth/login}"
+                           th:classappend="${currentPath == '/auth/login'} ? 'is-active' : ''">
+                            Login
+                        </a>
+                    </li>
+                    <li th:if="${!isAuthenticated}">
+                        <a th:href="@{/auth/register}"
+                           th:classappend="${currentPath == '/auth/register'} ? 'is-active' : ''">
+                            Register
+                        </a>
+                    </li>
+
+                    <li th:if="${isCustomer}">
+                        <a th:href="@{/customer/specialists}"
+                           th:classappend="${#strings.startsWith(currentPath, '/customer/specialists')} ? 'is-active' : ''">
+                            Specialists
+                        </a>
+                    </li>
+                    <li th:if="${isCustomer}">
+                        <a th:href="@{/customer/bookings}"
+                           th:classappend="${#strings.startsWith(currentPath, '/customer/bookings')} ? 'is-active' : ''">
+                            My Bookings
+                        </a>
+                    </li>
+
+                    <li th:if="${isSpecialist}">
+                        <a th:href="@{/specialist/availability}"
+                           th:classappend="${#strings.startsWith(currentPath, '/specialist/availability')} ? 'is-active' : ''">
+                            Availability
+                        </a>
+                    </li>
+                    <li th:if="${isSpecialist}">
+                        <a th:href="@{/specialist/bookings}"
+                           th:classappend="${#strings.startsWith(currentPath, '/specialist/bookings')} ? 'is-active' : ''">
+                            Bookings
+                        </a>
+                    </li>
+                    <li th:if="${isSpecialist}">
+                        <a th:href="@{/specialist/feedback}"
+                           th:classappend="${#strings.startsWith(currentPath, '/specialist/feedback')} ? 'is-active' : ''">
+                            Feedback
+                        </a>
+                    </li>
+
+                    <li th:if="${isAdmin}">
+                        <a th:href="@{/admin/specialists}"
+                           th:classappend="${#strings.startsWith(currentPath, '/admin/specialists')} ? 'is-active' : ''">
+                            Specialists
+                        </a>
+                    </li>
+                    <li th:if="${isAdmin}">
+                        <a th:href="@{/admin/bookings}"
+                           th:classappend="${#strings.startsWith(currentPath, '/admin/bookings')} ? 'is-active' : ''">
+                            Bookings
+                        </a>
+                    </li>
+                    <li th:if="${isAdmin}">
+                        <a th:href="@{/admin/categories}"
+                           th:classappend="${#strings.startsWith(currentPath, '/admin/categories')} ? 'is-active' : ''">
+                            Categories
+                        </a>
+                    </li>
+                    <li th:if="${isAdmin}">
+                        <a th:href="@{/admin/billing}"
+                           th:classappend="${#strings.startsWith(currentPath, '/admin/billing')} ? 'is-active' : ''">
+                            Billing
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="user-panel">
+                    <div class="user-panel__info" th:if="${isAuthenticated}">
+                        <span class="user-panel__name" th:text="${currentDisplayName}">Display Name</span>
+                        <span class="user-panel__meta">
+                            <span th:text="${currentRoleLabel}">Role</span>
+                            <span class="dot">·</span>
+                            <span th:text="${currentUsername}">username</span>
+                        </span>
+                    </div>
+
+                    <div class="user-panel__actions" th:if="${isAuthenticated}">
+                        <a class="btn btn-secondary" th:href="${profilePath}">Profile</a>
+                        <form class="logout-form" th:action="@{/logout}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="flash-area content-wrap" th:if="${message != null}">
+        <div class="flash-message" data-flash-message>
+            <span th:text="${message}">Operation completed.</span>
+            <button type="button" class="flash-close" aria-label="Close message" data-flash-close>&times;</button>
+        </div>
+    </section>
+
+    <main class="content-wrap page-content">
+        <th:block th:replace="${content}"></th:block>
+    </main>
+
+    <footer class="site-footer">
+        <div class="content-wrap site-footer__inner">
+            <div>
+                <strong>Specialist Consultation Booking System</strong>
+                <p>Course project for specialist scheduling, booking validation, and consultation workflow management.</p>
+            </div>
+            <div class="site-footer__links">
+                <a th:href="${isAuthenticated} ? ${dashboardPath} : @{/}">Dashboard</a>
+                <a th:href="${isAuthenticated} ? ${profilePath} : @{/auth/login}">Profile</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script th:src="@{/js/common.js}"></script>
+<th:block th:replace="${extraScripts}"></th:block>
+</body>
+</html>

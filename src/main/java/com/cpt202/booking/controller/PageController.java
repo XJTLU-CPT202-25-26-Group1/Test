@@ -29,7 +29,8 @@ public class PageController {
         if (authentication != null) {
             return resolveDashboard(authentication);
         }
-        model.addAttribute("featuredSpecialists", specialistService.getAllSpecialists().stream().limit(3).toList());
+        model.addAttribute("featuredSpecialists", specialistService.getAllSpecialists().stream().limit(6).toList());
+        model.addAttribute("activeCategories", categoryService.getActiveCategories().stream().limit(12).toList());
         model.addAttribute("specialistCount", specialistService.getAllSpecialists().size());
         model.addAttribute("categoryCount", categoryService.getActiveCategories().size());
         model.addAttribute("bookingCount", bookingService.getAllBookings().size());

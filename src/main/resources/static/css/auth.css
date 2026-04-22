@@ -62,7 +62,7 @@
 .role-fields {
     padding: 18px;
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 0;
     background: #f6f7ff;
 }
 

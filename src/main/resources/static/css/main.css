@@ -122,23 +122,35 @@ textarea {
     margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: var(--space-6);
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
-.brand {
-    display: inline-flex;
+.topbar__brand-row {
+    display: flex;
     align-items: center;
-    gap: var(--space-4);
     min-width: 0;
 }
 
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+    max-width: 100%;
+}
+
 .brand__logo {
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    border-radius: 999px;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
     background: transparent;
     border: 0;
     padding: 0;
@@ -146,10 +158,12 @@ textarea {
 }
 
 .brand__logo-wrap {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     flex-shrink: 0;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
@@ -165,6 +179,7 @@ textarea {
     flex-direction: column;
     line-height: 1.1;
     min-width: 0;
+    overflow: hidden;
 }
 
 .brand__title {
@@ -179,44 +194,24 @@ textarea {
     color: rgba(225, 236, 255, 0.72);
 }
 
-.nav-toggle {
-    display: none;
-    margin-left: auto;
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    cursor: pointer;
-    padding: 0;
-}
-
-.nav-toggle span {
-    display: block;
-    width: 18px;
-    height: 2px;
-    margin: 4px auto;
-    border-radius: 999px;
-    background: #ffffff;
-}
-
 .main-nav {
-    flex: 1;
+    flex: 1 1 560px;
     min-width: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
+    flex-wrap: wrap;
 }
 
 .main-nav__links {
-    list-style: none;
     display: flex;
     align-items: center;
     gap: var(--space-2);
     margin: 0;
     padding: 0;
     flex-wrap: wrap;
+    list-style: none;
 }
 
 .main-nav__links a {
@@ -774,9 +769,7 @@ textarea {
     }
 
     .topbar__inner {
-        flex-wrap: wrap;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        align-items: flex-start;
     }
 
     .brand__title {
@@ -787,21 +780,13 @@ textarea {
         font-size: 0.78rem;
     }
 
-    .nav-toggle {
-        display: inline-block;
-    }
-
     .main-nav {
         width: 100%;
-        display: none;
+        display: flex;
         flex-direction: column;
         align-items: stretch;
         gap: var(--space-4);
-        padding-bottom: var(--space-4);
-    }
-
-    .main-nav.is-open {
-        display: flex;
+        padding-bottom: 0;
     }
 
     .main-nav__links {

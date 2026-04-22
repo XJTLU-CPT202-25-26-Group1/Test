@@ -14,101 +14,88 @@
 <div class="page-shell">
     <header class="topbar">
         <div class="topbar__inner">
-            <a class="brand" th:href="${isAuthenticated} ? ${dashboardPath} : @{/}">
-                <span class="brand__logo-wrap">
-                    <img class="brand__logo" th:src="@{/images/logo.png}" alt="System logo">
-                </span>
-                <div class="brand__text">
-                    <span class="brand__title">XJTLU Specialist Booking</span>
-                    <span class="brand__subtitle">Consultation and Scheduling Portal</span>
+            <div class="topbar__brand-row">
+                <a class="brand" th:href="${isAuthenticated} ? ${dashboardPath} : @{/}">
+                    <span class="brand__logo-wrap">
+                        <img class="brand__logo"
+                             th:src="@{/images/logo.png}"
+                             alt="System logo"
+                             width="40"
+                             height="40">
+                    </span>
+                    <span class="brand__text">
+                        <span class="brand__title">XJTLU Specialist Booking</span>
+                        <span class="brand__subtitle">Consultation and Scheduling Portal</span>
+                    </span>
+                </a>
+            </div>
+
+            <nav class="main-nav">
+                <div class="main-nav__links" role="list">
+                    <a th:href="${isAuthenticated} ? ${dashboardPath} : @{/}"
+                       th:classappend="${currentPath == '/' or currentPath == dashboardPath} ? 'is-active' : ''">
+                        <span th:text="${isAuthenticated} ? 'Dashboard' : 'Home'">Home</span>
+                    </a>
+
+                    <a th:if="${!isAuthenticated}"
+                       th:href="@{/auth/login}"
+                       th:classappend="${currentPath == '/auth/login'} ? 'is-active' : ''">
+                        Login
+                    </a>
+                    <a th:if="${!isAuthenticated}"
+                       th:href="@{/auth/register}"
+                       th:classappend="${currentPath == '/auth/register'} ? 'is-active' : ''">
+                        Register
+                    </a>
+
+                    <a th:if="${isCustomer}"
+                       th:href="@{/customer/specialists}"
+                       th:classappend="${#strings.startsWith(currentPath, '/customer/specialists')} ? 'is-active' : ''">
+                        Specialists
+                    </a>
+                    <a th:if="${isCustomer}"
+                       th:href="@{/customer/bookings}"
+                       th:classappend="${#strings.startsWith(currentPath, '/customer/bookings')} ? 'is-active' : ''">
+                        My Bookings
+                    </a>
+
+                    <a th:if="${isSpecialist}"
+                       th:href="@{/specialist/availability}"
+                       th:classappend="${#strings.startsWith(currentPath, '/specialist/availability')} ? 'is-active' : ''">
+                        Availability
+                    </a>
+                    <a th:if="${isSpecialist}"
+                       th:href="@{/specialist/bookings}"
+                       th:classappend="${#strings.startsWith(currentPath, '/specialist/bookings')} ? 'is-active' : ''">
+                        Bookings
+                    </a>
+                    <a th:if="${isSpecialist}"
+                       th:href="@{/specialist/feedback}"
+                       th:classappend="${#strings.startsWith(currentPath, '/specialist/feedback')} ? 'is-active' : ''">
+                        Feedback
+                    </a>
+
+                    <a th:if="${isAdmin}"
+                       th:href="@{/admin/specialists}"
+                       th:classappend="${#strings.startsWith(currentPath, '/admin/specialists')} ? 'is-active' : ''">
+                        Specialists
+                    </a>
+                    <a th:if="${isAdmin}"
+                       th:href="@{/admin/bookings}"
+                       th:classappend="${#strings.startsWith(currentPath, '/admin/bookings')} ? 'is-active' : ''">
+                        Bookings
+                    </a>
+                    <a th:if="${isAdmin}"
+                       th:href="@{/admin/categories}"
+                       th:classappend="${#strings.startsWith(currentPath, '/admin/categories')} ? 'is-active' : ''">
+                        Categories
+                    </a>
+                    <a th:if="${isAdmin}"
+                       th:href="@{/admin/billing}"
+                       th:classappend="${#strings.startsWith(currentPath, '/admin/billing')} ? 'is-active' : ''">
+                        Billing
+                    </a>
                 </div>
-            </a>
-
-            <button class="nav-toggle" type="button" aria-label="Toggle navigation" data-nav-toggle>
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
-            <nav class="main-nav" data-nav-menu>
-                <ul class="main-nav__links">
-                    <li>
-                        <a th:href="${isAuthenticated} ? ${dashboardPath} : @{/}"
-                           th:classappend="${currentPath == '/' or currentPath == dashboardPath} ? 'is-active' : ''">
-                            <span th:text="${isAuthenticated} ? 'Dashboard' : 'Home'">Home</span>
-                        </a>
-                    </li>
-
-                    <li th:if="${!isAuthenticated}">
-                        <a th:href="@{/auth/login}"
-                           th:classappend="${currentPath == '/auth/login'} ? 'is-active' : ''">
-                            Login
-                        </a>
-                    </li>
-                    <li th:if="${!isAuthenticated}">
-                        <a th:href="@{/auth/register}"
-                           th:classappend="${currentPath == '/auth/register'} ? 'is-active' : ''">
-                            Register
-                        </a>
-                    </li>
-
-                    <li th:if="${isCustomer}">
-                        <a th:href="@{/customer/specialists}"
-                           th:classappend="${#strings.startsWith(currentPath, '/customer/specialists')} ? 'is-active' : ''">
-                            Specialists
-                        </a>
-                    </li>
-                    <li th:if="${isCustomer}">
-                        <a th:href="@{/customer/bookings}"
-                           th:classappend="${#strings.startsWith(currentPath, '/customer/bookings')} ? 'is-active' : ''">
-                            My Bookings
-                        </a>
-                    </li>
-
-                    <li th:if="${isSpecialist}">
-                        <a th:href="@{/specialist/availability}"
-                           th:classappend="${#strings.startsWith(currentPath, '/specialist/availability')} ? 'is-active' : ''">
-                            Availability
-                        </a>
-                    </li>
-                    <li th:if="${isSpecialist}">
-                        <a th:href="@{/specialist/bookings}"
-                           th:classappend="${#strings.startsWith(currentPath, '/specialist/bookings')} ? 'is-active' : ''">
-                            Bookings
-                        </a>
-                    </li>
-                    <li th:if="${isSpecialist}">
-                        <a th:href="@{/specialist/feedback}"
-                           th:classappend="${#strings.startsWith(currentPath, '/specialist/feedback')} ? 'is-active' : ''">
-                            Feedback
-                        </a>
-                    </li>
-
-                    <li th:if="${isAdmin}">
-                        <a th:href="@{/admin/specialists}"
-                           th:classappend="${#strings.startsWith(currentPath, '/admin/specialists')} ? 'is-active' : ''">
-                            Specialists
-                        </a>
-                    </li>
-                    <li th:if="${isAdmin}">
-                        <a th:href="@{/admin/bookings}"
-                           th:classappend="${#strings.startsWith(currentPath, '/admin/bookings')} ? 'is-active' : ''">
-                            Bookings
-                        </a>
-                    </li>
-                    <li th:if="${isAdmin}">
-                        <a th:href="@{/admin/categories}"
-                           th:classappend="${#strings.startsWith(currentPath, '/admin/categories')} ? 'is-active' : ''">
-                            Categories
-                        </a>
-                    </li>
-                    <li th:if="${isAdmin}">
-                        <a th:href="@{/admin/billing}"
-                           th:classappend="${#strings.startsWith(currentPath, '/admin/billing')} ? 'is-active' : ''">
-                            Billing
-                        </a>
-                    </li>
-                </ul>
 
                 <div class="user-panel">
                     <div class="user-panel__info" th:if="${isAuthenticated}">

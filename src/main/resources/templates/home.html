@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Home',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles"></th:block>
+
+<th:block th:fragment="content">
+    <section class="hero">
+        <div class="hero__grid">
+            <article class="card hero__panel">
+                <span class="eyebrow">Consultation Workflow Ready</span>
+                <h1 class="hero__headline">Book the right specialist with a workflow your team can trust.</h1>
+                <p class="hero__copy">
+                    Search active specialists, compare available consultation slots, submit booking requests,
+                    and follow status changes in one place.
+                </p>
+
+                <div class="cta-row">
+                    <a class="btn btn-primary" th:href="@{/auth/register}">Create an Account</a>
+                    <a class="btn btn-secondary" th:href="@{/auth/login}">Sign In</a>
+                </div>
+
+                <div class="inline-list" style="margin-top: 24px;">
+                    <span class="pill">Role-based access</span>
+                    <span class="pill">Specialist availability</span>
+                    <span class="pill">Booking status tracking</span>
+                    <span class="pill">Admin workflow review</span>
+                </div>
+            </article>
+
+            <aside class="card">
+                <div class="page-header" style="margin-bottom: 18px;">
+                    <div>
+                        <h2 class="page-title" style="font-size: 1.4rem;">System Snapshot</h2>
+                        <p class="page-subtitle">A quick look at what is already configured in the system.</p>
+                    </div>
+                </div>
+
+                <div class="info-list">
+                    <div class="info-list__item">
+                        <span class="muted">Active specialists</span>
+                        <strong th:text="${specialistCount}">0</strong>
+                    </div>
+                    <div class="info-list__item">
+                        <span class="muted">Expertise categories</span>
+                        <strong th:text="${categoryCount}">0</strong>
+                    </div>
+                    <div class="info-list__item">
+                        <span class="muted">Total bookings</span>
+                        <strong th:text="${bookingCount}">0</strong>
+                    </div>
+                    <div class="info-list__item">
+                        <span class="muted">Pending reviews</span>
+                        <strong th:text="${pendingCount}">0</strong>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <section class="grid" style="margin-top: 8px;">
+        <div class="page-header">
+            <div>
+                <h2 class="page-title" style="font-size: 1.8rem;">Why This System Works</h2>
+                <p class="page-subtitle">The front office, specialist workflow, and admin controls are aligned around one booking record.</p>
+            </div>
+        </div>
+
+        <div class="catalog-grid">
+            <article class="card feature-card">
+                <h3 class="feature-card__title">For Customers</h3>
+                <p class="feature-card__text">
+                    Browse specialists, inspect available time slots, create booking requests, and review your booking history.
+                </p>
+            </article>
+            <article class="card feature-card">
+                <h3 class="feature-card__title">For Specialists</h3>
+                <p class="feature-card__text">
+                    Manage availability, check booking workload, view weekly schedules, and follow consultation feedback.
+                </p>
+            </article>
+            <article class="card feature-card">
+                <h3 class="feature-card__title">For Administrators</h3>
+                <p class="feature-card__text">
+                    Maintain specialist profiles, review booking requests, control category data, and inspect billing summaries.
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <section class="grid" style="margin-top: 8px;">
+        <div class="page-header">
+            <div>
+                <h2 class="page-title" style="font-size: 1.8rem;">Featured Specialists</h2>
+                <p class="page-subtitle">A quick preview of specialists currently visible from the public landing page.</p>
+            </div>
+        </div>
+
+        <div th:if="${featuredSpecialists != null and !#lists.isEmpty(featuredSpecialists)}" class="catalog-grid">
+            <article class="card" th:each="specialist : ${featuredSpecialists}">
+                <h3 class="feature-card__title" th:text="${specialist.name}">Specialist Name</h3>
+                <p class="muted" th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                <p class="feature-card__text" th:text="${specialist.profileDescription}">Description</p>
+                <div class="inline-list" style="margin-top: 16px;">
+                    <span class="pill" th:text="${specialist.level}">Level</span>
+                    <span class="pill" th:text="'Fee ' + ${#numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
+                </div>
+            </article>
+        </div>
+
+        <div th:if="${featuredSpecialists == null or #lists.isEmpty(featuredSpecialists)}" class="empty-state">
+            Featured specialists will appear here once specialist records are available.
+        </div>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Register',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="auth-shell">
+        <div class="auth-layout">
+            <article class="card auth-panel">
+                <span class="eyebrow">Start Here</span>
+                <h1>Create your account and enter the booking workflow.</h1>
+                <p>
+                    Register as a customer to request consultations, or register as a specialist
+                    to maintain your service profile and availability schedule.
+                </p>
+
+                <div class="auth-points">
+                    <div class="auth-point">Customer accounts can search specialists and create booking requests.</div>
+                    <div class="auth-point">Specialist accounts can publish availability and review feedback.</div>
+                    <div class="auth-point">Email verification is required before login access is enabled.</div>
+                </div>
+            </article>
+
+            <article class="card auth-card">
+                <h2>Register</h2>
+                <p class="auth-card__subtitle">Choose your role and complete the required account information.</p>
+
+                <form th:action="@{/auth/register}" method="post" class="form-grid">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="form-grid form-grid--2">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input id="username" name="username" type="text" autocomplete="username" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input id="password" name="password" type="password" autocomplete="new-password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="displayName">Display Name</label>
+                            <input id="displayName" name="displayName" type="text" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input id="phone" name="phone" type="text" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" type="email" autocomplete="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select id="role" name="role" data-role-select required>
+                                <option th:each="role : ${roles}"
+                                        th:value="${role.name()}"
+                                        th:text="${#strings.capitalize(#strings.toLowerCase(role.name()))}">
+                                    Customer
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <section class="role-fields hidden" data-specialist-fields>
+                        <h3 class="role-fields__title">Specialist Profile Details</h3>
+                        <p class="role-fields__subtitle">
+                            These fields are required only when the selected role is Specialist.
+                        </p>
+
+                        <div class="form-grid form-grid--2">
+                            <div class="form-group">
+                                <label for="categoryId">Expertise Category</label>
+                                <select id="categoryId" name="categoryId" data-required-for-specialist>
+                                    <option value="">Select a category</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}">
+                                        Category
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="level">Professional Level</label>
+                                <input id="level" name="level" type="text" placeholder="Associate, Senior, Consultant"
+                                       data-required-for-specialist>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="feeRate">Hourly Fee Rate</label>
+                                <input id="feeRate" name="feeRate" type="number" min="0.01" step="0.01"
+                                       placeholder="200.00" data-required-for-specialist>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Profile Description</label>
+                                <textarea id="description" name="description"
+                                          placeholder="Briefly describe your expertise and consultation focus."
+                                          data-required-for-specialist></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+                        <a class="btn btn-secondary" th:href="@{/auth/login}">Back to Login</a>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts">
+    <script th:src="@{/js/auth.js}"></script>
+</th:block>
+</body>
+</html>

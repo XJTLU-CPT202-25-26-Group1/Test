@@ -109,9 +109,10 @@ textarea {
     z-index: 100;
     min-height: var(--topbar-height);
     backdrop-filter: blur(14px);
-    background: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid rgba(208, 213, 221, 0.78);
-    box-shadow: var(--shadow-sm);
+    background:
+        linear-gradient(90deg, rgba(8, 31, 68, 0.96), rgba(11, 48, 97, 0.96) 45%, rgba(10, 62, 122, 0.94));
+    border-bottom: 1px solid rgba(167, 199, 255, 0.16);
+    box-shadow: 0 14px 34px rgba(8, 31, 68, 0.2);
 }
 
 .topbar__inner {
@@ -120,40 +121,44 @@ textarea {
     margin: 0 auto;
     display: flex;
     align-items: center;
-    gap: var(--space-5);
+    gap: var(--space-6);
 }
 
 .brand {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     min-width: 0;
 }
 
 .brand__logo {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
-    border-radius: 10px;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     padding: 4px;
+    box-shadow: 0 8px 20px rgba(7, 20, 44, 0.18);
 }
 
 .brand__text {
     display: flex;
     flex-direction: column;
     line-height: 1.1;
+    min-width: 0;
 }
 
 .brand__title {
-    font-size: 1rem;
+    font-size: 1.06rem;
     font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.01em;
 }
 
 .brand__subtitle {
     font-size: 0.82rem;
-    color: var(--text-muted);
+    color: rgba(225, 236, 255, 0.72);
 }
 
 .nav-toggle {
@@ -161,9 +166,9 @@ textarea {
     margin-left: auto;
     width: 44px;
     height: 44px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 12px;
-    background: var(--surface);
+    background: rgba(255, 255, 255, 0.08);
     cursor: pointer;
     padding: 0;
 }
@@ -174,7 +179,7 @@ textarea {
     height: 2px;
     margin: 4px auto;
     border-radius: 999px;
-    background: var(--text);
+    background: #ffffff;
 }
 
 .main-nav {
@@ -201,22 +206,26 @@ textarea {
     align-items: center;
     padding: 10px 14px;
     border-radius: 999px;
-    color: var(--text-muted);
+    color: rgba(236, 244, 255, 0.82);
+    font-weight: 600;
+    letter-spacing: 0.01em;
     transition:
-            background-color var(--transition-fast),
-            color var(--transition-fast),
-            transform var(--transition-fast);
+        background-color var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .main-nav__links a:hover {
-    background: var(--surface-muted);
-    color: var(--text);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
 
 .main-nav__links a.is-active {
-    background: rgba(15, 118, 110, 0.12);
-    color: var(--primary);
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
     font-weight: 600;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .user-panel {
@@ -236,11 +245,12 @@ textarea {
 .user-panel__name {
     font-size: 0.95rem;
     font-weight: 700;
+    color: #ffffff;
 }
 
 .user-panel__meta {
     font-size: 0.82rem;
-    color: var(--text-muted);
+    color: rgba(225, 236, 255, 0.68);
 }
 
 .dot {
@@ -569,6 +579,17 @@ textarea {
     background: var(--secondary-hover);
 }
 
+.topbar .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.topbar .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
 .btn-danger {
     background: var(--danger);
     color: #ffffff;
@@ -576,6 +597,17 @@ textarea {
 
 .btn-danger:hover {
     background: var(--danger-hover);
+}
+
+.topbar .btn-danger {
+    background: rgba(255, 255, 255, 0.94);
+    color: #0b3167;
+    border-color: rgba(255, 255, 255, 0.92);
+}
+
+.topbar .btn-danger:hover {
+    background: #ffffff;
+    color: #082045;
 }
 
 .btn-link {
@@ -709,6 +741,14 @@ textarea {
         flex-wrap: wrap;
         padding-top: 10px;
         padding-bottom: 10px;
+    }
+
+    .brand__title {
+        font-size: 0.98rem;
+    }
+
+    .brand__subtitle {
+        font-size: 0.78rem;
     }
 
     .nav-toggle {

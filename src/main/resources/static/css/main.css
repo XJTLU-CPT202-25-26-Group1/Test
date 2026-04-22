@@ -6,21 +6,21 @@
     --text-muted: #667085;
     --border: #d0d5dd;
 
-    --primary: #0f766e;
-    --primary-hover: #115e59;
-    --secondary: #e5e7eb;
-    --secondary-hover: #d1d5db;
-    --danger: #b42318;
-    --danger-hover: #912018;
+    --primary: #4257c8;
+    --primary-hover: #3346af;
+    --secondary: #eef1ff;
+    --secondary-hover: #dfe5ff;
+    --danger: #5b44c7;
+    --danger-hover: #4934aa;
 
-    --info-bg: #eff8ff;
-    --info-text: #175cd3;
-    --success-bg: #ecfdf3;
-    --success-text: #027a48;
-    --warning-bg: #fffaeb;
-    --warning-text: #b54708;
-    --error-bg: #fef3f2;
-    --error-text: #b42318;
+    --info-bg: #eef2ff;
+    --info-text: #4257c8;
+    --success-bg: #f1efff;
+    --success-text: #5b44c7;
+    --warning-bg: #eef2ff;
+    --warning-text: #4c5fd3;
+    --error-bg: #f3efff;
+    --error-text: #5b44c7;
 
     --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
     --shadow-md: 0 16px 38px rgba(16, 24, 40, 0.08);
@@ -64,8 +64,8 @@ body {
     color: var(--text);
     line-height: 1.5;
     background:
-            radial-gradient(circle at top left, rgba(15, 118, 110, 0.09), transparent 28%),
-            radial-gradient(circle at top right, rgba(23, 92, 211, 0.07), transparent 22%),
+            radial-gradient(circle at top left, rgba(91, 68, 199, 0.1), transparent 28%),
+            radial-gradient(circle at top right, rgba(66, 87, 200, 0.08), transparent 22%),
             var(--bg);
 }
 
@@ -111,7 +111,7 @@ textarea {
     min-height: var(--topbar-height);
     backdrop-filter: blur(14px);
     background:
-        linear-gradient(90deg, rgba(8, 31, 68, 0.96), rgba(11, 48, 97, 0.96) 45%, rgba(10, 62, 122, 0.94));
+        linear-gradient(90deg, rgba(20, 31, 88, 0.97), rgba(40, 56, 132, 0.96) 48%, rgba(77, 62, 167, 0.94));
     border-bottom: 1px solid rgba(167, 199, 255, 0.16);
     box-shadow: 0 14px 34px rgba(8, 31, 68, 0.2);
 }
@@ -615,13 +615,13 @@ textarea {
 
 .topbar .btn-danger {
     background: rgba(255, 255, 255, 0.94);
-    color: #0b3167;
+    color: #342d84;
     border-color: rgba(255, 255, 255, 0.92);
 }
 
 .topbar .btn-danger:hover {
     background: #ffffff;
-    color: #082045;
+    color: #26225f;
 }
 
 .btn-link {

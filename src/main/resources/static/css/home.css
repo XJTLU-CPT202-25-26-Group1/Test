@@ -8,9 +8,9 @@
     overflow: hidden;
     border-radius: 28px;
     background:
-        linear-gradient(90deg, rgba(6, 23, 50, 0.78), rgba(6, 23, 50, 0.4) 44%, rgba(6, 23, 50, 0.16)),
+        linear-gradient(90deg, rgba(19, 28, 86, 0.82), rgba(32, 43, 116, 0.5) 44%, rgba(71, 60, 150, 0.2)),
         url("/images/home-hero.jpg"),
-        linear-gradient(135deg, #d7e8fb 0%, #b8d4f0 34%, #8fb7df 63%, #d8e3ee 100%);
+        linear-gradient(135deg, #dfe6ff 0%, #cdd9ff 34%, #adbfff 62%, #e2dcff 100%);
     background-size: cover;
     background-position: center;
     box-shadow: var(--shadow-md);
@@ -20,7 +20,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(8, 31, 68, 0.18));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(34, 39, 108, 0.2));
 }
 
 .home-hero__overlay {
@@ -126,15 +126,15 @@
 }
 
 .home-shortcut--teal {
-    background: linear-gradient(145deg, #3fbbc9, #2f7eb7);
+    background: linear-gradient(145deg, #4367de, #394fb8);
 }
 
 .home-shortcut--gold {
-    background: linear-gradient(145deg, #ffb100, #d98600);
+    background: linear-gradient(145deg, #5a6fed, #5640c9);
 }
 
 .home-shortcut--green {
-    background: linear-gradient(145deg, #4cc38a, #2e9e91);
+    background: linear-gradient(145deg, #657cf2, #6b50d6);
 }
 
 .home-shortcut__icon {
@@ -161,7 +161,7 @@
     min-height: 28px;
     padding: 0 12px;
     border-radius: 999px;
-    background: rgba(15, 118, 110, 0.1);
+    background: rgba(66, 87, 200, 0.1);
     color: var(--primary);
     font-size: 0.75rem;
     font-weight: 800;
@@ -202,7 +202,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, #eef5fb, #d8e8f6);
+    background: linear-gradient(180deg, #eef2ff, #e0e4ff);
 }
 
 .home-specialist-card__portrait img {
@@ -253,7 +253,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    background: rgba(15, 118, 110, 0.12);
+    background: rgba(66, 87, 200, 0.12);
     color: var(--primary);
     font-size: 1.1rem;
     font-weight: 700;

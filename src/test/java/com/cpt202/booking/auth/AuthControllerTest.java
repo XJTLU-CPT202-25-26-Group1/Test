@@ -1,6 +1,7 @@
 package com.cpt202.booking.auth;
 
 import com.cpt202.booking.controller.auth.AuthController;
+import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
 import com.cpt202.booking.model.User;
 import com.cpt202.booking.service.EmailService;
@@ -15,7 +16,7 @@ class AuthControllerTest {
 
     @Test
     void registrationReportsSuccessEvenWhenEmailSendingFails() {
-        User created = new User("newuser", "encoded", "New User", "newuser@example.com", "13800009999", RoleType.CUSTOMER);
+        User created = new User("newuser", "encoded", "New User", "newuser@example.com", "13800009999", GenderType.UNSPECIFIED, RoleType.CUSTOMER);
         UserService userService = new UserService(null, null, null) {
             @Override
             public User registerUser(String username,
@@ -23,6 +24,7 @@ class AuthControllerTest {
                                      String displayName,
                                      String email,
                                      String phone,
+                                     GenderType gender,
                                      RoleType role,
                                      Long categoryId,
                                      String level,
@@ -48,6 +50,7 @@ class AuthControllerTest {
                 "New User",
                 "newuser@example.com",
                 "13800009999",
+                GenderType.UNSPECIFIED,
                 RoleType.CUSTOMER,
                 null,
                 null,

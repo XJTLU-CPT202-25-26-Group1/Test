@@ -17,30 +17,20 @@
         <article class="home-hero__banner">
             <div class="home-hero__overlay">
                 <div class="home-hero__copy">
-                    <span class="eyebrow home-hero__eyebrow">XJTLU Specialist Booking Portal</span>
-                    <h1 class="home-hero__title">A clearer, more credible specialist booking homepage with direct access to the next step.</h1>
+                    <span class="eyebrow home-hero__eyebrow">Specialist Booking System</span>
+                    <h1 class="home-hero__title">Book the right specialist through a homepage that stays focused on the real next action.</h1>
                     <p class="home-hero__text">
-                        Search specialists, review expertise categories, understand the booking workflow,
-                        and move into registration or login through a homepage that feels structured and trustworthy.
+                        Register, log in, review available specialists, and enter the booking workflow
+                        without extra content getting in the way.
                     </p>
 
                     <div class="cta-row">
-                        <a class="btn btn-primary" th:href="@{/auth/register}">Create an Account</a>
-                        <a class="btn btn-secondary" th:href="@{/auth/login}">Sign In</a>
-                    </div>
-
-                    <div class="home-hero__trust">
-                        <span class="home-hero__trust-item">Customer booking access</span>
-                        <span class="home-hero__trust-item">Specialist scheduling tools</span>
-                        <span class="home-hero__trust-item">Admin workflow control</span>
+                        <a class="btn btn-primary" th:href="@{/auth/register}">Register</a>
+                        <a class="btn btn-secondary" th:href="@{/auth/login}">Login</a>
                     </div>
                 </div>
 
                 <aside class="home-hero__metrics card">
-                    <div class="home-hero__metrics-head">
-                        <span class="section-kicker section-kicker--light">Portal Snapshot</span>
-                        <p>Key system counts stay visible before users enter the workflow.</p>
-                    </div>
                     <div class="home-hero__metric">
                         <span class="home-hero__metric-label">Active specialists</span>
                         <strong th:text="${specialistCount}">0</strong>
@@ -54,7 +44,7 @@
                         <strong th:text="${bookingCount}">0</strong>
                     </div>
                     <div class="home-hero__metric">
-                        <span class="home-hero__metric-label">Pending reviews</span>
+                        <span class="home-hero__metric-label">Pending bookings</span>
                         <strong th:text="${pendingCount}">0</strong>
                     </div>
                 </aside>
@@ -66,97 +56,36 @@
         <div class="home-shortcuts__grid">
             <a class="home-shortcut home-shortcut--teal" th:href="@{/auth/register}">
                 <span class="home-shortcut__icon">01</span>
-                <span class="home-shortcut__title">Create Account</span>
-                <span class="home-shortcut__text">Start as a customer or specialist account.</span>
+                <span class="home-shortcut__title">Create account</span>
+                <span class="home-shortcut__text">Register as a customer or specialist.</span>
             </a>
             <a class="home-shortcut home-shortcut--gold" th:href="@{/auth/login}">
                 <span class="home-shortcut__icon">02</span>
-                <span class="home-shortcut__title">Secure Login</span>
-                <span class="home-shortcut__text">Enter the portal and continue your workflow.</span>
+                <span class="home-shortcut__title">Enter system</span>
+                <span class="home-shortcut__text">Use your verified account to log in.</span>
             </a>
             <a class="home-shortcut home-shortcut--green" th:href="@{/auth/register}">
                 <span class="home-shortcut__icon">03</span>
-                <span class="home-shortcut__title">Booking Access</span>
-                <span class="home-shortcut__text">Prepare for specialist search and slot selection.</span>
+                <span class="home-shortcut__title">Booking workflow</span>
+                <span class="home-shortcut__text">Move from specialist search to booking request.</span>
             </a>
-            <a class="home-shortcut home-shortcut--blue" th:href="@{/auth/login}">
-                <span class="home-shortcut__icon">04</span>
-                <span class="home-shortcut__title">Track Status</span>
-                <span class="home-shortcut__text">Follow approval, reschedule, and feedback progress.</span>
-            </a>
-        </div>
-    </section>
-
-    <section class="home-news">
-        <div class="page-header">
-            <div>
-                <span class="section-kicker">Information Center</span>
-                <h2 class="page-title home-section-title">Information Blocks</h2>
-                <p class="page-subtitle">This section borrows the three-column information rhythm from your reference image, but maps it to your booking system.</p>
-            </div>
-        </div>
-
-        <div class="home-news__grid">
-            <article class="card home-news__card">
-                <div class="home-news__visual home-news__visual--one"></div>
-                <div class="home-news__body">
-                    <div class="home-news__head">
-                        <h3>Booking Announcements</h3>
-                        <a class="btn btn-link" th:href="@{/auth/register}">View more</a>
-                    </div>
-                    <ul class="home-news__list">
-                        <li>Customers can create booking requests after registration and email verification.</li>
-                        <li>Only active specialists with available future slots can be selected for booking.</li>
-                        <li>Pending bookings remain reviewable by administrators before confirmation.</li>
-                    </ul>
-                </div>
-            </article>
-
-            <article class="card home-news__card">
-                <div class="home-news__visual home-news__visual--two"></div>
-                <div class="home-news__body">
-                    <div class="home-news__head">
-                        <h3>Workflow Highlights</h3>
-                        <a class="btn btn-link" th:href="@{/auth/login}">View more</a>
-                    </div>
-                    <ul class="home-news__list">
-                        <li>Specialists maintain their own availability schedule and booked slots stay locked.</li>
-                        <li>Customers can later track booking status, upcoming consultations, and booking history.</li>
-                        <li>Completed consultations can feed into specialist-side feedback visibility.</li>
-                    </ul>
-                </div>
-            </article>
-
-            <article class="card home-news__card">
-                <div class="home-news__visual home-news__visual--three"></div>
-                <div class="home-news__body">
-                    <div class="home-news__head">
-                        <h3>Access Guide</h3>
-                        <a class="btn btn-link" th:href="@{/auth/login}">View more</a>
-                    </div>
-                    <ul class="home-news__list">
-                        <li>Customers move from discovery to booking request and then to status tracking.</li>
-                        <li>Specialists move from profile linkage to slot maintenance and booking completion.</li>
-                        <li>Administrators maintain categories, specialist records, approvals, and billing review.</li>
-                    </ul>
-                </div>
-            </article>
         </div>
     </section>
 
     <section class="home-specialists">
         <div class="page-header">
             <div>
-                <span class="section-kicker">Specialist Directory</span>
+                <span class="section-kicker">Specialist Preview</span>
                 <h2 class="page-title home-section-title">Featured Specialists</h2>
-                <p class="page-subtitle">A structured row of cards inspired by the portrait strip in your reference, adapted to text-first system data.</p>
+                <p class="page-subtitle">A compact preview block for the specialists users are likely to browse first.</p>
             </div>
         </div>
 
         <div th:if="${featuredSpecialists != null and !#lists.isEmpty(featuredSpecialists)}" class="home-specialists__grid">
             <article class="home-specialist-card" th:each="specialist : ${featuredSpecialists}">
                 <div class="home-specialist-card__portrait">
-                    <span th:text="${#strings.substring(specialist.name, 0, 1)}">A</span>
+                    <img th:src="${specialistAvatarMap[specialist.id]}"
+                         alt="Specialist avatar">
                 </div>
                 <div class="home-specialist-card__body">
                     <h3 th:text="${specialist.name}">Specialist Name</h3>
@@ -180,9 +109,9 @@
     <section class="home-categories">
         <div class="page-header">
             <div>
-                <span class="section-kicker">Department Access</span>
-                <h2 class="page-title home-section-title">Expertise Navigation</h2>
-                <p class="page-subtitle">A category navigation block inspired by the departmental navigation structure in your reference image.</p>
+                <span class="section-kicker">Expertise List</span>
+                <h2 class="page-title home-section-title">Available Expertise Categories</h2>
+                <p class="page-subtitle">Customers can use these categories during specialist search and booking.</p>
             </div>
         </div>
 
@@ -192,73 +121,13 @@
                       th:text="${#strings.substring(category.name, 0, 1)}">C</span>
                 <div class="home-category-card__body">
                     <h3 th:text="${category.name}">Category</h3>
-                    <p>Available for specialist registration and booking-side filtering.</p>
+                    <p>Available for registration support and booking-side filtering.</p>
                 </div>
-                <span class="home-category-card__arrow">+</span>
             </article>
         </div>
 
         <div th:if="${activeCategories == null or #lists.isEmpty(activeCategories)}" class="empty-state">
             Active expertise categories will appear here once category data is configured.
-        </div>
-    </section>
-
-    <section class="home-bottom">
-        <div class="home-bottom__grid">
-            <article class="card">
-                <div class="page-header">
-                    <div>
-                        <span class="section-kicker">Booking Flow</span>
-                        <h2 class="page-title home-section-title">Consultation Journey</h2>
-                        <p class="page-subtitle">A clean process section that helps the homepage feel more complete without needing more backend data.</p>
-                    </div>
-                </div>
-                <div class="home-steps">
-                    <div class="home-step">
-                        <span class="home-step__index">01</span>
-                        <h3>Create and verify your account</h3>
-                        <p>Users register first, then complete email verification before access is enabled.</p>
-                    </div>
-                    <div class="home-step">
-                        <span class="home-step__index">02</span>
-                        <h3>Choose a specialist and submit a request</h3>
-                        <p>Customers search specialists, inspect availability, and submit validated booking requests.</p>
-                    </div>
-                    <div class="home-step">
-                        <span class="home-step__index">03</span>
-                        <h3>Track, complete, and review the booking</h3>
-                        <p>Status changes, completion, and feedback are all visible to the relevant roles.</p>
-                    </div>
-                </div>
-            </article>
-
-            <article class="card">
-                <div class="page-header">
-                    <div>
-                        <span class="section-kicker">System Bulletin</span>
-                        <h2 class="page-title home-section-title">Operational Updates</h2>
-                        <p class="page-subtitle">A right-column list block to echo the lower information bands in your reference layout.</p>
-                    </div>
-                </div>
-                <div class="home-updates">
-                    <div class="home-update">
-                        <span class="home-update__date">Access</span>
-                        <p>Verified users are routed to role-specific dashboards after login.</p>
-                    </div>
-                    <div class="home-update">
-                        <span class="home-update__date">Scheduling</span>
-                        <p>Availability management protects booked slots and blocks overlapping records.</p>
-                    </div>
-                    <div class="home-update">
-                        <span class="home-update__date">Validation</span>
-                        <p>Bookings only proceed with active specialists and available future slots.</p>
-                    </div>
-                    <div class="home-update">
-                        <span class="home-update__date">Oversight</span>
-                        <p>Administrators can review specialists, categories, booking approvals, and billing summaries.</p>
-                    </div>
-                </div>
-            </article>
         </div>
     </section>
 </th:block>

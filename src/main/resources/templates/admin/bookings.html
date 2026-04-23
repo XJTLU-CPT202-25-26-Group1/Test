@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Booking Review',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="admin-page">
+        <div class="page-header admin-page__header">
+            <div>
+                <span class="section-kicker">Admin Review</span>
+                <h1 class="page-title">Booking Management</h1>
+                <p class="page-subtitle">Review pending booking requests, inspect all records, and monitor status history.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/admin/billing}">Billing</a>
+        </div>
+
+        <section class="admin-section">
+            <div class="admin-section__head">
+                <div>
+                    <h2>Pending Review</h2>
+                    <p>Confirm valid requests or reject requests with a reason.</p>
+                </div>
+                <span class="admin-count" th:text="${pendingBookings != null ? #lists.size(pendingBookings) + ' pending' : '0 pending'}">0 pending</span>
+            </div>
+
+            <div th:if="${pendingBookings != null and !#lists.isEmpty(pendingBookings)}" class="admin-booking-list">
+                <article class="admin-booking-card admin-booking-card--pending" th:each="booking : ${pendingBookings}">
+                    <div class="admin-booking-card__main">
+                        <div>
+                            <h3 th:text="${booking.topic}">Booking Topic</h3>
+                            <p>
+                                <span th:text="${booking.customerName}">Customer</span>
+                                <span> · </span>
+                                <span th:text="${booking.specialist.name}">Specialist</span>
+                            </p>
+                        </div>
+                        <span class="status-badge status-badge--pending" th:text="${booking.status}">PENDING</span>
+                    </div>
+
+                    <div class="admin-booking-card__meta">
+                        <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">Date</span>
+                        <span>
+                            <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
+                            <span> - </span>
+                            <span th:text="${#temporals.format(booking.slot.endTime, 'HH:mm')}">10:00</span>
+                        </span>
+                        <span th:text="${'Fee ' + (booking.calculatedFee != null ? #numbers.formatDecimal(booking.calculatedFee, 1, 2) : 'Pending')}">Fee</span>
+                    </div>
+
+                    <div class="admin-booking-card__actions">
+                        <a class="btn btn-secondary" th:href="@{/admin/bookings/detail(id=${booking.id})}">View Detail</a>
+
+                        <form th:action="@{/admin/bookings/confirm}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="id" th:value="${booking.id}">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </form>
+
+                        <form th:action="@{/admin/bookings/reject}" method="post" class="admin-reject-form">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="id" th:value="${booking.id}">
+                            <input name="reason" type="text" placeholder="Rejection reason" required>
+                            <button type="submit" class="btn btn-secondary">Reject</button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+
+            <div th:if="${pendingBookings == null or #lists.isEmpty(pendingBookings)}" class="empty-state">
+                No bookings are pending review.
+            </div>
+        </section>
+
+        <section class="admin-dashboard-grid">
+            <article class="card admin-mini-panel">
+                <div class="admin-section__head">
+                    <div>
+                        <h2>All Bookings</h2>
+                        <p>Complete booking record list.</p>
+                    </div>
+                    <span class="admin-count" th:text="${allBookings != null ? #lists.size(allBookings) + ' records' : '0 records'}">0 records</span>
+                </div>
+
+                <div th:if="${allBookings != null and !#lists.isEmpty(allBookings)}" class="admin-compact-list">
+                    <a class="admin-compact-list__item"
+                       th:each="booking : ${allBookings}"
+                       th:href="@{/admin/bookings/detail(id=${booking.id})}">
+                        <strong th:text="${booking.topic}">Topic</strong>
+                        <span>
+                            <span th:text="${booking.customerName}">Customer</span>
+                            <span> · </span>
+                            <span th:text="${booking.specialist.name}">Specialist</span>
+                        </span>
+                        <span class="status-badge" th:classappend="${' status-badge--' + #strings.toLowerCase(booking.status.name())}"
+                              th:text="${booking.status}">STATUS</span>
+                    </a>
+                </div>
+
+                <p th:if="${allBookings == null or #lists.isEmpty(allBookings)}" class="admin-muted-text">
+                    No booking records yet.
+                </p>
+            </article>
+
+            <article class="card admin-mini-panel">
+                <div class="admin-section__head">
+                    <div>
+                        <h2>Audit Logs</h2>
+                        <p>Latest status operations across bookings.</p>
+                    </div>
+                    <span class="admin-count" th:text="${auditLogs != null ? #lists.size(auditLogs) + ' logs' : '0 logs'}">0 logs</span>
+                </div>
+
+                <div th:if="${auditLogs != null and !#lists.isEmpty(auditLogs)}" class="admin-compact-list">
+                    <div class="admin-compact-list__item" th:each="log : ${auditLogs}">
+                        <strong th:text="${log.newStatus}">STATUS</strong>
+                        <span th:text="${log.remark}">Remark</span>
+                        <span th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">Time</span>
+                    </div>
+                </div>
+
+                <p th:if="${auditLogs == null or #lists.isEmpty(auditLogs)}" class="admin-muted-text">
+                    No audit logs recorded yet.
+                </p>
+            </article>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

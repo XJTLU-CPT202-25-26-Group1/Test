@@ -25,8 +25,8 @@ public class SecurityConfig {
                 .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-email", "/auth/resend-verification", "/error/**").permitAll()
                 // Role-based access control
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/specialist/**").hasAnyRole("SPECIALIST", "ADMIN")
-                .requestMatchers("/customer/**").hasAnyRole("CUSTOMER", "ADMIN")
+                .requestMatchers("/specialist/**").hasRole("SPECIALIST")
+                .requestMatchers("/customer/**").hasRole("CUSTOMER")
                 // Any other request requires authentication
                 .anyRequest().authenticated()
             )

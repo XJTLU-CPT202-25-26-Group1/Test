@@ -1,10 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const navRoot = document.querySelector("[data-nav-root]");
     const navToggle = document.querySelector("[data-nav-toggle]");
     const navMenu = document.querySelector("[data-nav-menu]");
 
-    if (navToggle && navMenu) {
+    if (navRoot && navToggle && navMenu) {
+        const closeMenu = () => {
+            navMenu.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+        };
+
         navToggle.addEventListener("click", () => {
-            navMenu.classList.toggle("is-open");
+            const nextState = !navMenu.classList.contains("is-open");
+            navMenu.classList.toggle("is-open", nextState);
+            navToggle.setAttribute("aria-expanded", String(nextState));
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!navRoot.contains(event.target)) {
+                closeMenu();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                closeMenu();
+            }
         });
     }
 

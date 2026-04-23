@@ -30,71 +30,84 @@
                 </a>
             </div>
 
-            <nav class="main-nav">
-                <div class="main-nav__links" role="list">
-                    <a th:href="${isAuthenticated} ? ${dashboardPath} : @{/}"
-                       th:classappend="${currentPath == '/' or currentPath == dashboardPath} ? 'is-active' : ''">
-                        <span th:text="${isAuthenticated} ? 'Dashboard' : 'Home'">Home</span>
-                    </a>
+            <div class="topbar__actions">
+                <a class="topbar__dashboard-link"
+                   th:href="${isAuthenticated} ? ${dashboardPath} : @{/}"
+                   th:classappend="${currentPath == '/' or currentPath == dashboardPath} ? ' is-active' : ''">
+                    <span th:text="${isAuthenticated} ? 'Dashboard' : 'Home'}">Home</span>
+                </a>
 
-                    <a th:if="${!isAuthenticated}"
-                       th:href="@{/auth/login}"
-                       th:classappend="${currentPath == '/auth/login'} ? 'is-active' : ''">
-                        Login
-                    </a>
-                    <a th:if="${!isAuthenticated}"
-                       th:href="@{/auth/register}"
-                       th:classappend="${currentPath == '/auth/register'} ? 'is-active' : ''">
-                        Register
-                    </a>
+                <div class="topbar-menu" data-nav-root>
+                    <button type="button"
+                            class="topbar-menu__toggle"
+                            data-nav-toggle
+                            aria-expanded="false"
+                            aria-controls="topbarMenu">
+                        Menu
+                    </button>
 
-                    <a th:if="${isCustomer}"
-                       th:href="@{/customer/specialists}"
-                       th:classappend="${#strings.startsWith(currentPath, '/customer/specialists')} ? 'is-active' : ''">
-                        Specialists
-                    </a>
-                    <a th:if="${isCustomer}"
-                       th:href="@{/customer/bookings}"
-                       th:classappend="${#strings.startsWith(currentPath, '/customer/bookings')} ? 'is-active' : ''">
-                        My Bookings
-                    </a>
+                    <div class="topbar-menu__panel" id="topbarMenu" data-nav-menu>
+                        <div class="topbar-menu__group">
+                            <a th:if="${!isAuthenticated}"
+                               th:href="@{/auth/login}"
+                               th:classappend="${currentPath == '/auth/login'} ? 'is-active' : ''">
+                                Login
+                            </a>
+                            <a th:if="${!isAuthenticated}"
+                               th:href="@{/auth/register}"
+                               th:classappend="${currentPath == '/auth/register'} ? 'is-active' : ''">
+                                Register
+                            </a>
 
-                    <a th:if="${isSpecialist}"
-                       th:href="@{/specialist/availability}"
-                       th:classappend="${#strings.startsWith(currentPath, '/specialist/availability')} ? 'is-active' : ''">
-                        Availability
-                    </a>
-                    <a th:if="${isSpecialist}"
-                       th:href="@{/specialist/bookings}"
-                       th:classappend="${#strings.startsWith(currentPath, '/specialist/bookings')} ? 'is-active' : ''">
-                        Bookings
-                    </a>
-                    <a th:if="${isSpecialist}"
-                       th:href="@{/specialist/feedback}"
-                       th:classappend="${#strings.startsWith(currentPath, '/specialist/feedback')} ? 'is-active' : ''">
-                        Feedback
-                    </a>
+                            <a th:if="${isCustomer}"
+                               th:href="@{/customer/specialists}"
+                               th:classappend="${#strings.startsWith(currentPath, '/customer/specialists')} ? 'is-active' : ''">
+                                Specialists
+                            </a>
+                            <a th:if="${isCustomer}"
+                               th:href="@{/customer/bookings}"
+                               th:classappend="${#strings.startsWith(currentPath, '/customer/bookings')} ? 'is-active' : ''">
+                                My Bookings
+                            </a>
 
-                    <a th:if="${isAdmin}"
-                       th:href="@{/admin/specialists}"
-                       th:classappend="${#strings.startsWith(currentPath, '/admin/specialists')} ? 'is-active' : ''">
-                        Specialists
-                    </a>
-                    <a th:if="${isAdmin}"
-                       th:href="@{/admin/bookings}"
-                       th:classappend="${#strings.startsWith(currentPath, '/admin/bookings')} ? 'is-active' : ''">
-                        Bookings
-                    </a>
-                    <a th:if="${isAdmin}"
-                       th:href="@{/admin/categories}"
-                       th:classappend="${#strings.startsWith(currentPath, '/admin/categories')} ? 'is-active' : ''">
-                        Categories
-                    </a>
-                    <a th:if="${isAdmin}"
-                       th:href="@{/admin/billing}"
-                       th:classappend="${#strings.startsWith(currentPath, '/admin/billing')} ? 'is-active' : ''">
-                        Billing
-                    </a>
+                            <a th:if="${isSpecialist}"
+                               th:href="@{/specialist/availability}"
+                               th:classappend="${#strings.startsWith(currentPath, '/specialist/availability')} ? 'is-active' : ''">
+                                Availability
+                            </a>
+                            <a th:if="${isSpecialist}"
+                               th:href="@{/specialist/bookings}"
+                               th:classappend="${#strings.startsWith(currentPath, '/specialist/bookings')} ? 'is-active' : ''">
+                                Bookings
+                            </a>
+                            <a th:if="${isSpecialist}"
+                               th:href="@{/specialist/feedback}"
+                               th:classappend="${#strings.startsWith(currentPath, '/specialist/feedback')} ? 'is-active' : ''">
+                                Feedback
+                            </a>
+
+                            <a th:if="${isAdmin}"
+                               th:href="@{/admin/specialists}"
+                               th:classappend="${#strings.startsWith(currentPath, '/admin/specialists')} ? 'is-active' : ''">
+                                Specialists
+                            </a>
+                            <a th:if="${isAdmin}"
+                               th:href="@{/admin/bookings}"
+                               th:classappend="${#strings.startsWith(currentPath, '/admin/bookings')} ? 'is-active' : ''">
+                                Bookings
+                            </a>
+                            <a th:if="${isAdmin}"
+                               th:href="@{/admin/categories}"
+                               th:classappend="${#strings.startsWith(currentPath, '/admin/categories')} ? 'is-active' : ''">
+                                Categories
+                            </a>
+                            <a th:if="${isAdmin}"
+                               th:href="@{/admin/billing}"
+                               th:classappend="${#strings.startsWith(currentPath, '/admin/billing')} ? 'is-active' : ''">
+                                Billing
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="user-panel">
@@ -115,7 +128,7 @@
                         </form>
                     </div>
                 </div>
-            </nav>
+            </div>
         </div>
     </header>
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Feedback',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/specialist.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="specialist-page">
+        <div class="page-header specialist-page__header">
+            <div>
+                <span class="section-kicker">Customer Feedback</span>
+                <h1 class="page-title">Consultation Feedback</h1>
+                <p class="page-subtitle">Review feedback submitted after completed consultations.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/specialist/bookings}">Back to Bookings</a>
+        </div>
+
+        <section class="specialist-section">
+            <div class="specialist-section__head">
+                <div>
+                    <h2>Feedback Records</h2>
+                    <p>Latest feedback appears first.</p>
+                </div>
+                <span class="specialist-count" th:text="${feedbackList != null ? #lists.size(feedbackList) + ' records' : '0 records'}">0 records</span>
+            </div>
+
+            <div th:if="${feedbackList != null and !#lists.isEmpty(feedbackList)}" class="feedback-grid">
+                <article class="feedback-card" th:each="feedback : ${feedbackList}">
+                    <div class="feedback-card__head">
+                        <div>
+                            <h3 th:text="${feedback.customerName}">Customer</h3>
+                            <p th:text="${feedback.customerEmail}">customer@example.com</p>
+                        </div>
+                        <span th:text="${feedback.rating + '/5'}">5/5</span>
+                    </div>
+
+                    <div class="feedback-card__booking">
+                        <strong th:text="${feedback.booking.topic}">Booking Topic</strong>
+                        <span th:text="${#temporals.format(feedback.createdAt, 'yyyy-MM-dd HH:mm')}">Created</span>
+                    </div>
+
+                    <p class="feedback-card__comment" th:text="${feedback.comment}">Feedback comment.</p>
+                </article>
+            </div>
+
+            <div th:if="${feedbackList == null or #lists.isEmpty(feedbackList)}" class="empty-state">
+                No feedback has been submitted yet.
+            </div>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

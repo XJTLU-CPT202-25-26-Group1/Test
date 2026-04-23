@@ -235,6 +235,180 @@
     margin: 0;
 }
 
+.specialist-detail-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--space-6);
+    align-items: start;
+}
+
+.specialist-detail-card,
+.specialist-audit-card,
+.specialist-filter-card {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.specialist-detail-card__head,
+.specialist-action-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.specialist-detail-card__head h2 {
+    margin: 0 0 4px;
+    font-size: 1.35rem;
+}
+
+.specialist-detail-card__head p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.specialist-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--surface-muted);
+}
+
+.specialist-info-grid div {
+    padding: var(--space-4);
+    border-right: 1px solid var(--surface-muted);
+}
+
+.specialist-info-grid div:last-child {
+    border-right: 0;
+}
+
+.specialist-info-grid span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+}
+
+.specialist-info-grid strong {
+    color: var(--text);
+}
+
+.specialist-info-grid strong span {
+    display: inline;
+    margin-bottom: 0;
+    color: inherit;
+    font-size: inherit;
+}
+
+.specialist-text-block {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--surface-muted);
+}
+
+.specialist-text-block h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+}
+
+.specialist-text-block p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.specialist-action-row {
+    justify-content: flex-start;
+}
+
+.specialist-action-row form {
+    margin: 0;
+}
+
+.specialist-timeline {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.specialist-timeline__item {
+    display: grid;
+    gap: 4px;
+    padding: var(--space-3);
+    border-left: 3px solid var(--primary);
+    background: #ffffff;
+}
+
+.specialist-timeline__item strong {
+    color: var(--primary);
+}
+
+.specialist-timeline__item span,
+.specialist-timeline__item small {
+    color: var(--text-muted);
+}
+
+.weekly-filter-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-4);
+    align-items: end;
+}
+
+.weekly-filter-form__actions {
+    display: flex;
+    align-items: center;
+}
+
+.feedback-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+}
+
+.feedback-card {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: 1px solid rgba(208, 213, 221, 0.9);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--shadow-sm);
+}
+
+.feedback-card__head,
+.feedback-card__booking {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.feedback-card__head h3 {
+    margin: 0 0 4px;
+    font-size: 1.12rem;
+}
+
+.feedback-card__head p,
+.feedback-card__booking span,
+.feedback-card__comment {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.feedback-card__head > span {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    padding: 0 12px;
+    background: #eef1ff;
+    color: var(--primary);
+    font-weight: 800;
+}
+
+.feedback-card__booking {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--surface-muted);
+}
+
 button:disabled,
 input:disabled {
     cursor: not-allowed;
@@ -244,7 +418,10 @@ input:disabled {
 @media (max-width: 980px) {
     .specialist-grid--create,
     .availability-form,
-    .availability-edit-form {
+    .availability-edit-form,
+    .specialist-detail-grid,
+    .weekly-filter-form,
+    .feedback-grid {
         grid-template-columns: 1fr;
     }
 
@@ -254,8 +431,27 @@ input:disabled {
     .specialist-booking-card__main,
     .specialist-booking-card__meta,
     .specialist-booking-card__actions,
-    .specialist-header-actions {
+    .specialist-header-actions,
+    .specialist-detail-card__head,
+    .feedback-card__head,
+    .feedback-card__booking {
         flex-direction: column;
         align-items: stretch;
+    }
+}
+
+@media (max-width: 640px) {
+    .specialist-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specialist-info-grid div,
+    .specialist-info-grid div:last-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--surface-muted);
+    }
+
+    .specialist-info-grid div:last-child {
+        border-bottom: 0;
     }
 }

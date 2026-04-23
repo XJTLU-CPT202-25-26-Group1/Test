@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Billing',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="admin-page">
+        <div class="page-header admin-page__header">
+            <div>
+                <span class="section-kicker">Admin Finance</span>
+                <h1 class="page-title">Billing Summary</h1>
+                <p class="page-subtitle">Track billable booking value from confirmed and completed consultations.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/admin/bookings}">Back to Bookings</a>
+        </div>
+
+        <section class="admin-metric-grid admin-metric-grid--billing">
+            <article class="card admin-metric-card admin-metric-card--primary">
+                <span>Billable Records</span>
+                <strong th:text="${billableCount}">0</strong>
+                <p>Confirmed and completed bookings included in this billing view.</p>
+            </article>
+
+            <article class="card admin-metric-card">
+                <span>Confirmed Value</span>
+                <strong th:text="${#numbers.formatDecimal(confirmedValue, 1, 2)}">0.00</strong>
+                <p>Projected value from confirmed consultations not yet completed.</p>
+            </article>
+
+            <article class="card admin-metric-card">
+                <span>Completed Revenue</span>
+                <strong th:text="${#numbers.formatDecimal(completedRevenue, 1, 2)}">0.00</strong>
+                <p>Revenue from consultations already marked as completed.</p>
+            </article>
+        </section>
+
+        <section class="admin-section">
+            <div class="admin-section__head">
+                <div>
+                    <h2>Billable Bookings</h2>
+                    <p>Only confirmed and completed bookings are included in billing calculations.</p>
+                </div>
+                <span class="admin-count" th:text="${billableBookings != null ? #lists.size(billableBookings) + ' records' : '0 records'}">0 records</span>
+            </div>
+
+            <div th:if="${billableBookings != null and !#lists.isEmpty(billableBookings)}" class="admin-billing-list">
+                <article class="admin-billing-card" th:each="booking : ${billableBookings}">
+                    <div class="admin-billing-card__main">
+                        <div>
+                            <h3 th:text="${booking.topic}">Booking Topic</h3>
+                            <p>
+                                <span th:text="${booking.customerName}">Customer</span>
+                                <span> · </span>
+                                <span th:text="${booking.specialist.name}">Specialist</span>
+                            </p>
+                        </div>
+                        <span class="status-badge"
+                              th:classappend="${' status-badge--' + #strings.toLowerCase(booking.status.name())}"
+                              th:text="${booking.status}">STATUS</span>
+                    </div>
+
+                    <div class="admin-billing-card__meta">
+                        <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">Date</span>
+                        <span>
+                            <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
+                            <span> - </span>
+                            <span th:text="${#temporals.format(booking.slot.endTime, 'HH:mm')}">10:00</span>
+                        </span>
+                        <strong th:text="${booking.calculatedFee != null ? #numbers.formatDecimal(booking.calculatedFee, 1, 2) : '0.00'}">0.00</strong>
+                    </div>
+
+                    <div class="admin-billing-card__actions">
+                        <a class="btn btn-secondary" th:href="@{/admin/bookings/detail(id=${booking.id})}">View Detail</a>
+                    </div>
+                </article>
+            </div>
+
+            <div th:if="${billableBookings == null or #lists.isEmpty(billableBookings)}" class="empty-state">
+                No confirmed or completed bookings are ready for billing yet.
+            </div>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

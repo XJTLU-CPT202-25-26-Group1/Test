@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Access Denied',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles"></th:block>
+
+<th:block th:fragment="content">
+    <section class="error-page">
+        <article class="card error-page__card">
+            <div class="error-page__visual">403</div>
+
+            <div class="error-page__body">
+                <span class="eyebrow">Permission Required</span>
+                <h1 class="page-title">You do not have access to this page</h1>
+                <p class="page-subtitle">
+                    Your current account role cannot open this resource. Return to a safe page or sign in with an account that has the correct permissions.
+                </p>
+
+                <div class="error-page__actions">
+                    <a class="btn btn-primary" th:href="${isAuthenticated} ? ${dashboardPath} : @{/auth/login}">
+                        <span th:text="${isAuthenticated} ? 'Go to Dashboard' : 'Go to Login'}">Go to Login</span>
+                    </a>
+                    <a class="btn btn-secondary" th:href="@{/}">Back Home</a>
+                </div>
+
+                <div class="error-page__tips">
+                    <div>
+                        <strong>Common reason</strong>
+                        <p>You tried to open a page reserved for another role such as customer, specialist, or admin.</p>
+                    </div>
+                    <div>
+                        <strong>What to do next</strong>
+                        <p>Use the navigation bar to return to your own dashboard or switch to the correct account.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

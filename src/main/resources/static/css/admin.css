@@ -240,6 +240,257 @@
     color: var(--text);
 }
 
+.admin-dashboard-grid,
+.admin-booking-detail-grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+}
+
+.admin-dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-booking-detail-grid {
+    grid-template-columns: 1.12fr 0.88fr;
+}
+
+.admin-mini-panel,
+.admin-booking-detail-card,
+.admin-booking-action-card {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.admin-booking-list,
+.admin-compact-list,
+.admin-timeline {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.admin-booking-card,
+.admin-compact-list__item,
+.admin-timeline__item {
+    border: 1px solid rgba(208, 213, 221, 0.9);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-booking-card {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-5);
+}
+
+.admin-booking-card--pending {
+    border-color: rgba(76, 91, 214, 0.3);
+    background: linear-gradient(135deg, #f9faff 0%, #f3f1ff 100%);
+}
+
+.admin-booking-card__main,
+.admin-booking-card__meta,
+.admin-booking-card__actions,
+.admin-booking-detail-card__head,
+.admin-booking-action-list {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.admin-booking-card__main h3,
+.admin-booking-detail-card__head h2,
+.admin-booking-action-card h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.admin-booking-card__main p,
+.admin-booking-detail-card__head p {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+}
+
+.admin-booking-card__meta {
+    justify-content: flex-start;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.admin-booking-card__meta > span {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    padding: 0 10px;
+    background: #eef1ff;
+    color: var(--primary);
+}
+
+.admin-booking-card__actions form,
+.admin-booking-action-list form {
+    margin: 0;
+}
+
+.admin-reject-form,
+.admin-detail-reject-form {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.admin-reject-form {
+    grid-template-columns: minmax(180px, 1fr) auto;
+    align-items: center;
+    flex: 1 1 360px;
+}
+
+.admin-reject-form input {
+    min-height: 42px;
+}
+
+.admin-compact-list__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-4);
+    color: var(--text);
+    text-decoration: none;
+}
+
+.admin-compact-list__item:hover {
+    border-color: rgba(76, 91, 214, 0.55);
+    background: #f7f8ff;
+}
+
+.admin-compact-list__item strong {
+    color: var(--primary);
+}
+
+.admin-compact-list__item span {
+    color: var(--text-muted);
+}
+
+.admin-compact-list__item .status-badge--pending {
+    color: var(--warning-text);
+}
+
+.admin-compact-list__item .status-badge--confirmed,
+.admin-compact-list__item .status-badge--completed,
+.admin-compact-list__item .status-badge--active {
+    color: var(--success-text);
+}
+
+.admin-compact-list__item .status-badge--cancelled,
+.admin-compact-list__item .status-badge--rejected,
+.admin-compact-list__item .status-badge--inactive,
+.admin-compact-list__item .status-badge--error {
+    color: var(--error-text);
+}
+
+.admin-muted-text {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.admin-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+}
+
+.admin-info-grid div {
+    display: grid;
+    gap: 8px;
+    padding: var(--space-4);
+    border: 1px solid rgba(208, 213, 221, 0.9);
+    background: #f8f9ff;
+}
+
+.admin-info-grid div > span {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.admin-info-grid strong {
+    color: var(--text);
+}
+
+.admin-text-block {
+    display: grid;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid rgba(208, 213, 221, 0.9);
+}
+
+.admin-text-block h3 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.admin-text-block p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+
+.admin-booking-action-card {
+    border-left: 4px solid var(--primary);
+}
+
+.admin-booking-action-list {
+    justify-content: flex-start;
+}
+
+.admin-detail-reject-form {
+    width: 100%;
+}
+
+.admin-detail-reject-form textarea {
+    min-height: 120px;
+}
+
+.admin-detail-reject-form .btn,
+.admin-booking-action-list .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+.admin-timeline__item {
+    position: relative;
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-4) var(--space-4) var(--space-6);
+}
+
+.admin-timeline__item::before {
+    content: "";
+    position: absolute;
+    left: 16px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    background: var(--primary);
+}
+
+.admin-timeline__item strong {
+    color: var(--primary);
+}
+
+.admin-timeline__item span {
+    color: var(--text-muted);
+}
+
+.admin-timeline__item small {
+    color: var(--text-light);
+    font-weight: 700;
+}
+
 @media (max-width: 980px) {
     .admin-grid--create,
     .admin-edit-grid,
@@ -249,12 +500,20 @@
     .admin-edit-form,
     .admin-record-card,
     .admin-record-card__form,
-    .admin-specialist-list {
+    .admin-specialist-list,
+    .admin-dashboard-grid,
+    .admin-booking-detail-grid,
+    .admin-compact-list__item,
+    .admin-info-grid,
+    .admin-reject-form {
         grid-template-columns: 1fr;
     }
 
     .admin-section__head,
-    .admin-specialist-card__main {
+    .admin-specialist-card__main,
+    .admin-booking-card__main,
+    .admin-booking-card__actions,
+    .admin-booking-detail-card__head {
         flex-direction: column;
         align-items: stretch;
     }

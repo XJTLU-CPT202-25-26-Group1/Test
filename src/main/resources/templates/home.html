@@ -133,7 +133,7 @@
                     </p>
                     <div class="inline-list">
                         <span class="pill" th:text="${specialist.level}">Level</span>
-                        <span class="pill" th:text="'Fee ' + ${#numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
+                        <span class="pill" th:text="${'Fee ' + #numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
                     </div>
                 </div>
             </article>

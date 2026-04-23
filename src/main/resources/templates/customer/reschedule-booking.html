@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Reschedule Booking',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="customer-page">
+        <div class="page-header customer-page__header">
+            <div>
+                <span class="section-kicker">Reschedule</span>
+                <h1 class="page-title">Reschedule Booking</h1>
+                <p class="page-subtitle">Choose another available slot for the same specialist.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">Back to Detail</a>
+        </div>
+
+        <section class="booking-create-grid">
+            <article class="card booking-summary-card">
+                <h2>Current Booking</h2>
+                <div class="booking-summary-list">
+                    <div>
+                        <span>Topic</span>
+                        <strong th:text="${booking.topic}">Topic</strong>
+                    </div>
+                    <div>
+                        <span>Specialist</span>
+                        <strong th:text="${booking.specialist.name}">Specialist</strong>
+                    </div>
+                    <div>
+                        <span>Current Date</span>
+                        <strong th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</strong>
+                    </div>
+                    <div>
+                        <span>Current Time</span>
+                        <strong>
+                            <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
+                            <span> - </span>
+                            <span th:text="${#temporals.format(booking.slot.endTime, 'HH:mm')}">10:00</span>
+                        </strong>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card specialist-slots-card">
+                <div class="customer-section__head">
+                    <div>
+                        <h2>Alternative Slots</h2>
+                        <p>After rescheduling, the booking returns to pending review.</p>
+                    </div>
+                    <span class="customer-count"
+                          th:text="${alternativeSlots != null ? #lists.size(alternativeSlots) + ' slots' : '0 slots'}">
+                        0 slots
+                    </span>
+                </div>
+
+                <div th:if="${alternativeSlots != null and !#lists.isEmpty(alternativeSlots)}" class="slot-list">
+                    <article class="slot-card" th:each="slot : ${alternativeSlots}">
+                        <div>
+                            <h3 th:text="${#temporals.format(slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</h3>
+                            <p>
+                                <span th:text="${#temporals.format(slot.startTime, 'HH:mm')}">09:00</span>
+                                <span> - </span>
+                                <span th:text="${#temporals.format(slot.endTime, 'HH:mm')}">10:00</span>
+                            </p>
+                        </div>
+                        <form th:action="@{/customer/bookings/reschedule}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="id" th:value="${booking.id}">
+                            <input type="hidden" name="newSlotId" th:value="${slot.id}">
+                            <button type="submit" class="btn btn-primary">Choose Slot</button>
+                        </form>
+                    </article>
+                </div>
+
+                <div th:if="${alternativeSlots == null or #lists.isEmpty(alternativeSlots)}" class="empty-state">
+                    No alternative slots are currently available for this specialist.
+                </div>
+            </article>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

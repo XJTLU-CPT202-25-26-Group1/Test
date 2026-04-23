@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'My Bookings',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="customer-page">
+        <div class="page-header customer-page__header">
+            <div>
+                <span class="section-kicker">Customer Booking</span>
+                <h1 class="page-title">My Bookings</h1>
+                <p class="page-subtitle">Track submitted requests, upcoming appointments, and booking history.</p>
+            </div>
+            <a class="btn btn-primary" th:href="@{/customer/specialists}">Find Specialist</a>
+        </div>
+
+        <section class="customer-dashboard-grid">
+            <article class="card customer-mini-panel">
+                <h2>Upcoming Appointments</h2>
+                <div th:if="${upcomingBookings != null and !#lists.isEmpty(upcomingBookings)}" class="compact-list">
+                    <a class="compact-list__item"
+                       th:each="booking : ${upcomingBookings}"
+                       th:href="@{/customer/bookings/detail(id=${booking.id})}">
+                        <strong th:text="${booking.specialist.name}">Specialist</strong>
+                        <span>
+                            <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
+                            <span> </span>
+                            <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
+                        </span>
+                    </a>
+                </div>
+                <p th:if="${upcomingBookings == null or #lists.isEmpty(upcomingBookings)}" class="muted-panel-text">
+                    No confirmed upcoming appointments.
+                </p>
+            </article>
+
+            <article class="card customer-mini-panel">
+                <h2>Recent Notifications</h2>
+                <div th:if="${notifications != null and !#lists.isEmpty(notifications)}" class="compact-list">
+                    <div class="compact-list__item" th:each="notification : ${notifications}">
+                        <strong th:text="${notification.newStatus}">STATUS</strong>
+                        <span th:text="${notification.remark}">Notification remark</span>
+                    </div>
+                </div>
+                <p th:if="${notifications == null or #lists.isEmpty(notifications)}" class="muted-panel-text">
+                    No booking notifications yet.
+                </p>
+            </article>
+        </section>
+
+        <section class="card customer-filter">
+            <form th:action="@{/customer/bookings}" method="get" class="booking-search-form">
+                <div class="form-group">
+                    <label for="keyword">Search Bookings</label>
+                    <input id="keyword" name="keyword" type="text" th:value="${keyword}"
+                           placeholder="Topic, specialist, or status">
+                </div>
+                <div class="customer-filter__actions">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a class="btn btn-secondary" th:href="@{/customer/bookings}">Reset</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="customer-section">
+            <div class="customer-section__head">
+                <h2>Booking History</h2>
+                <span class="customer-count" th:text="${bookings != null ? #lists.size(bookings) + ' records' : '0 records'}">0 records</span>
+            </div>
+
+            <div th:if="${bookings != null and !#lists.isEmpty(bookings)}" class="booking-list">
+                <article class="booking-row-card" th:each="booking : ${bookings}">
+                    <div class="booking-row-card__main">
+                        <div>
+                            <h3 th:text="${booking.topic}">Booking Topic</h3>
+                            <p>
+                                <span th:text="${booking.specialist.name}">Specialist</span>
+                                <span> · </span>
+                                <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
+                                <span> </span>
+                                <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
+                            </p>
+                        </div>
+                        <span class="status-badge" th:classappend="${' status-badge--' + #strings.toLowerCase(booking.status.name())}"
+                              th:text="${booking.status}">PENDING</span>
+                    </div>
+                    <div class="booking-row-card__meta">
+                        <span th:text="${'Created ' + #temporals.format(booking.createdAt, 'yyyy-MM-dd HH:mm')}">Created</span>
+                        <span th:text="${'Fee ' + (booking.calculatedFee != null ? #numbers.formatDecimal(booking.calculatedFee, 1, 2) : 'Pending')}">Fee</span>
+                    </div>
+                    <div class="booking-row-card__actions">
+                        <a class="btn btn-primary" th:href="@{/customer/bookings/detail(id=${booking.id})}">View Details</a>
+                    </div>
+                </article>
+            </div>
+
+            <div th:if="${bookings == null or #lists.isEmpty(bookings)}" class="empty-state">
+                No bookings match the current search.
+            </div>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

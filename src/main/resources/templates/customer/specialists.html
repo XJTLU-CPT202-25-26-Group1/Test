@@ -80,7 +80,7 @@
 
                         <div class="specialist-list-card__meta">
                             <span th:text="${specialist.level}">Level</span>
-                            <span th:text="'Fee ' + ${#numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
+                            <span th:text="${'Fee ' + #numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
                         </div>
                     </div>
 

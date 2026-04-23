@@ -54,21 +54,21 @@
 
     <section class="home-roles">
         <div class="home-roles__grid">
-            <article class="home-role-card">
+            <a class="home-role-card" th:href="@{/auth/login}">
                 <span class="home-role-card__label">Customer</span>
                 <h2>I am a customer</h2>
                 <p>Search specialists, submit booking requests, and track appointment progress.</p>
-            </article>
-            <article class="home-role-card">
+            </a>
+            <a class="home-role-card" th:href="@{/auth/login}">
                 <span class="home-role-card__label">Specialist</span>
                 <h2>I am a specialist</h2>
                 <p>Maintain availability, review scheduled consultations, and complete bookings.</p>
-            </article>
-            <article class="home-role-card">
+            </a>
+            <a class="home-role-card" th:href="@{/auth/login}">
                 <span class="home-role-card__label">Administrator</span>
                 <h2>I am an administrator</h2>
                 <p>Manage specialists, categories, booking approvals, and operational records.</p>
-            </article>
+            </a>
         </div>
     </section>
 

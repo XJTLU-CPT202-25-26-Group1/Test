@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Availability',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/specialist.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="specialist-page">
+        <div class="page-header specialist-page__header">
+            <div>
+                <span class="section-kicker">Specialist Schedule</span>
+                <h1 class="page-title">Availability Management</h1>
+                <p class="page-subtitle">
+                    Manage future consultation slots for <span th:text="${specialist.name}">Specialist</span>.
+                    Booked slots are locked from editing or deletion.
+                </p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/specialist/bookings}">View Bookings</a>
+        </div>
+
+        <section class="specialist-grid specialist-grid--create">
+            <article class="card specialist-profile-strip">
+                <span class="specialist-profile-strip__label">Profile</span>
+                <h2 th:text="${specialist.name}">Specialist Name</h2>
+                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                <div class="specialist-chip-row">
+                    <span th:text="${specialist.level}">Level</span>
+                    <span th:text="${'Fee ' + #numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
+                    <span th:text="${specialist.status}">ACTIVE</span>
+                </div>
+            </article>
+
+            <article class="card availability-create-card">
+                <h2>Add Available Slot</h2>
+                <form th:action="@{/specialist/availability}" method="post" class="availability-form">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input id="date" name="date" type="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startTime">Start Time</label>
+                        <input id="startTime" name="startTime" type="time" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime">End Time</label>
+                        <input id="endTime" name="endTime" type="time" required>
+                    </div>
+
+                    <div class="availability-form__actions">
+                        <button type="submit" class="btn btn-primary">Add Slot</button>
+                    </div>
+                </form>
+            </article>
+        </section>
+
+        <section class="specialist-section">
+            <div class="specialist-section__head">
+                <div>
+                    <h2>Current Availability</h2>
+                    <p>Update open slots or review booked slots that are locked by existing bookings.</p>
+                </div>
+                <span class="specialist-count" th:text="${slots != null ? #lists.size(slots) + ' slots' : '0 slots'}">0 slots</span>
+            </div>
+
+            <div th:if="${slots != null and !#lists.isEmpty(slots)}" class="availability-list">
+                <article class="availability-card" th:each="slot : ${slots}" th:classappend="${slot.booked} ? ' availability-card--booked' : ''">
+                    <div class="availability-card__status">
+                        <strong th:text="${slot.booked ? 'Booked' : 'Open'}">Open</strong>
+                        <span th:text="${slot.booked ? 'Locked from modification' : 'Available for customer booking'}">Status</span>
+                    </div>
+
+                    <form th:action="@{/specialist/availability/update}" method="post" class="availability-edit-form">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="slotId" th:value="${slot.id}">
+
+                        <div class="form-group">
+                            <label th:for="${'date-' + slot.id}">Date</label>
+                            <input th:id="${'date-' + slot.id}" name="date" type="date"
+                                   th:value="${slot.slotDate}" th:disabled="${slot.booked}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label th:for="${'start-' + slot.id}">Start</label>
+                            <input th:id="${'start-' + slot.id}" name="startTime" type="time"
+                                   th:value="${slot.startTime}" th:disabled="${slot.booked}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label th:for="${'end-' + slot.id}">End</label>
+                            <input th:id="${'end-' + slot.id}" name="endTime" type="time"
+                                   th:value="${slot.endTime}" th:disabled="${slot.booked}" required>
+                        </div>
+
+                        <div class="availability-card__actions">
+                            <button type="submit" class="btn btn-primary" th:disabled="${slot.booked}">Update</button>
+                        </div>
+                    </form>
+
+                    <form th:action="@{/specialist/availability/delete}" method="post" class="availability-delete-form">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="slotId" th:value="${slot.id}">
+                        <button type="submit" class="btn btn-secondary"
+                                th:disabled="${slot.booked}"
+                                data-danger-confirm="Delete this availability slot?">
+                            Delete
+                        </button>
+                    </form>
+                </article>
+            </div>
+
+            <div th:if="${slots == null or #lists.isEmpty(slots)}" class="empty-state">
+                No availability slots have been created yet.
+            </div>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

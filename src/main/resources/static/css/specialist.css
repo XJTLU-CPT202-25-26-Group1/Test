@@ -1,0 +1,261 @@
+.specialist-page {
+    display: grid;
+    gap: var(--space-6);
+}
+
+.specialist-page__header {
+    align-items: center;
+}
+
+.section-kicker {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 12px;
+    background: rgba(66, 87, 200, 0.1);
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.specialist-header-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.specialist-grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+}
+
+.specialist-grid--create {
+    grid-template-columns: 0.85fr 1.15fr;
+}
+
+.specialist-profile-strip,
+.availability-create-card,
+.specialist-notification-panel {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.specialist-profile-strip__label {
+    display: inline-flex;
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.specialist-profile-strip h2,
+.availability-create-card h2,
+.specialist-notification-panel h2 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.specialist-profile-strip p,
+.specialist-notification-panel p,
+.specialist-section__head p,
+.specialist-muted-text {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.specialist-chip-row {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.specialist-chip-row span {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    padding: 0 10px;
+    background: #eef1ff;
+    color: var(--primary);
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.availability-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    gap: var(--space-4);
+    align-items: end;
+}
+
+.availability-form__actions {
+    display: flex;
+    align-items: center;
+}
+
+.specialist-section {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.specialist-section__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.specialist-section__head h2 {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.specialist-section__head p {
+    margin-top: 6px;
+}
+
+.specialist-count {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    padding: 0 12px;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: #f6f7ff;
+    color: var(--primary);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.availability-list,
+.specialist-booking-list,
+.specialist-compact-list {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.availability-card,
+.specialist-booking-card {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: 1px solid rgba(208, 213, 221, 0.9);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--shadow-sm);
+}
+
+.availability-card--booked {
+    background: #f8f9ff;
+}
+
+.availability-card__status {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--surface-muted);
+}
+
+.availability-card__status strong {
+    color: var(--primary);
+}
+
+.availability-card__status span {
+    color: var(--text-muted);
+}
+
+.availability-edit-form {
+    display: grid;
+    grid-template-columns: 1fr 0.8fr 0.8fr auto;
+    gap: var(--space-4);
+    align-items: end;
+}
+
+.availability-card__actions,
+.availability-delete-form {
+    display: flex;
+    align-items: end;
+}
+
+.availability-delete-form {
+    margin: 0;
+}
+
+.specialist-compact-list__item {
+    display: grid;
+    gap: 4px;
+    padding: var(--space-3);
+    border: 1px solid var(--surface-muted);
+    background: #ffffff;
+}
+
+.specialist-compact-list__item strong {
+    color: var(--primary);
+}
+
+.specialist-compact-list__item span {
+    color: var(--text-muted);
+}
+
+.specialist-booking-card__main,
+.specialist-booking-card__meta,
+.specialist-booking-card__actions {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.specialist-booking-card__main h3 {
+    margin: 0 0 6px;
+    font-size: 1.12rem;
+}
+
+.specialist-booking-card__main p,
+.specialist-booking-card__meta {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.specialist-booking-card__meta {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--surface-muted);
+}
+
+.specialist-booking-card__actions {
+    justify-content: flex-start;
+}
+
+.specialist-booking-card__actions form {
+    margin: 0;
+}
+
+button:disabled,
+input:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+}
+
+@media (max-width: 980px) {
+    .specialist-grid--create,
+    .availability-form,
+    .availability-edit-form {
+        grid-template-columns: 1fr;
+    }
+
+    .specialist-page__header,
+    .specialist-section__head,
+    .availability-card__status,
+    .specialist-booking-card__main,
+    .specialist-booking-card__meta,
+    .specialist-booking-card__actions,
+    .specialist-header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

@@ -373,10 +373,6 @@ textarea {
     padding: var(--space-6);
 }
 
-.card + .card {
-    margin-top: var(--space-6);
-}
-
 .grid {
     display: grid;
     gap: var(--space-6);

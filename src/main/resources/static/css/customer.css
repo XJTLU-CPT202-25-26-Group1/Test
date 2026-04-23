@@ -302,6 +302,7 @@
 
 .customer-dashboard-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
 }
 
 .booking-summary-card,
@@ -310,6 +311,8 @@
 .booking-action-card,
 .customer-mini-panel {
     display: grid;
+    grid-template-rows: auto 1fr;
+    align-content: start;
     gap: var(--space-5);
     height: 100%;
 }

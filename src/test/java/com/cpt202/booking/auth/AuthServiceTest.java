@@ -2,7 +2,9 @@ package com.cpt202.booking.auth;
 
 import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
+import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.model.User;
+import com.cpt202.booking.repository.SpecialistRepository;
 import com.cpt202.booking.repository.ExpertiseCategoryRepository;
 import com.cpt202.booking.repository.UserRepository;
 import com.cpt202.booking.service.UserService;
@@ -28,6 +30,9 @@ class AuthServiceTest {
 
     @Autowired
     private ExpertiseCategoryRepository categoryRepository;
+
+    @Autowired
+    private SpecialistRepository specialistRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -76,6 +81,8 @@ class AuthServiceTest {
 
         assertNotNull(created.getSpecialistId());
         assertFalse(created.isEmailVerified());
+        assertEquals(SpecialistStatus.PENDING_APPROVAL,
+                specialistRepository.findById(created.getSpecialistId()).orElseThrow().getStatus());
     }
 
     @Test
@@ -108,5 +115,28 @@ class AuthServiceTest {
                 () -> userService.resolveSpecialistId("orphan-specialist"));
 
         assertEquals("Specialist account is not linked to a specialist profile.", error.getMessage());
+    }
+
+    @Test
+    void specialistLoginBlockReasonReflectsApprovalStatus() {
+        Long categoryId = categoryRepository.findAll().get(0).getId();
+
+        User created = userService.registerUser(
+                "pending-specialist",
+                "password123",
+                "Pending Specialist",
+                "pending-specialist@example.com",
+                "13800004444",
+                GenderType.MALE,
+                RoleType.SPECIALIST,
+                categoryId,
+                "Associate",
+                220.0,
+                "Pending review"
+        );
+        created.setEmailVerified(true);
+        userRepository.save(created);
+
+        assertEquals("pendingApproval", userService.resolveLoginBlockReason("pending-specialist"));
     }
 }

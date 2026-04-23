@@ -2,10 +2,11 @@ package com.cpt202.booking.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import com.cpt202.booking.service.UserService;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -14,6 +15,12 @@ import org.springframework.security.authentication.DisabledException;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final UserService userService;
+
+    public SecurityConfig(@Lazy UserService userService) {
+        this.userService = userService;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,7 +41,8 @@ public class SecurityConfig {
                 .loginPage("/auth/login")          // Custom login page
                 .loginProcessingUrl("/auth/login") // Login processing URL
                 .defaultSuccessUrl("/auth/success", true)
-                .failureHandler((request, response, exception) -> response.sendRedirect(buildFailureRedirect(exception)))
+                .failureHandler((request, response, exception) ->
+                        response.sendRedirect(buildFailureRedirect(request.getParameter("username"), exception)))
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll()
@@ -55,9 +63,12 @@ public class SecurityConfig {
         return http.build();
     }
 
-    private String buildFailureRedirect(AuthenticationException exception) {
+    private String buildFailureRedirect(String username, AuthenticationException exception) {
         if (exception instanceof DisabledException) {
-            return "/auth/login?unverified=true";
+            String reason = userService.resolveLoginBlockReason(username);
+            if (reason != null) {
+                return "/auth/login?" + reason + "=true";
+            }
         }
         return "/auth/login?error=true";
     }

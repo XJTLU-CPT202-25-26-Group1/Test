@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Specialist Profile',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/specialist.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="specialist-page">
+        <div class="page-header specialist-page__header">
+            <div>
+                <span class="section-kicker">Profile</span>
+                <h1 class="page-title">Specialist Profile</h1>
+                <p class="page-subtitle">Review account identity and specialist service information.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/specialist/dashboard}">Back to Dashboard</a>
+        </div>
+
+        <section class="specialist-profile-grid">
+            <article class="card specialist-profile-card">
+                <div class="specialist-profile-avatar" th:text="${#strings.substring(specialist.name, 0, 1)}">S</div>
+                <h2 th:text="${specialist.name}">Specialist Name</h2>
+                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+
+                <div class="specialist-readonly-list">
+                    <div>
+                        <span>Professional Level</span>
+                        <strong th:text="${specialist.level}">Level</strong>
+                    </div>
+                    <div>
+                        <span>Fee Rate</span>
+                        <strong th:text="${#numbers.formatDecimal(specialist.feeRate, 1, 2)}">200.00</strong>
+                    </div>
+                    <div>
+                        <span>Status</span>
+                        <strong th:text="${specialist.status}">ACTIVE</strong>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card specialist-profile-card">
+                <h2>Account Information</h2>
+                <div class="specialist-readonly-list">
+                    <div>
+                        <span>Username</span>
+                        <strong th:text="${account.username}">username</strong>
+                    </div>
+                    <div>
+                        <span>Display Name</span>
+                        <strong th:text="${account.displayName}">Display Name</strong>
+                    </div>
+                    <div>
+                        <span>Email</span>
+                        <strong th:text="${account.email}">email@example.com</strong>
+                    </div>
+                    <div>
+                        <span>Phone</span>
+                        <strong th:text="${account.phone}">Phone</strong>
+                    </div>
+                    <div>
+                        <span>Gender</span>
+                        <strong th:text="${account.gender}">UNSPECIFIED</strong>
+                    </div>
+                    <div>
+                        <span>Email Verification</span>
+                        <strong th:text="${account.emailVerified ? 'Verified' : 'Not verified'}">Verified</strong>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card specialist-profile-description">
+                <h2>Profile Description</h2>
+                <p th:text="${specialist.profileDescription}">Profile description.</p>
+                <p class="specialist-muted-text">
+                    Profile editing is currently managed through administrator or operations workflows.
+                </p>
+            </article>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

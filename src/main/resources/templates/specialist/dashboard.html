@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Specialist Dashboard',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/specialist.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="specialist-page">
+        <div class="page-header specialist-page__header">
+            <div>
+                <span class="section-kicker">Specialist Portal</span>
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">
+                    Welcome back, <span th:text="${specialist.name}">Specialist</span>. Review booking workload, open slots, and recent updates.
+                </p>
+            </div>
+            <div class="specialist-header-actions">
+                <a class="btn btn-primary" th:href="@{/specialist/bookings}">View Bookings</a>
+                <a class="btn btn-secondary" th:href="@{/specialist/availability}">Manage Availability</a>
+            </div>
+        </div>
+
+        <section class="specialist-stat-grid">
+            <article class="specialist-stat-card">
+                <span>Total Bookings</span>
+                <strong th:text="${bookingCount}">0</strong>
+            </article>
+            <article class="specialist-stat-card">
+                <span>Confirmed</span>
+                <strong th:text="${confirmedCount}">0</strong>
+            </article>
+            <article class="specialist-stat-card">
+                <span>Completed</span>
+                <strong th:text="${completedCount}">0</strong>
+            </article>
+            <article class="specialist-stat-card">
+                <span>Open Slots</span>
+                <strong th:text="${availableSlotCount}">0</strong>
+            </article>
+        </section>
+
+        <section class="specialist-dashboard-grid">
+            <article class="card specialist-notification-panel">
+                <div class="specialist-section__head">
+                    <div>
+                        <h2>Recent Notifications</h2>
+                        <p>Latest status changes for your bookings.</p>
+                    </div>
+                    <span class="specialist-count" th:text="${notifications != null ? #lists.size(notifications) + ' items' : '0 items'}">0 items</span>
+                </div>
+
+                <div th:if="${notifications != null and !#lists.isEmpty(notifications)}" class="specialist-compact-list">
+                    <div class="specialist-compact-list__item" th:each="notification : ${notifications}">
+                        <strong th:text="${notification.newStatus}">STATUS</strong>
+                        <span th:text="${notification.remark}">Notification remark</span>
+                        <span th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">Time</span>
+                    </div>
+                </div>
+
+                <p th:if="${notifications == null or #lists.isEmpty(notifications)}" class="specialist-muted-text">
+                    No recent notifications.
+                </p>
+            </article>
+
+            <article class="card specialist-profile-strip">
+                <span class="specialist-profile-strip__label">Profile Summary</span>
+                <h2 th:text="${specialist.name}">Specialist Name</h2>
+                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                <div class="specialist-chip-row">
+                    <span th:text="${specialist.level}">Level</span>
+                    <span th:text="${'Fee ' + #numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
+                    <span th:text="${specialist.status}">ACTIVE</span>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/specialist/profile}">View Profile</a>
+            </article>
+        </section>
+
+        <section class="specialist-section">
+            <div class="specialist-section__head">
+                <div>
+                    <h2>Recent Bookings</h2>
+                    <p>Your latest consultation booking records.</p>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/specialist/bookings}">View All</a>
+            </div>
+
+            <div th:if="${recentBookings != null and !#lists.isEmpty(recentBookings)}" class="specialist-booking-list">
+                <article class="specialist-booking-card" th:each="booking : ${recentBookings}">
+                    <div class="specialist-booking-card__main">
+                        <div>
+                            <h3 th:text="${booking.topic}">Booking Topic</h3>
+                            <p>
+                                <span th:text="${booking.customerName}">Customer</span>
+                                <span> · </span>
+                                <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">Date</span>
+                                <span> </span>
+                                <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">Start</span>
+                            </p>
+                        </div>
+                        <span class="status-badge" th:classappend="${' status-badge--' + #strings.toLowerCase(booking.status.name())}"
+                              th:text="${booking.status}">STATUS</span>
+                    </div>
+                    <div class="specialist-booking-card__actions">
+                        <a class="btn btn-primary" th:href="@{/specialist/bookings/detail(id=${booking.id})}">View Detail</a>
+                    </div>
+                </article>
+            </div>
+
+            <div th:if="${recentBookings == null or #lists.isEmpty(recentBookings)}" class="empty-state">
+                No booking records yet.
+            </div>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

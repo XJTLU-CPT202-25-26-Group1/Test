@@ -130,6 +130,48 @@
     white-space: nowrap;
 }
 
+.specialist-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+}
+
+.specialist-stat-card {
+    padding: var(--space-5);
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(241, 243, 255, 0.98));
+}
+
+.specialist-stat-card span {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.specialist-stat-card strong {
+    display: block;
+    color: var(--primary);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.specialist-dashboard-grid,
+.specialist-profile-grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+}
+
+.specialist-dashboard-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+}
+
+.specialist-profile-grid {
+    grid-template-columns: 0.8fr 1.2fr;
+}
+
 .availability-list,
 .specialist-booking-list,
 .specialist-compact-list {
@@ -409,6 +451,70 @@
     border-top: 1px solid var(--surface-muted);
 }
 
+.specialist-profile-card,
+.specialist-profile-description {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.specialist-profile-avatar {
+    width: 84px;
+    height: 84px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: #eef1ff;
+    color: var(--primary);
+    font-size: 2.2rem;
+    font-weight: 800;
+}
+
+.specialist-profile-card h2,
+.specialist-profile-description h2 {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.specialist-profile-card p,
+.specialist-profile-description p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.specialist-profile-card > p {
+    margin-top: -12px;
+}
+
+.specialist-readonly-list {
+    display: grid;
+    border: 1px solid var(--surface-muted);
+}
+
+.specialist-readonly-list div {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--surface-muted);
+}
+
+.specialist-readonly-list div:last-child {
+    border-bottom: 0;
+}
+
+.specialist-readonly-list span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+}
+
+.specialist-readonly-list strong {
+    color: var(--text);
+}
+
+.specialist-profile-description {
+    grid-column: 1 / -1;
+}
+
 button:disabled,
 input:disabled {
     cursor: not-allowed;
@@ -421,7 +527,10 @@ input:disabled {
     .availability-edit-form,
     .specialist-detail-grid,
     .weekly-filter-form,
-    .feedback-grid {
+    .feedback-grid,
+    .specialist-stat-grid,
+    .specialist-dashboard-grid,
+    .specialist-profile-grid {
         grid-template-columns: 1fr;
     }
 

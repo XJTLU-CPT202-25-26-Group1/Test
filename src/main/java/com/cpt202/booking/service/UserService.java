@@ -224,12 +224,12 @@ public class UserService implements UserDetailsService {
 
     private String resolveAvatarPath(GenderType gender) {
         if (gender == GenderType.FEMALE) {
-            return "/images/avatar-female.svg";
+            return "/images/avatar-female.png";
         }
         if (gender == GenderType.MALE) {
-            return "/images/avatar-male.svg";
+            return "/images/avatar-male.png";
         }
-        return "/images/avatar-neutral.svg";
+        return "/images/avatar-neutral.png";
     }
 
     private String generateToken() {

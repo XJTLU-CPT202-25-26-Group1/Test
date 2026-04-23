@@ -22,7 +22,7 @@ public class EmailService {
     public EmailService(ObjectProvider<JavaMailSender> mailSenderProvider,
                         @Value("${app.mail.enabled:false}") boolean mailEnabled,
                         @Value("${app.mail.from:no-reply@example.com}") String fromAddress,
-                        @Value("${app.base-url:http://localhost:8080}") String baseUrl) {
+                        @Value("${app.base-url:https://xsbooking.com}") String baseUrl) {
         this.mailSenderProvider = mailSenderProvider;
         this.mailEnabled = mailEnabled;
         this.fromAddress = fromAddress;

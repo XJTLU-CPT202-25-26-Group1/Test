@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Customer Dashboard',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="customer-page">
+        <div class="page-header customer-page__header">
+            <div>
+                <span class="section-kicker">Customer Portal</span>
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">
+                    Welcome back, <span th:text="${profile.displayName}">Customer</span>. Review your booking activity and continue to the next action.
+                </p>
+            </div>
+            <div class="customer-header-actions">
+                <a class="btn btn-primary" th:href="@{/customer/specialists}">Find Specialist</a>
+                <a class="btn btn-secondary" th:href="@{/customer/profile}">Edit Profile</a>
+            </div>
+        </div>
+
+        <section class="customer-stat-grid">
+            <article class="customer-stat-card">
+                <span>Total Bookings</span>
+                <strong th:text="${bookingCount}">0</strong>
+            </article>
+            <article class="customer-stat-card">
+                <span>Pending Review</span>
+                <strong th:text="${pendingCount}">0</strong>
+            </article>
+            <article class="customer-stat-card">
+                <span>Completed</span>
+                <strong th:text="${completedCount}">0</strong>
+            </article>
+        </section>
+
+        <section class="customer-dashboard-grid">
+            <article class="card customer-mini-panel">
+                <div class="customer-section__head">
+                    <div>
+                        <h2>Upcoming Appointments</h2>
+                        <p>Confirmed appointments that are still ahead.</p>
+                    </div>
+                    <span class="customer-count" th:text="${upcomingBookings != null ? #lists.size(upcomingBookings) + ' items' : '0 items'}">0 items</span>
+                </div>
+
+                <div th:if="${upcomingBookings != null and !#lists.isEmpty(upcomingBookings)}" class="compact-list">
+                    <a class="compact-list__item"
+                       th:each="booking : ${upcomingBookings}"
+                       th:href="@{/customer/bookings/detail(id=${booking.id})}">
+                        <strong th:text="${booking.specialist.name}">Specialist</strong>
+                        <span>
+                            <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
+                            <span> </span>
+                            <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
+                            <span> - </span>
+                            <span th:text="${booking.topic}">Topic</span>
+                        </span>
+                    </a>
+                </div>
+
+                <p th:if="${upcomingBookings == null or #lists.isEmpty(upcomingBookings)}" class="muted-panel-text">
+                    No confirmed upcoming appointments yet.
+                </p>
+            </article>
+
+            <article class="card customer-mini-panel">
+                <div class="customer-section__head">
+                    <div>
+                        <h2>Notifications</h2>
+                        <p>Recent status changes related to your bookings.</p>
+                    </div>
+                    <span class="customer-count" th:text="${notifications != null ? #lists.size(notifications) + ' items' : '0 items'}">0 items</span>
+                </div>
+
+                <div th:if="${notifications != null and !#lists.isEmpty(notifications)}" class="compact-list">
+                    <div class="compact-list__item" th:each="notification : ${notifications}">
+                        <strong th:text="${notification.newStatus}">STATUS</strong>
+                        <span th:text="${notification.remark}">Notification remark</span>
+                        <span th:text="${#temporals.format(notification.operatedAt, 'yyyy-MM-dd HH:mm')}">Time</span>
+                    </div>
+                </div>
+
+                <p th:if="${notifications == null or #lists.isEmpty(notifications)}" class="muted-panel-text">
+                    No notifications yet.
+                </p>
+            </article>
+        </section>
+
+        <section class="customer-section">
+            <div class="customer-section__head">
+                <div>
+                    <h2>Recent Bookings</h2>
+                    <p>Your latest booking records.</p>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/customer/bookings}">View All</a>
+            </div>
+
+            <div th:if="${recentBookings != null and !#lists.isEmpty(recentBookings)}" class="booking-list">
+                <article class="booking-row-card" th:each="booking : ${recentBookings}">
+                    <div class="booking-row-card__main">
+                        <div>
+                            <h3 th:text="${booking.topic}">Booking Topic</h3>
+                            <p>
+                                <span th:text="${booking.specialist.name}">Specialist</span>
+                                <span> · </span>
+                                <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
+                                <span> </span>
+                                <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
+                            </p>
+                        </div>
+                        <span class="status-badge" th:classappend="${' status-badge--' + #strings.toLowerCase(booking.status.name())}"
+                              th:text="${booking.status}">PENDING</span>
+                    </div>
+                    <div class="booking-row-card__actions">
+                        <a class="btn btn-primary" th:href="@{/customer/bookings/detail(id=${booking.id})}">View Details</a>
+                    </div>
+                </article>
+            </div>
+
+            <div th:if="${recentBookings == null or #lists.isEmpty(recentBookings)}" class="empty-state">
+                No bookings yet. Start by finding a specialist.
+            </div>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

@@ -24,8 +24,8 @@
 
                 <div class="error-page__actions">
                     <a class="btn btn-primary" th:href="@{/}">Back Home</a>
-                    <a class="btn btn-secondary" th:href="${isAuthenticated} ? ${dashboardPath} : @{/auth/login}">
-                        <span th:text="${isAuthenticated} ? 'Open Dashboard' : 'Open Login'}">Open Login</span>
+                    <a class="btn btn-secondary" th:href="${isAuthenticated ? dashboardPath : '/auth/login'}">
+                        <span th:text="${isAuthenticated ? 'Open Dashboard' : 'Open Login'}">Open Login</span>
                     </a>
                 </div>
 

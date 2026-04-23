@@ -5,9 +5,11 @@ import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.model.AvailabilitySlot;
 import com.cpt202.booking.model.ExpertiseCategory;
 import com.cpt202.booking.model.Specialist;
+import com.cpt202.booking.model.User;
 import com.cpt202.booking.repository.AvailabilitySlotRepository;
 import com.cpt202.booking.repository.ExpertiseCategoryRepository;
 import com.cpt202.booking.repository.SpecialistRepository;
+import com.cpt202.booking.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +24,19 @@ public class SpecialistService {
     private final SpecialistRepository specialistRepository;
     private final ExpertiseCategoryRepository categoryRepository;
     private final AvailabilitySlotRepository availabilitySlotRepository;
+    private final UserRepository userRepository;
+    private final EmailService emailService;
 
     public SpecialistService(SpecialistRepository specialistRepository,
                              ExpertiseCategoryRepository categoryRepository,
-                             AvailabilitySlotRepository availabilitySlotRepository) {
+                             AvailabilitySlotRepository availabilitySlotRepository,
+                             UserRepository userRepository,
+                             EmailService emailService) {
         this.specialistRepository = specialistRepository;
         this.categoryRepository = categoryRepository;
         this.availabilitySlotRepository = availabilitySlotRepository;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     public List<Specialist> getAllSpecialists() {
@@ -88,6 +96,21 @@ public class SpecialistService {
 
     @Transactional
     public Specialist createSpecialist(String name, String level, Double feeRate, String description, Long categoryId) {
+        return createSpecialist(name, level, feeRate, description, categoryId, SpecialistStatus.ACTIVE);
+    }
+
+    @Transactional
+    public Specialist createPendingSpecialist(String name, String level, Double feeRate, String description, Long categoryId) {
+        return createSpecialist(name, level, feeRate, description, categoryId, SpecialistStatus.PENDING_APPROVAL);
+    }
+
+    @Transactional
+    public Specialist createSpecialist(String name,
+                                       String level,
+                                       Double feeRate,
+                                       String description,
+                                       Long categoryId,
+                                       SpecialistStatus initialStatus) {
         String normalizedName = normalizeRequiredText(name, "Specialist name");
         String normalizedLevel = normalizeRequiredText(level, "Specialist level");
         String normalizedDescription = normalizeRequiredText(description, "Specialist description");
@@ -103,7 +126,7 @@ public class SpecialistService {
         specialist.setLevel(normalizedLevel);
         specialist.setFeeRate(normalizedFeeRate);
         specialist.setProfileDescription(normalizedDescription);
-        specialist.setStatus(SpecialistStatus.ACTIVE);
+        specialist.setStatus(initialStatus == null ? SpecialistStatus.ACTIVE : initialStatus);
         specialist.setCategory(category);
         return specialistRepository.save(specialist);
     }
@@ -133,8 +156,37 @@ public class SpecialistService {
     @Transactional
     public Specialist toggleStatus(Long id) {
         Specialist specialist = getSpecialistById(id);
+        if (specialist.getStatus() == SpecialistStatus.PENDING_APPROVAL || specialist.getStatus() == SpecialistStatus.REJECTED) {
+            throw new IllegalStateException("Pending or rejected specialists must be approved before operational status can be changed.");
+        }
         specialist.setStatus(specialist.getStatus() == SpecialistStatus.ACTIVE ? SpecialistStatus.INACTIVE : SpecialistStatus.ACTIVE);
         return specialistRepository.save(specialist);
+    }
+
+    @Transactional
+    public Specialist approveSpecialist(Long id) {
+        Specialist specialist = getSpecialistById(id);
+        if (specialist.getStatus() != SpecialistStatus.PENDING_APPROVAL) {
+            throw new IllegalStateException("Only pending specialist registrations can be approved.");
+        }
+        specialist.setStatus(SpecialistStatus.ACTIVE);
+        Specialist saved = specialistRepository.save(specialist);
+        userRepository.findBySpecialistId(saved.getId())
+                .ifPresent(user -> emailService.sendSpecialistApprovalEmail(user, user.isEmailVerified()));
+        return saved;
+    }
+
+    @Transactional
+    public Specialist rejectSpecialist(Long id) {
+        Specialist specialist = getSpecialistById(id);
+        if (specialist.getStatus() != SpecialistStatus.PENDING_APPROVAL) {
+            throw new IllegalStateException("Only pending specialist registrations can be rejected.");
+        }
+        specialist.setStatus(SpecialistStatus.REJECTED);
+        Specialist saved = specialistRepository.save(specialist);
+        userRepository.findBySpecialistId(saved.getId())
+                .ifPresent(emailService::sendSpecialistRejectionEmail);
+        return saved;
     }
 
     private ExpertiseCategory requireActiveCategory(Long categoryId) {

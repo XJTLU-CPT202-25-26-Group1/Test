@@ -2,6 +2,7 @@ package com.cpt202.booking.service;
 
 import com.cpt202.booking.enums.GenderType;
 import com.cpt202.booking.enums.RoleType;
+import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.model.Specialist;
 import com.cpt202.booking.model.User;
 import com.cpt202.booking.repository.UserRepository;
@@ -94,7 +95,7 @@ public class UserService implements UserDetailsService {
             String finalDescription = (description == null || description.isBlank())
                     ? "Self-registered specialist profile pending enrichment."
                     : description.trim();
-            Specialist specialist = specialistService.createSpecialist(displayName, finalLevel, finalFeeRate, finalDescription, categoryId);
+            Specialist specialist = specialistService.createPendingSpecialist(displayName, finalLevel, finalFeeRate, finalDescription, categoryId);
             user.setSpecialistId(specialist.getId());
         }
         return userRepository.save(user);
@@ -179,8 +180,39 @@ public class UserService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
                 .password(user.getPassword())
                 .authorities(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
-                .disabled(!user.isEmailVerified())
+                .disabled(!canUserLogin(user))
                 .build();
+    }
+
+    public String resolveLoginBlockReason(String username) {
+        User user = userRepository.findByUsernameIgnoreCase(username == null ? "" : username.trim().toLowerCase())
+                .orElse(null);
+        if (user == null) {
+            return null;
+        }
+        if (!user.isEmailVerified()) {
+            return "unverified";
+        }
+        if (user.getRole() != RoleType.SPECIALIST) {
+            return null;
+        }
+        if (user.getSpecialistId() == null) {
+            return "specialist_pending";
+        }
+
+        Specialist specialist;
+        try {
+            specialist = specialistService.getSpecialistById(user.getSpecialistId());
+        } catch (IllegalArgumentException ex) {
+            return "specialist_pending";
+        }
+
+        return switch (specialist.getStatus()) {
+            case PENDING_APPROVAL -> "pendingApproval";
+            case REJECTED -> "approvalRejected";
+            case INACTIVE -> "specialistInactive";
+            case ACTIVE -> null;
+        };
     }
 
     private void ensureEmailAvailable(String email, String currentUsername) {
@@ -234,5 +266,22 @@ public class UserService implements UserDetailsService {
 
     private String generateToken() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 24).toUpperCase();
+    }
+
+    private boolean canUserLogin(User user) {
+        if (!user.isEmailVerified()) {
+            return false;
+        }
+        if (user.getRole() != RoleType.SPECIALIST) {
+            return true;
+        }
+        if (user.getSpecialistId() == null) {
+            return false;
+        }
+        try {
+            return specialistService.getSpecialistById(user.getSpecialistId()).getStatus() == SpecialistStatus.ACTIVE;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
     }
 }

@@ -54,6 +54,30 @@ public class EmailService {
         );
     }
 
+    public void sendSpecialistApprovalEmail(User user, boolean emailVerified) {
+        sendEmail(
+                user.getEmail(),
+                "Your specialist registration has been approved",
+                "Hello " + user.getDisplayName() + ",\n\n"
+                        + "Your specialist registration has been approved by the administrator.\n"
+                        + (emailVerified
+                        ? "You can now log in to the system and start using your specialist portal."
+                        : "Please verify your email first. After email verification, you will be able to log in.")
+                        + "\n\n"
+                        + "Login page: " + baseUrl + "/auth/login"
+        );
+    }
+
+    public void sendSpecialistRejectionEmail(User user) {
+        sendEmail(
+                user.getEmail(),
+                "Your specialist registration was not approved",
+                "Hello " + user.getDisplayName() + ",\n\n"
+                        + "Your specialist registration request was reviewed by the administrator and was not approved at this time.\n"
+                        + "If you believe this was a mistake, please contact the system administrator for further support."
+        );
+    }
+
     private void sendEmail(String to, String subject, String text) {
         if (!mailEnabled) {
             log.info("Mail disabled. Skipping email to {} with subject '{}'.", to, subject);

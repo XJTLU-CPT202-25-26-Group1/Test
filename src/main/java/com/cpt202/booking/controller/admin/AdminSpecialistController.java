@@ -87,4 +87,26 @@ public class AdminSpecialistController {
         }
         return "redirect:/admin/specialists";
     }
+
+    @PostMapping("/approve")
+    public String approveSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        try {
+            specialistService.approveSpecialist(id);
+            redirectAttributes.addFlashAttribute("message", "Specialist approved successfully.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/admin/specialists";
+    }
+
+    @PostMapping("/reject")
+    public String rejectSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        try {
+            specialistService.rejectSpecialist(id);
+            redirectAttributes.addFlashAttribute("message", "Specialist rejected successfully.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/admin/specialists";
+    }
 }

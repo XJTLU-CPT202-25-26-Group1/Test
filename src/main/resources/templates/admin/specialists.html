@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260426')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -111,7 +111,7 @@
             <div class="admin-section__head">
                 <div>
                     <h2>Specialist Records</h2>
-                    <p>Use edit for full record updates, or toggle operational status directly.</p>
+                    <p>Review pending specialist registrations, approve or reject applications, and manage operational status.</p>
                 </div>
                 <span class="admin-count" th:text="${specialists != null ? #lists.size(specialists) + ' records' : '0 records'}">0 records</span>
             </div>
@@ -139,7 +139,22 @@
 
                     <div class="admin-specialist-card__actions">
                         <a class="btn btn-primary" th:href="@{/admin/specialists/edit(id=${specialist.id})}">Edit</a>
-                        <form th:action="@{/admin/specialists/toggle}" method="post">
+                        <form th:if="${specialist.status.name() == 'PENDING_APPROVAL'}"
+                              th:action="@{/admin/specialists/approve}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="id" th:value="${specialist.id}">
+                            <button type="submit" class="btn btn-secondary">
+                                Approve
+                            </button>
+                        </form>
+                        <form th:if="${specialist.status.name() == 'PENDING_APPROVAL'}"
+                              th:action="@{/admin/specialists/reject}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input type="hidden" name="id" th:value="${specialist.id}">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                        <form th:if="${specialist.status.name() == 'ACTIVE' or specialist.status.name() == 'INACTIVE'}"
+                              th:action="@{/admin/specialists/toggle}" method="post">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                             <input type="hidden" name="id" th:value="${specialist.id}">
                             <button type="submit" class="btn btn-secondary"

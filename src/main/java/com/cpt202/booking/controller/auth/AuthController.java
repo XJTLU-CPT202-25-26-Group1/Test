@@ -85,10 +85,15 @@ public class AuthController {
 
         try {
             emailService.sendVerificationEmail(user);
-            redirectAttributes.addFlashAttribute("message", "Registration successful. Please verify your email before logging in.");
+            redirectAttributes.addFlashAttribute("message",
+                    role == RoleType.SPECIALIST
+                            ? "Specialist registration submitted. Please verify your email and wait for administrator approval. You will be notified by email after review."
+                            : "Registration successful. Please verify your email before logging in.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message",
-                    "Registration successful, but the verification email could not be sent. Please use resend verification.");
+                    role == RoleType.SPECIALIST
+                            ? "Specialist registration submitted, but the verification email could not be sent. Please use resend verification and wait for administrator approval."
+                            : "Registration successful, but the verification email could not be sent. Please use resend verification.");
         }
         return "redirect:/auth/login";
     }

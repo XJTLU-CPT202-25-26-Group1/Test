@@ -121,7 +121,7 @@
                     </div>
 
                     <div class="user-panel__actions" th:if="${isAuthenticated}">
-                        <a class="btn btn-secondary" th:href="${profilePath}">Profile</a>
+                        <a th:if="${!isAdmin}" class="btn btn-secondary" th:href="${profilePath}">Profile</a>
                         <form class="logout-form" th:action="@{/logout}" method="post">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                             <button type="submit" class="btn btn-danger">Logout</button>
@@ -151,7 +151,7 @@
             </div>
             <div class="site-footer__links">
                 <a th:href="${isAuthenticated ? dashboardPath : '/'}">Dashboard</a>
-                <a th:href="${isAuthenticated ? profilePath : '/auth/login'}">Profile</a>
+                <a th:if="${!isAuthenticated or !isAdmin}" th:href="${isAuthenticated ? profilePath : '/auth/login'}">Profile</a>
             </div>
         </div>
     </footer>

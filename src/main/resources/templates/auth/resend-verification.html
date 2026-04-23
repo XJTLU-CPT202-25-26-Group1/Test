@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/auth.css(v='20260424')}">
+    <link rel="stylesheet" th:href="@{/css/auth.css(v='20260426')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -18,17 +18,28 @@
             <h1>Resend Verification</h1>
             <p class="auth-card__subtitle">Enter your username and email to receive a new verification link.</p>
 
+            <section class="auth-note">
+                <h2>When To Use This</h2>
+                <ul class="auth-checklist">
+                    <li>Use this only if your account is registered but your email is still unverified.</li>
+                    <li>Your username and email must match the same account.</li>
+                    <li>If the account is already verified, a new verification email is not needed.</li>
+                </ul>
+            </section>
+
             <form th:action="@{/auth/resend-verification}" method="post" class="form-grid">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input id="username" name="username" type="text" autocomplete="username" required>
+                    <span class="help-text">Enter the account username exactly as registered.</span>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input id="email" name="email" type="email" autocomplete="email" required>
+                    <span class="help-text">Use the same email address used during registration.</span>
                 </div>
 
                 <div class="form-actions auth-actions">
@@ -45,7 +56,7 @@
 </th:block>
 
 <th:block th:fragment="pageScripts">
-    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/auth.js(v='20260426')}"></script>
 </th:block>
 </body>
 </html>

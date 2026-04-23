@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/auth.css(v='20260424')}">
+    <link rel="stylesheet" th:href="@{/css/auth.css(v='20260426')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -18,23 +18,49 @@
             <h1>Login</h1>
             <p class="auth-card__subtitle">Enter your account information to continue.</p>
 
+            <div th:if="${param.error != null}" class="auth-alert auth-alert--error">
+                Username or password is incorrect. Please check your credentials and try again.
+            </div>
+
+            <div th:if="${param.unverified != null}" class="auth-alert auth-alert--warning">
+                Your email has not been verified yet. Please verify it first or request a new verification email.
+            </div>
+
+            <div th:if="${param.logout != null}" class="auth-alert auth-alert--success">
+                You have been logged out successfully.
+            </div>
+
             <form th:action="@{/auth/login}" method="post" class="form-grid">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input id="username" name="username" type="text" autocomplete="username" required>
+                    <span class="help-text">Use the username you registered with, not your email address.</span>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="current-password" required>
+                    <div class="password-field">
+                        <input id="password" name="password" type="password" autocomplete="current-password" required>
+                        <button type="button" class="password-toggle" data-password-toggle data-target="password">Show</button>
+                    </div>
+                    <span class="help-text">Passwords must contain at least 6 characters.</span>
                 </div>
 
                 <div class="form-actions auth-actions">
                     <button type="submit" class="btn btn-primary">Sign In</button>
                 </div>
             </form>
+
+            <section class="auth-note">
+                <h2>Quick Help</h2>
+                <ul class="auth-checklist">
+                    <li>If you just registered, verify your email before trying to log in.</li>
+                    <li>If your password is wrong, use “Forgot password?” to reset it.</li>
+                    <li>If the verification email is missing, use “Resend verification email”.</li>
+                </ul>
+            </section>
 
             <div class="auth-links auth-links--stack">
                 <a th:href="@{/auth/forgot-password}">Forgot password?</a>
@@ -46,7 +72,7 @@
 </th:block>
 
 <th:block th:fragment="pageScripts">
-    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/auth.js(v='20260426')}"></script>
 </th:block>
 </body>
 </html>

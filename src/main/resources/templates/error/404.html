@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Page Not Found',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles"></th:block>
+
+<th:block th:fragment="content">
+    <section class="error-page">
+        <article class="card error-page__card">
+            <div class="error-page__visual">404</div>
+
+            <div class="error-page__body">
+                <span class="eyebrow">Resource Not Found</span>
+                <h1 class="page-title">The page you requested does not exist</h1>
+                <p class="page-subtitle">
+                    The link may be outdated, the address may be incorrect, or the page may have been moved during development.
+                </p>
+
+                <div class="error-page__actions">
+                    <a class="btn btn-primary" th:href="@{/}">Back Home</a>
+                    <a class="btn btn-secondary" th:href="${isAuthenticated} ? ${dashboardPath} : @{/auth/login}">
+                        <span th:text="${isAuthenticated} ? 'Open Dashboard' : 'Open Login'}">Open Login</span>
+                    </a>
+                </div>
+
+                <div class="error-page__tips">
+                    <div>
+                        <strong>Check the address</strong>
+                        <p>Make sure the URL path, query string, and copied link are all correct.</p>
+                    </div>
+                    <div>
+                        <strong>Continue safely</strong>
+                        <p>Return to the home page or dashboard and navigate again from the main menu.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

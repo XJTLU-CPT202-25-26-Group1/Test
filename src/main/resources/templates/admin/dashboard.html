@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Admin Dashboard',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="admin-page">
+        <div class="page-header admin-page__header">
+            <div>
+                <span class="section-kicker">Admin Console</span>
+                <h1 class="page-title">Operations Dashboard</h1>
+                <p class="page-subtitle">Monitor booking workload, specialist capacity, category setup, and recent workflow actions.</p>
+            </div>
+            <a class="btn btn-primary" th:href="@{/admin/bookings}">Review Bookings</a>
+        </div>
+
+        <section class="admin-metric-grid">
+            <article class="card admin-metric-card admin-metric-card--primary">
+                <span>Pending Review</span>
+                <strong th:text="${pendingCount}">0</strong>
+                <p>Booking requests waiting for administrator confirmation or rejection.</p>
+            </article>
+
+            <article class="card admin-metric-card">
+                <span>Total Bookings</span>
+                <strong th:text="${bookingCount}">0</strong>
+                <p>All booking records currently stored in the system.</p>
+            </article>
+
+            <article class="card admin-metric-card">
+                <span>Specialists</span>
+                <strong th:text="${specialistCount}">0</strong>
+                <p>Specialist profiles available for operations and customer discovery.</p>
+            </article>
+
+            <article class="card admin-metric-card">
+                <span>Categories</span>
+                <strong th:text="${categoryCount}">0</strong>
+                <p>Expertise categories used by filtering, specialist setup, and booking search.</p>
+            </article>
+        </section>
+
+        <section class="admin-dashboard-grid">
+            <article class="card admin-mini-panel">
+                <div class="admin-section__head">
+                    <div>
+                        <h2>Quick Actions</h2>
+                        <p>Jump to the most common administrator workflows.</p>
+                    </div>
+                </div>
+
+                <div class="admin-action-grid">
+                    <a th:href="@{/admin/bookings}">
+                        <strong>Booking Review</strong>
+                        <span>Confirm, reject, and inspect booking status history.</span>
+                    </a>
+                    <a th:href="@{/admin/specialists}">
+                        <strong>Specialist Records</strong>
+                        <span>Create, search, edit, and activate specialist profiles.</span>
+                    </a>
+                    <a th:href="@{/admin/categories}">
+                        <strong>Expertise Categories</strong>
+                        <span>Maintain category names and active selection status.</span>
+                    </a>
+                    <a th:href="@{/admin/billing}">
+                        <strong>Billing Summary</strong>
+                        <span>Review confirmed value and completed consultation revenue.</span>
+                    </a>
+                </div>
+            </article>
+
+            <article class="card admin-mini-panel">
+                <div class="admin-section__head">
+                    <div>
+                        <h2>Recent Audit Logs</h2>
+                        <p>Latest booking workflow operations.</p>
+                    </div>
+                    <span class="admin-count" th:text="${recentAuditLogs != null ? #lists.size(recentAuditLogs) + ' logs' : '0 logs'}">0 logs</span>
+                </div>
+
+                <div th:if="${recentAuditLogs != null and !#lists.isEmpty(recentAuditLogs)}" class="admin-timeline">
+                    <article class="admin-timeline__item" th:each="log : ${recentAuditLogs}">
+                        <strong th:text="${log.newStatus}">STATUS</strong>
+                        <span th:text="${log.remark}">Remark</span>
+                        <small>
+                            <span th:text="${#temporals.format(log.operatedAt, 'yyyy-MM-dd HH:mm')}">Time</span>
+                            <span> · </span>
+                            <span th:text="${log.operatorUsername}">operator</span>
+                        </small>
+                    </article>
+                </div>
+
+                <div th:if="${recentAuditLogs == null or #lists.isEmpty(recentAuditLogs)}" class="empty-state">
+                    No recent audit logs are available.
+                </div>
+            </article>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

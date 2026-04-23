@@ -702,6 +702,77 @@ textarea {
     color: var(--text-muted);
 }
 
+.error-page {
+    display: grid;
+    place-items: center;
+    min-height: calc(100vh - 280px);
+}
+
+.error-page__card {
+    width: min(100%, 920px);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-8);
+    align-items: center;
+    border-top: 4px solid var(--primary);
+    background:
+        linear-gradient(135deg, rgba(66, 87, 200, 0.08), rgba(91, 68, 199, 0.06)),
+        var(--surface);
+}
+
+.error-page__visual {
+    display: grid;
+    place-items: center;
+    min-height: 220px;
+    border: 1px solid rgba(66, 87, 200, 0.18);
+    background: linear-gradient(135deg, #25245f 0%, #4c42bb 100%);
+    color: #ffffff;
+    font-size: clamp(3.4rem, 9vw, 5.8rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.error-page__body {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.error-page__body .page-subtitle {
+    margin-top: 0;
+    max-width: 62ch;
+}
+
+.error-page__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.error-page__tips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+}
+
+.error-page__tips div {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border: 1px solid rgba(208, 213, 221, 0.9);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.error-page__tips strong {
+    color: var(--primary);
+    font-size: 0.95rem;
+}
+
+.error-page__tips p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
 .site-footer {
     margin-top: auto;
     border-top: 1px solid rgba(208, 213, 221, 0.78);
@@ -765,7 +836,9 @@ textarea {
     .grid-3,
     .grid-2,
     .catalog-grid,
-    .form-grid--2 {
+    .form-grid--2,
+    .error-page__card,
+    .error-page__tips {
         grid-template-columns: 1fr;
     }
 
@@ -828,5 +901,10 @@ textarea {
     .card,
     .stat-card {
         padding: var(--space-5);
+    }
+
+    .error-page__visual {
+        min-height: 160px;
+        font-size: 3.4rem;
     }
 }

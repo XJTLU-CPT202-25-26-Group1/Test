@@ -240,6 +240,61 @@
     color: var(--text);
 }
 
+.admin-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+}
+
+.admin-metric-grid--billing {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-metric-card {
+    display: grid;
+    gap: var(--space-3);
+    min-height: 190px;
+    border-top: 4px solid rgba(76, 91, 214, 0.28);
+}
+
+.admin-metric-card--primary {
+    background: linear-gradient(135deg, #25245f 0%, #4c42bb 100%);
+    color: #ffffff;
+    border-top-color: #87a4ff;
+}
+
+.admin-metric-card span {
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.admin-metric-card--primary span {
+    color: #cfd7ff;
+}
+
+.admin-metric-card strong {
+    color: var(--text);
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    line-height: 0.95;
+}
+
+.admin-metric-card--primary strong {
+    color: #ffffff;
+}
+
+.admin-metric-card p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.55;
+}
+
+.admin-metric-card--primary p {
+    color: rgba(255, 255, 255, 0.76);
+}
+
 .admin-dashboard-grid,
 .admin-booking-detail-grid {
     display: grid;
@@ -262,14 +317,48 @@
     gap: var(--space-5);
 }
 
+.admin-action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+}
+
+.admin-action-grid a {
+    display: grid;
+    gap: var(--space-3);
+    min-height: 132px;
+    padding: var(--space-5);
+    border: 1px solid rgba(208, 213, 221, 0.9);
+    background: #f8f9ff;
+    color: var(--text);
+    text-decoration: none;
+}
+
+.admin-action-grid a:hover {
+    border-color: rgba(76, 91, 214, 0.55);
+    background: #f2f3ff;
+}
+
+.admin-action-grid strong {
+    color: var(--primary);
+    font-size: 1.02rem;
+}
+
+.admin-action-grid span {
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
 .admin-booking-list,
 .admin-compact-list,
-.admin-timeline {
+.admin-timeline,
+.admin-billing-list {
     display: grid;
     gap: var(--space-4);
 }
 
 .admin-booking-card,
+.admin-billing-card,
 .admin-compact-list__item,
 .admin-timeline__item {
     border: 1px solid rgba(208, 213, 221, 0.9);
@@ -277,7 +366,8 @@
     box-shadow: var(--shadow-sm);
 }
 
-.admin-booking-card {
+.admin-booking-card,
+.admin-billing-card {
     display: grid;
     gap: var(--space-4);
     padding: var(--space-5);
@@ -291,6 +381,9 @@
 .admin-booking-card__main,
 .admin-booking-card__meta,
 .admin-booking-card__actions,
+.admin-billing-card__main,
+.admin-billing-card__meta,
+.admin-billing-card__actions,
 .admin-booking-detail-card__head,
 .admin-booking-action-list {
     display: flex;
@@ -301,6 +394,7 @@
 }
 
 .admin-booking-card__main h3,
+.admin-billing-card__main h3,
 .admin-booking-detail-card__head h2,
 .admin-booking-action-card h2 {
     margin: 0;
@@ -308,24 +402,33 @@
 }
 
 .admin-booking-card__main p,
+.admin-billing-card__main p,
 .admin-booking-detail-card__head p {
     margin: 6px 0 0;
     color: var(--text-muted);
 }
 
-.admin-booking-card__meta {
+.admin-booking-card__meta,
+.admin-billing-card__meta {
     justify-content: flex-start;
     color: var(--text-muted);
     font-weight: 700;
 }
 
-.admin-booking-card__meta > span {
+.admin-booking-card__meta > span,
+.admin-billing-card__meta > span,
+.admin-billing-card__meta > strong {
     display: inline-flex;
     min-height: 30px;
     align-items: center;
     padding: 0 10px;
     background: #eef1ff;
     color: var(--primary);
+}
+
+.admin-billing-card__meta > strong {
+    background: #25245f;
+    color: #ffffff;
 }
 
 .admin-booking-card__actions form,
@@ -501,8 +604,11 @@
     .admin-record-card,
     .admin-record-card__form,
     .admin-specialist-list,
+    .admin-metric-grid,
+    .admin-metric-grid--billing,
     .admin-dashboard-grid,
     .admin-booking-detail-grid,
+    .admin-action-grid,
     .admin-compact-list__item,
     .admin-info-grid,
     .admin-reject-form {
@@ -513,6 +619,8 @@
     .admin-specialist-card__main,
     .admin-booking-card__main,
     .admin-booking-card__actions,
+    .admin-billing-card__main,
+    .admin-billing-card__actions,
     .admin-booking-detail-card__head {
         flex-direction: column;
         align-items: stretch;

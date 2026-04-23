@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Specialists',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="customer-page">
+        <div class="page-header customer-page__header">
+            <div>
+                <span class="section-kicker">Customer Search</span>
+                <h1 class="page-title">Find a Specialist</h1>
+                <p class="page-subtitle">Search by specialist name, expertise category, or available appointment date.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/customer/bookings}">My Bookings</a>
+        </div>
+
+        <section class="card customer-filter">
+            <form th:action="@{/customer/specialists}" method="get" class="customer-filter__form">
+                <div class="form-group">
+                    <label for="keyword">Keyword</label>
+                    <input id="keyword" name="keyword" type="text" th:value="${keyword}"
+                           placeholder="Name or expertise category">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryId">Expertise Category</label>
+                    <select id="categoryId" name="categoryId">
+                        <option value="">All categories</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}"
+                                th:selected="${selectedCategoryId != null and selectedCategoryId == category.id}">
+                            Category
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="availableDate">Available Date</label>
+                    <input id="availableDate" name="availableDate" type="date" th:value="${availableDate}">
+                </div>
+
+                <div class="customer-filter__actions">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a class="btn btn-secondary" th:href="@{/customer/specialists}">Reset</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="customer-section">
+            <div class="customer-section__head">
+                <h2>Available Specialists</h2>
+                <span class="customer-count" th:text="${specialists != null ? #lists.size(specialists) + ' results' : '0 results'}">0 results</span>
+            </div>
+
+            <div th:if="${specialists != null and !#lists.isEmpty(specialists)}" class="specialist-list-grid">
+                <article class="specialist-list-card" th:each="specialist : ${specialists}">
+                    <div class="specialist-list-card__body">
+                        <div class="specialist-list-card__top">
+                            <div>
+                                <h3 th:text="${specialist.name}">Specialist Name</h3>
+                                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                            </div>
+                            <span class="status-badge status-badge--active" th:text="${specialist.status}">ACTIVE</span>
+                        </div>
+
+                        <p class="specialist-list-card__description"
+                           th:text="${specialist.profileDescription}">
+                            Specialist description.
+                        </p>
+
+                        <div class="specialist-list-card__meta">
+                            <span th:text="${specialist.level}">Level</span>
+                            <span th:text="'Fee ' + ${#numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
+                        </div>
+                    </div>
+
+                    <div class="specialist-list-card__actions">
+                        <a class="btn btn-primary"
+                           th:href="@{/customer/specialists/detail(id=${specialist.id}, availableDate=${availableDate})}">
+                            View Details
+                        </a>
+                    </div>
+                </article>
+            </div>
+
+            <div th:if="${specialists == null or #lists.isEmpty(specialists)}" class="empty-state">
+                No active specialists match the current search filters.
+            </div>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

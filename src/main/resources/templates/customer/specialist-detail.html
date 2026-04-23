@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Specialist Detail',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260423')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="customer-page">
+        <div class="page-header customer-page__header">
+            <div>
+                <span class="section-kicker">Specialist Detail</span>
+                <h1 class="page-title" th:text="${specialist.name}">Specialist Name</h1>
+                <p class="page-subtitle">Review specialist information and choose an available consultation slot.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/customer/specialists}">Back to Search</a>
+        </div>
+
+        <section class="specialist-detail-grid">
+            <article class="card specialist-profile-card">
+                <div class="specialist-profile-card__summary">
+                    <div class="specialist-profile-card__avatar"
+                         th:text="${#strings.substring(specialist.name, 0, 1)}">S</div>
+                    <div>
+                        <h2 th:text="${specialist.name}">Specialist Name</h2>
+                        <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                    </div>
+                </div>
+
+                <div class="specialist-profile-card__meta">
+                    <div>
+                        <span>Level</span>
+                        <strong th:text="${specialist.level}">Senior</strong>
+                    </div>
+                    <div>
+                        <span>Fee Rate</span>
+                        <strong th:text="${#numbers.formatDecimal(specialist.feeRate, 1, 2)}">200.00</strong>
+                    </div>
+                    <div>
+                        <span>Status</span>
+                        <strong th:text="${specialist.status}">ACTIVE</strong>
+                    </div>
+                </div>
+
+                <div class="specialist-profile-card__description">
+                    <h3>Profile Description</h3>
+                    <p th:text="${specialist.profileDescription}">Profile description.</p>
+                </div>
+            </article>
+
+            <article class="card specialist-slots-card">
+                <div class="customer-section__head">
+                    <div>
+                        <h2>Available Slots</h2>
+                        <p>Filter by date or choose a slot to start a booking request.</p>
+                    </div>
+                    <span class="customer-count" th:text="${slots != null ? #lists.size(slots) + ' slots' : '0 slots'}">0 slots</span>
+                </div>
+
+                <form th:action="@{/customer/specialists/detail}" method="get" class="slot-filter-form">
+                    <input type="hidden" name="id" th:value="${specialist.id}">
+                    <div class="form-group">
+                        <label for="availableDate">Available Date</label>
+                        <input id="availableDate" name="availableDate" type="date" th:value="${availableDate}">
+                    </div>
+                    <div class="slot-filter-form__actions">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a class="btn btn-secondary" th:href="@{/customer/specialists/detail(id=${specialist.id})}">Show All</a>
+                    </div>
+                </form>
+
+                <div th:if="${slots != null and !#lists.isEmpty(slots)}" class="slot-list">
+                    <article class="slot-card" th:each="slot : ${slots}">
+                        <div>
+                            <h3 th:text="${#temporals.format(slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</h3>
+                            <p>
+                                <span th:text="${#temporals.format(slot.startTime, 'HH:mm')}">09:00</span>
+                                <span> - </span>
+                                <span th:text="${#temporals.format(slot.endTime, 'HH:mm')}">10:00</span>
+                            </p>
+                        </div>
+                        <a class="btn btn-primary"
+                           th:href="@{/customer/bookings/create(specialistId=${specialist.id}, slotId=${slot.id})}">
+                            Select Slot
+                        </a>
+                    </article>
+                </div>
+
+                <div th:if="${slots == null or #lists.isEmpty(slots)}" class="empty-state">
+                    No available slots match the selected date.
+                </div>
+            </article>
+        </section>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

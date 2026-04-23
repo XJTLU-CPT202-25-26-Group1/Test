@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,8 +75,15 @@ public class SpecialistService {
     }
 
     private boolean hasAvailableSlotOnDate(Long specialistId, LocalDate date) {
+        LocalDateTime now = LocalDateTime.now();
         List<AvailabilitySlot> slots = availabilitySlotRepository.findBySpecialistIdAndBookedFalseAndSlotDateOrderByStartTimeAsc(specialistId, date);
-        return !slots.isEmpty();
+        return slots.stream().anyMatch(slot -> isSlotInFuture(slot, now));
+    }
+
+    private boolean isSlotInFuture(AvailabilitySlot slot, LocalDateTime now) {
+        return slot.getSlotDate() != null
+                && slot.getStartTime() != null
+                && LocalDateTime.of(slot.getSlotDate(), slot.getStartTime()).isAfter(now);
     }
 
     @Transactional

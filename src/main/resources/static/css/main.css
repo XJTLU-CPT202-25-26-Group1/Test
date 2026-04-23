@@ -878,7 +878,10 @@ textarea {
     }
 
     .topbar__inner {
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--space-4);
     }
 
     .brand__title {
@@ -889,35 +892,49 @@ textarea {
         font-size: 0.78rem;
     }
 
-    .main-nav {
-        width: 100%;
-    }
-
-    .topbar__actions,
-    .user-panel {
-        width: 100%;
-        flex-direction: column;
-        align-items: stretch;
+    .topbar__actions {
+        width: auto;
+        flex: 0 0 auto;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        align-items: center;
     }
 
     .topbar__dashboard-link,
     .topbar-menu__toggle {
-        width: 100%;
+        width: auto;
+        min-height: 38px;
+        padding: 0 14px;
     }
 
     .topbar-menu {
-        width: 100%;
+        width: auto;
     }
 
     .topbar-menu__panel {
-        position: static;
-        width: 100%;
-        margin-top: 8px;
+        position: absolute;
+        width: 220px;
+        margin-top: 0;
+    }
+
+    .user-panel {
+        width: auto;
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-2);
     }
 
     .user-panel__info {
-        align-items: flex-start;
-        text-align: left;
+        display: none;
+    }
+
+    .user-panel__actions {
+        gap: var(--space-2);
+    }
+
+    .user-panel__actions .btn {
+        min-height: 38px;
+        padding: 0 14px;
     }
 
     .site-footer__inner {
@@ -933,6 +950,69 @@ textarea {
     .page-content {
         padding-top: var(--space-6);
         padding-bottom: var(--space-8);
+    }
+
+    .topbar__inner {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+
+    .topbar__brand-row {
+        width: 100%;
+    }
+
+    .brand {
+        gap: 12px;
+    }
+
+    .brand__logo-wrap {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        min-height: 38px;
+    }
+
+    .brand__title {
+        font-size: 0.94rem;
+    }
+
+    .brand__subtitle {
+        font-size: 0.74rem;
+    }
+
+    .topbar__actions {
+        width: 100%;
+        justify-content: stretch;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+    }
+
+    .topbar__dashboard-link,
+    .topbar-menu,
+    .user-panel {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 0;
+    }
+
+    .topbar-menu__toggle,
+    .user-panel__actions .btn {
+        width: 100%;
+    }
+
+    .user-panel {
+        justify-content: stretch;
+    }
+
+    .user-panel__actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .topbar-menu__panel {
+        left: 0;
+        right: auto;
+        width: min(240px, 100vw - 40px);
     }
 
     .card,

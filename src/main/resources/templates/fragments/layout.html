@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle}">Specialist Consultation Booking System</title>
+    <title th:text="${pageTitle}">xsbooking.com</title>
 
     <link rel="stylesheet" th:href="@{/css/main.css(v='20260425')}">
     <th:block th:replace="${extraStyles}"></th:block>
@@ -24,8 +24,8 @@
                              height="40">
                     </span>
                     <span class="brand__text">
-                        <span class="brand__title">XJTLU Specialist Booking</span>
-                        <span class="brand__subtitle">Consultation and Scheduling Portal</span>
+                        <span class="brand__title">xsbooking.com</span>
+                        <span class="brand__subtitle">Specialist Consultation Platform</span>
                     </span>
                 </a>
             </div>
@@ -146,8 +146,8 @@
     <footer class="site-footer">
         <div class="content-wrap site-footer__inner">
             <div>
-                <strong>Specialist Consultation Booking System</strong>
-                <p>Course project for specialist scheduling, booking validation, and consultation workflow management.</p>
+                <strong>xsbooking.com</strong>
+                <p>Specialist scheduling, booking validation, and consultation workflow management platform.</p>
             </div>
             <div class="site-footer__links">
                 <a th:href="${isAuthenticated ? dashboardPath : '/'}">Dashboard</a>

@@ -52,23 +52,61 @@
         </article>
     </section>
 
-    <section class="home-shortcuts">
-        <div class="home-shortcuts__grid">
-            <a class="home-shortcut home-shortcut--teal" th:href="@{/auth/register}">
-                <span class="home-shortcut__icon">01</span>
-                <span class="home-shortcut__title">Create account</span>
-                <span class="home-shortcut__text">Register as a customer or specialist.</span>
-            </a>
-            <a class="home-shortcut home-shortcut--gold" th:href="@{/auth/login}">
-                <span class="home-shortcut__icon">02</span>
-                <span class="home-shortcut__title">Enter system</span>
-                <span class="home-shortcut__text">Use your verified account to log in.</span>
-            </a>
-            <a class="home-shortcut home-shortcut--green" th:href="@{/auth/register}">
-                <span class="home-shortcut__icon">03</span>
-                <span class="home-shortcut__title">Booking workflow</span>
-                <span class="home-shortcut__text">Move from specialist search to booking request.</span>
-            </a>
+    <section class="home-roles">
+        <div class="home-roles__grid">
+            <article class="home-role-card">
+                <span class="home-role-card__label">Customer</span>
+                <h2>I am a customer</h2>
+                <p>Search specialists, submit booking requests, and track appointment progress.</p>
+            </article>
+            <article class="home-role-card">
+                <span class="home-role-card__label">Specialist</span>
+                <h2>I am a specialist</h2>
+                <p>Maintain availability, review scheduled consultations, and complete bookings.</p>
+            </article>
+            <article class="home-role-card">
+                <span class="home-role-card__label">Administrator</span>
+                <h2>I am an administrator</h2>
+                <p>Manage specialists, categories, booking approvals, and operational records.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="home-process">
+        <div class="page-header">
+            <div>
+                <span class="section-kicker">Appointment Process</span>
+                <h2 class="page-title home-section-title">How a Booking Moves Through the System</h2>
+                <p class="page-subtitle">A simple lifeline view of the main appointment path from account access to feedback.</p>
+            </div>
+        </div>
+
+        <div class="home-lifeline">
+            <article class="home-lifeline__step">
+                <span class="home-lifeline__point"></span>
+                <h3>Register and verify</h3>
+                <p>Create an account and complete email verification before entering the system.</p>
+            </article>
+            <article class="home-lifeline__step">
+                <span class="home-lifeline__point"></span>
+                <h3>Select specialist</h3>
+                <p>Browse active specialists by category and choose an available consultation slot.</p>
+            </article>
+            <article class="home-lifeline__step">
+                <span class="home-lifeline__point"></span>
+                <h3>Submit request</h3>
+                <p>Send a validated booking request and wait for administrative confirmation.</p>
+            </article>
+            <article class="home-lifeline__step">
+                <span class="home-lifeline__point"></span>
+                <h3>Attend appointment</h3>
+                <p>The specialist completes the consultation after the scheduled time.</p>
+            </article>
+            <article class="home-lifeline__step">
+                <span class="home-lifeline__point"></span>
+                <h3>Review record</h3>
+                <p>Customers and specialists can view history, status updates, and feedback.</p>
+            </article>
         </div>
     </section>
 

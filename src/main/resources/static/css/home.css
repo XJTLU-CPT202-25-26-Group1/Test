@@ -93,65 +93,99 @@
     line-height: 1;
 }
 
-.home-shortcuts,
+.home-roles,
+.home-process,
 .home-specialists,
 .home-categories {
     margin-top: 28px;
 }
 
-.home-shortcuts__grid {
+.home-roles__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
+    gap: 16px;
     width: 100%;
 }
 
-.home-shortcut {
-    min-height: 148px;
+.home-role-card {
+    min-height: 168px;
     padding: 24px;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 8px;
+    border: 1px solid rgba(126, 137, 210, 0.34);
     border-radius: 0;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-fast), filter var(--transition-fast);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(241, 243, 255, 0.98));
+    box-shadow: none;
 }
 
-.home-shortcut:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.03);
-}
-
-.home-shortcut--teal {
-    background: linear-gradient(145deg, #4367de, #394fb8);
-}
-
-.home-shortcut--gold {
-    background: linear-gradient(145deg, #5a6fed, #5640c9);
-}
-
-.home-shortcut--green {
-    background: linear-gradient(145deg, #657cf2, #6b50d6);
-}
-
-.home-shortcut__icon {
-    font-size: 0.86rem;
-    font-weight: 700;
+.home-role-card__label {
+    display: inline-flex;
+    margin-bottom: 22px;
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 800;
     letter-spacing: 0.08em;
-    opacity: 0.84;
+    text-transform: uppercase;
 }
 
-.home-shortcut__title {
-    font-size: 1.16rem;
-    font-weight: 700;
+.home-role-card h2 {
+    margin: 0 0 10px;
+    font-size: 1.34rem;
+    color: #1f2937;
 }
 
-.home-shortcut__text {
-    max-width: 26ch;
-    font-size: 0.92rem;
-    opacity: 0.95;
+.home-role-card p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.home-lifeline {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.home-lifeline::before {
+    content: "";
+    position: absolute;
+    top: 48px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: rgba(66, 87, 200, 0.32);
+}
+
+.home-lifeline__step {
+    position: relative;
+    z-index: 1;
+    padding: 32px 20px 24px;
+    border-right: 1px solid rgba(126, 137, 210, 0.2);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 248, 255, 0.96));
+}
+
+.home-lifeline__step:last-child {
+    border-right: 0;
+}
+
+.home-lifeline__point {
+    width: 16px;
+    height: 16px;
+    display: block;
+    margin-bottom: 24px;
+    border: 3px solid #4257c8;
+    background: #ffffff;
+}
+
+.home-lifeline__step h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+}
+
+.home-lifeline__step p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
 .section-kicker {
@@ -282,8 +316,35 @@
 
 @media (max-width: 980px) {
     .home-hero__overlay,
-    .home-shortcuts__grid {
+    .home-roles__grid,
+    .home-lifeline {
         grid-template-columns: 1fr;
+    }
+
+    .home-lifeline::before {
+        top: 34px;
+        bottom: 34px;
+        left: 27px;
+        right: auto;
+        width: 2px;
+        height: auto;
+    }
+
+    .home-lifeline__step {
+        padding-left: 58px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(126, 137, 210, 0.2);
+    }
+
+    .home-lifeline__step:last-child {
+        border-bottom: 0;
+    }
+
+    .home-lifeline__point {
+        position: absolute;
+        top: 31px;
+        left: 20px;
+        margin-bottom: 0;
     }
 
     .home-hero__overlay {
@@ -312,7 +373,7 @@
         grid-template-columns: 1fr;
     }
 
-    .home-shortcut {
+    .home-role-card {
         min-height: 132px;
         padding: 18px;
     }

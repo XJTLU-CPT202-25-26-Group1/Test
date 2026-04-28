@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260428')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -46,12 +46,12 @@
 
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input id="name" name="name" type="text" th:value="${specialist.name}" required>
+                        <input id="name" name="name" type="text" maxlength="255" th:value="${specialist.name}" required>
                     </div>
 
                     <div class="form-group">
                         <label for="level">Level</label>
-                        <input id="level" name="level" type="text" th:value="${specialist.level}" required>
+                        <input id="level" name="level" type="text" maxlength="255" th:value="${specialist.level}" required>
                     </div>
 
                     <div class="form-group">
@@ -74,7 +74,8 @@
 
                     <div class="form-group admin-edit-form__description">
                         <label for="description">Description</label>
-                        <textarea id="description" name="description" th:text="${specialist.profileDescription}" required></textarea>
+                        <textarea id="description" name="description" maxlength="255" th:text="${specialist.profileDescription}" required></textarea>
+                        <span class="help-text">Maximum 255 characters.</span>
                     </div>
 
                     <div class="admin-edit-form__actions">

@@ -21,6 +21,10 @@ import java.util.stream.Collectors;
 @Service
 public class SpecialistService {
 
+    static final int SPECIALIST_NAME_MAX_LENGTH = 255;
+    static final int SPECIALIST_LEVEL_MAX_LENGTH = 255;
+    static final int SPECIALIST_DESCRIPTION_MAX_LENGTH = 255;
+
     private final SpecialistRepository specialistRepository;
     private final ExpertiseCategoryRepository categoryRepository;
     private final AvailabilitySlotRepository availabilitySlotRepository;
@@ -111,9 +115,9 @@ public class SpecialistService {
                                        String description,
                                        Long categoryId,
                                        SpecialistStatus initialStatus) {
-        String normalizedName = normalizeRequiredText(name, "Specialist name");
-        String normalizedLevel = normalizeRequiredText(level, "Specialist level");
-        String normalizedDescription = normalizeRequiredText(description, "Specialist description");
+        String normalizedName = normalizeRequiredText(name, "Specialist name", SPECIALIST_NAME_MAX_LENGTH);
+        String normalizedLevel = normalizeRequiredText(level, "Specialist level", SPECIALIST_LEVEL_MAX_LENGTH);
+        String normalizedDescription = normalizeRequiredText(description, "Specialist description", SPECIALIST_DESCRIPTION_MAX_LENGTH);
         double normalizedFeeRate = normalizeFeeRate(feeRate);
         ExpertiseCategory category = requireActiveCategory(categoryId);
 
@@ -134,9 +138,9 @@ public class SpecialistService {
     @Transactional
     public Specialist updateSpecialist(Long id, String name, String level, Double feeRate, String description, Long categoryId) {
         Specialist specialist = getSpecialistById(id);
-        String normalizedName = normalizeRequiredText(name, "Specialist name");
-        String normalizedLevel = normalizeRequiredText(level, "Specialist level");
-        String normalizedDescription = normalizeRequiredText(description, "Specialist description");
+        String normalizedName = normalizeRequiredText(name, "Specialist name", SPECIALIST_NAME_MAX_LENGTH);
+        String normalizedLevel = normalizeRequiredText(level, "Specialist level", SPECIALIST_LEVEL_MAX_LENGTH);
+        String normalizedDescription = normalizeRequiredText(description, "Specialist description", SPECIALIST_DESCRIPTION_MAX_LENGTH);
         double normalizedFeeRate = normalizeFeeRate(feeRate);
         ExpertiseCategory category = requireActiveCategory(categoryId);
 
@@ -198,11 +202,15 @@ public class SpecialistService {
         return category;
     }
 
-    private String normalizeRequiredText(String value, String fieldName) {
+    private String normalizeRequiredText(String value, String fieldName, int maxLength) {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(fieldName + " is required.");
         }
-        return value.trim();
+        String normalized = value.trim();
+        if (normalized.length() > maxLength) {
+            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+        }
+        return normalized;
     }
 
     private double normalizeFeeRate(Double feeRate) {

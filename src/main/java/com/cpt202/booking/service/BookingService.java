@@ -25,6 +25,11 @@ import java.util.stream.Collectors;
 @Service
 public class BookingService {
 
+    static final int BOOKING_TOPIC_MAX_LENGTH = 255;
+    static final int BOOKING_NOTES_MAX_LENGTH = 255;
+    static final int REJECTION_REASON_MAX_LENGTH = 255;
+    static final int AUDIT_REMARK_MAX_LENGTH = 255;
+
     private final BookingRepository bookingRepository;
     private final SpecialistRepository specialistRepository;
     private final AvailabilitySlotRepository availabilitySlotRepository;
@@ -156,9 +161,8 @@ public class BookingService {
 
     @Transactional
     public Booking createBooking(String customerName, String customerEmail, Long specialistId, Long slotId, String topic, String notes) {
-        if (topic == null || topic.isBlank()) {
-            throw new IllegalArgumentException("Consultation topic is required.");
-        }
+        String normalizedTopic = normalizeRequiredText(topic, "Consultation topic", BOOKING_TOPIC_MAX_LENGTH);
+        String normalizedNotes = normalizeOptionalText(notes, "Booking notes", BOOKING_NOTES_MAX_LENGTH);
 
         Specialist specialist = specialistRepository.findById(specialistId)
                 .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
@@ -187,8 +191,8 @@ public class BookingService {
         booking.setCustomerEmail(customerEmail);
         booking.setSpecialist(specialist);
         booking.setSlot(slot);
-        booking.setTopic(topic);
-        booking.setNotes(notes);
+        booking.setTopic(normalizedTopic);
+        booking.setNotes(normalizedNotes);
         booking.setStatus(BookingStatus.PENDING);
         booking.setCalculatedFee(calculateFee(specialist, slot));
 
@@ -219,6 +223,7 @@ public class BookingService {
     public Booking rejectBooking(Long id, String reason) {
         Booking booking = bookingRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+        String normalizedReason = normalizeRequiredText(reason, "Rejection reason", REJECTION_REASON_MAX_LENGTH);
 
         if (booking.getStatus() != BookingStatus.PENDING) {
             throw new IllegalStateException("Only pending bookings can be rejected.");
@@ -226,10 +231,10 @@ public class BookingService {
 
         BookingStatus oldStatus = booking.getStatus();
         booking.setStatus(BookingStatus.REJECTED);
-        booking.setRejectionReason(reason);
+        booking.setRejectionReason(normalizedReason);
         releaseSlot(booking);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.REJECTED, "admin", "Booking rejected: " + reason);
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.REJECTED, "admin", "Booking rejected: " + normalizedReason);
         return saved;
     }
 
@@ -422,7 +427,36 @@ public class BookingService {
         log.setOldStatus(oldStatus == null ? null : oldStatus.name());
         log.setNewStatus(newStatus == null ? null : newStatus.name());
         log.setOperatorUsername(operatorUsername);
-        log.setRemark(remark);
+        log.setRemark(truncateText(remark, AUDIT_REMARK_MAX_LENGTH));
         bookingAuditLogRepository.save(log);
+    }
+
+    private String normalizeRequiredText(String value, String fieldName, int maxLength) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " is required.");
+        }
+        String normalized = value.trim();
+        if (normalized.length() > maxLength) {
+            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+        }
+        return normalized;
+    }
+
+    private String normalizeOptionalText(String value, String fieldName, int maxLength) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        String normalized = value.trim();
+        if (normalized.length() > maxLength) {
+            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+        }
+        return normalized;
+    }
+
+    private String truncateText(String value, int maxLength) {
+        if (value == null) {
+            return null;
+        }
+        return value.length() > maxLength ? value.substring(0, maxLength) : value;
     }
 }

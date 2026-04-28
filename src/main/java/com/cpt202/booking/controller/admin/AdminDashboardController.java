@@ -28,7 +28,7 @@ public class AdminDashboardController {
         model.addAttribute("bookingCount", bookingService.getAllBookings().size());
         model.addAttribute("specialistCount", specialistService.getAllSpecialists().size());
         model.addAttribute("categoryCount", categoryService.getAllCategories().size());
-        model.addAttribute("recentAuditLogs", bookingService.getAuditLogs().stream().limit(6).toList());
+        model.addAttribute("recentAuditLogs", bookingService.getAuditLogs().stream().limit(3).toList());
         return "admin/dashboard";
     }
 }

@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private static final String DEFAULT_AVATAR_PATH = "/images/avatar-placeholder.svg";
+    static final int USERNAME_MAX_LENGTH = 255;
+    static final int DISPLAY_NAME_MAX_LENGTH = 255;
+    static final int EMAIL_MAX_LENGTH = 255;
+    static final int PHONE_MAX_LENGTH = 255;
 
     private final UserRepository userRepository;
     private final SpecialistService specialistService;
@@ -89,9 +93,9 @@ public class UserService implements UserDetailsService {
             nextAvatarPath = avatarStorageService.storeAvatar(avatar, user.getUsername());
         }
 
-        user.setDisplayName(normalizeRequiredText(displayName, "Display name"));
+        user.setDisplayName(normalizeRequiredText(displayName, "Display name", DISPLAY_NAME_MAX_LENGTH));
         user.setEmail(normalizedEmail);
-        user.setPhone(normalizeRequiredText(phone, "Phone"));
+        user.setPhone(normalizeRequiredText(phone, "Phone", PHONE_MAX_LENGTH));
         if (gender != null) {
             user.setGender(normalizeGender(gender));
         }
@@ -132,9 +136,6 @@ public class UserService implements UserDetailsService {
         if (password == null || password.length() < 6) {
             throw new IllegalArgumentException("Password must contain at least 6 characters.");
         }
-        if (displayName == null || displayName.isBlank()) {
-            throw new IllegalArgumentException("Display name is required.");
-        }
         if (userRepository.existsByUsernameIgnoreCase(normalizedUsername)) {
             throw new IllegalArgumentException("Username is already in use.");
         }
@@ -143,9 +144,9 @@ public class UserService implements UserDetailsService {
         User user = new User(
                 normalizedUsername,
                 passwordEncoder.encode(password),
-                normalizeRequiredText(displayName, "Display name"),
+                normalizeRequiredText(displayName, "Display name", DISPLAY_NAME_MAX_LENGTH),
                 normalizedEmail,
-                normalizeRequiredText(phone, "Phone"),
+                normalizeRequiredText(phone, "Phone", PHONE_MAX_LENGTH),
                 normalizeGender(gender),
                 role
         );
@@ -320,21 +321,33 @@ public class UserService implements UserDetailsService {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username is required.");
         }
-        return username.trim().toLowerCase();
+        String normalized = username.trim().toLowerCase();
+        if (normalized.length() > USERNAME_MAX_LENGTH) {
+            throw new IllegalArgumentException("Username must not exceed " + USERNAME_MAX_LENGTH + " characters.");
+        }
+        return normalized;
     }
 
     private String normalizeEmail(String email) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email is required.");
         }
-        return email.trim().toLowerCase();
+        String normalized = email.trim().toLowerCase();
+        if (normalized.length() > EMAIL_MAX_LENGTH) {
+            throw new IllegalArgumentException("Email must not exceed " + EMAIL_MAX_LENGTH + " characters.");
+        }
+        return normalized;
     }
 
-    private String normalizeRequiredText(String value, String fieldName) {
+    private String normalizeRequiredText(String value, String fieldName, int maxLength) {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(fieldName + " is required.");
         }
-        return value.trim();
+        String normalized = value.trim();
+        if (normalized.length() > maxLength) {
+            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+        }
+        return normalized;
     }
 
     private GenderType normalizeGender(GenderType gender) {

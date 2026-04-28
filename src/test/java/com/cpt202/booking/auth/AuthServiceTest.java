@@ -63,6 +63,26 @@ class AuthServiceTest {
     }
 
     @Test
+    void registerUserRejectsOverlongDisplayName() {
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class, () -> userService.registerUser(
+                "displaynamecheck",
+                "password123",
+                "a".repeat(256),
+                "displaynamecheck@example.com",
+                "13800009999",
+                GenderType.MALE,
+                RoleType.CUSTOMER,
+                null,
+                null,
+                null,
+                null,
+                null
+        ));
+
+        assertEquals("Display name must not exceed 255 characters.", error.getMessage());
+    }
+
+    @Test
     void specialistRegistrationCreatesLinkedSpecialistProfile() {
         Long categoryId = categoryRepository.findAll().get(0).getId();
 

@@ -198,22 +198,57 @@
     height: 100%;
 }
 
-.admin-specialist-card__main {
+.admin-specialist-card__profile {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    align-items: center;
     gap: var(--space-4);
-    flex-wrap: wrap;
 }
 
-.admin-specialist-card__main h3 {
+.admin-specialist-card__avatar {
+    width: 72px;
+    height: 72px;
+    overflow: hidden;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: #eef1ff;
+    flex: 0 0 auto;
+}
+
+.admin-specialist-card__avatar img,
+.admin-specialist-card__avatar-initial {
+    width: 100%;
+    height: 100%;
+}
+
+.admin-specialist-card__avatar img {
+    display: block;
+    object-fit: cover;
+}
+
+.admin-specialist-card__avatar-initial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.7rem;
+    font-weight: 800;
+}
+
+.admin-specialist-card__profile h3 {
     margin: 0 0 4px;
     font-size: 1.18rem;
 }
 
-.admin-specialist-card__main p {
+.admin-specialist-card__profile p {
     margin: 0;
     color: var(--text-muted);
+}
+
+.admin-specialist-card__main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: var(--space-4);
+    flex-wrap: wrap;
 }
 
 .admin-specialist-card__description {
@@ -623,6 +658,7 @@
     }
 
     .admin-section__head,
+    .admin-specialist-card__profile,
     .admin-specialist-card__main,
     .admin-booking-card__main,
     .admin-booking-card__actions,

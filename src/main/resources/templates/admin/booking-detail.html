@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260428')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -95,7 +95,8 @@
                         <input type="hidden" name="id" th:value="${booking.id}">
                         <div class="form-group">
                             <label for="reason">Rejection Reason</label>
-                            <textarea id="reason" name="reason" required></textarea>
+                            <textarea id="reason" name="reason" maxlength="255" required></textarea>
+                            <span class="help-text">Maximum 255 characters.</span>
                         </div>
                         <button type="submit" class="btn btn-secondary">Reject Booking</button>
                     </form>

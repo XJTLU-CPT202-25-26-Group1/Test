@@ -3,6 +3,7 @@ package com.cpt202.booking.controller.admin;
 import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.service.ExpertiseCategoryService;
 import com.cpt202.booking.service.SpecialistService;
+import com.cpt202.booking.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,14 @@ public class AdminSpecialistController {
 
     private final SpecialistService specialistService;
     private final ExpertiseCategoryService categoryService;
+    private final UserService userService;
 
-    public AdminSpecialistController(SpecialistService specialistService, ExpertiseCategoryService categoryService) {
+    public AdminSpecialistController(SpecialistService specialistService,
+                                     ExpertiseCategoryService categoryService,
+                                     UserService userService) {
         this.specialistService = specialistService;
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -28,7 +33,13 @@ public class AdminSpecialistController {
                                   @RequestParam(required = false) Long categoryId,
                                   @RequestParam(required = false) SpecialistStatus status,
                                   Model model) {
-        model.addAttribute("specialists", specialistService.searchSpecialistsForAdmin(keyword, categoryId, status));
+        var specialists = specialistService.searchSpecialistsForAdmin(keyword, categoryId, status);
+        model.addAttribute("specialists", specialists);
+        model.addAttribute("specialistAvatarMap",
+                userService.buildSpecialistAvatarMap(
+                        specialists.stream()
+                                .map(specialist -> specialist.getId())
+                                .toList()));
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("statuses", SpecialistStatus.values());
         model.addAttribute("keyword", keyword == null ? "" : keyword);

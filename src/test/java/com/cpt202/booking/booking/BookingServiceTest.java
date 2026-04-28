@@ -61,6 +61,25 @@ class BookingServiceTest {
     }
 
     @Test
+    void createBookingRejectsOverlongTopic() {
+        Specialist specialist = specialistRepository.findAll().get(0);
+        AvailabilitySlot slot = availabilitySlotRepository
+                .findBySpecialistIdAndBookedFalseAndSlotDateGreaterThanEqualOrderBySlotDateAscStartTimeAsc(specialist.getId(), LocalDate.now())
+                .get(0);
+
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class, () -> bookingService.createBooking(
+                "Test Customer",
+                "length-check@example.com",
+                specialist.getId(),
+                slot.getId(),
+                "a".repeat(256),
+                "Background information"
+        ));
+
+        assertEquals("Consultation topic must not exceed 255 characters.", error.getMessage());
+    }
+
+    @Test
     void rescheduleBookingReleasesOldSlotAndLocksNewSlot() {
         Specialist specialist = specialistRepository.findAll().stream()
                 .max(Comparator.comparingLong(Specialist::getId))
@@ -121,6 +140,28 @@ class BookingServiceTest {
         assertEquals(BookingStatus.REJECTED, rejected.getStatus());
         assertEquals("Capacity full", rejected.getRejectionReason());
         assertFalse(refreshedSlot.isBooked());
+    }
+
+    @Test
+    void rejectBookingRejectsOverlongReason() {
+        Specialist specialist = specialistRepository.findAll().get(0);
+        AvailabilitySlot slot = availabilitySlotRepository
+                .findBySpecialistIdAndBookedFalseAndSlotDateGreaterThanEqualOrderBySlotDateAscStartTimeAsc(specialist.getId(), LocalDate.now())
+                .get(0);
+
+        Booking booking = bookingService.createBooking(
+                "Rejected Customer",
+                "rejected-length@example.com",
+                specialist.getId(),
+                slot.getId(),
+                "Rejected booking",
+                ""
+        );
+
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+                () -> bookingService.rejectBooking(booking.getId(), "a".repeat(256)));
+
+        assertEquals("Rejection reason must not exceed 255 characters.", error.getMessage());
     }
 
     @Test

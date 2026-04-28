@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260426')}">
+    <link rel="stylesheet" th:href="@{/css/admin.css(v='20260428')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -71,12 +71,12 @@
 
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input id="name" name="name" type="text" required>
+                    <input id="name" name="name" type="text" maxlength="255" required>
                 </div>
 
                 <div class="form-group">
                     <label for="level">Level</label>
-                    <input id="level" name="level" type="text" placeholder="Associate, Senior, Consultant" required>
+                    <input id="level" name="level" type="text" maxlength="255" placeholder="Associate, Senior, Consultant" required>
                 </div>
 
                 <div class="form-group">
@@ -98,7 +98,8 @@
 
                 <div class="form-group admin-specialist-form__description">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" required></textarea>
+                    <textarea id="description" name="description" maxlength="255" required></textarea>
+                    <span class="help-text">Maximum 255 characters.</span>
                 </div>
 
                 <div class="admin-specialist-form__actions">
@@ -118,11 +119,22 @@
 
             <div th:if="${specialists != null and !#lists.isEmpty(specialists)}" class="admin-specialist-list">
                 <article class="admin-specialist-card" th:each="specialist : ${specialists}">
-                    <div class="admin-specialist-card__main">
+                    <div class="admin-specialist-card__profile">
+                        <div class="admin-specialist-card__avatar">
+                            <img th:if="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
+                                 th:src="${specialistAvatarMap[specialist.id]}"
+                                 th:alt="${specialist.name + ' avatar'}">
+                            <span th:if="${specialistAvatarMap[specialist.id] == null or specialistAvatarMap[specialist.id] == '/images/avatar-placeholder.svg'}"
+                                  class="admin-specialist-card__avatar-initial"
+                                  th:text="${#strings.substring(specialist.name, 0, 1)}">S</span>
+                        </div>
                         <div>
                             <h3 th:text="${specialist.name}">Specialist Name</h3>
                             <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
                         </div>
+                    </div>
+
+                    <div class="admin-specialist-card__main">
                         <span class="status-badge"
                               th:classappend="${' status-badge--' + #strings.toLowerCase(specialist.status.name())}"
                               th:text="${specialist.status}">ACTIVE</span>

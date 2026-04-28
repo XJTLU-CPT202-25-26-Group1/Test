@@ -8,6 +8,7 @@ import com.cpt202.booking.service.EmailService;
 import com.cpt202.booking.service.ExpertiseCategoryService;
 import com.cpt202.booking.service.UserService;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,8 +17,8 @@ class AuthControllerTest {
 
     @Test
     void registrationReportsSuccessEvenWhenEmailSendingFails() {
-        User created = new User("newuser", "encoded", "New User", "newuser@example.com", "13800009999", GenderType.UNSPECIFIED, RoleType.CUSTOMER);
-        UserService userService = new UserService(null, null, null) {
+        User created = new User("newuser", "encoded", "New User", "newuser@example.com", "13800009999", GenderType.MALE, RoleType.CUSTOMER);
+        UserService userService = new UserService(null, null, null, null) {
             @Override
             public User registerUser(String username,
                                      String password,
@@ -29,7 +30,8 @@ class AuthControllerTest {
                                      Long categoryId,
                                      String level,
                                      Double feeRate,
-                                     String description) {
+                                     String description,
+                                     MultipartFile avatar) {
                 return created;
             }
         };
@@ -50,8 +52,9 @@ class AuthControllerTest {
                 "New User",
                 "newuser@example.com",
                 "13800009999",
-                GenderType.UNSPECIFIED,
+                GenderType.MALE,
                 RoleType.CUSTOMER,
+                null,
                 null,
                 null,
                 null,

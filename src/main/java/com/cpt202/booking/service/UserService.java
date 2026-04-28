@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -22,16 +24,21 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
+    private static final String DEFAULT_AVATAR_PATH = "/images/avatar-placeholder.svg";
+
     private final UserRepository userRepository;
     private final SpecialistService specialistService;
     private final PasswordEncoder passwordEncoder;
+    private final AvatarStorageService avatarStorageService;
 
     public UserService(UserRepository userRepository,
                        SpecialistService specialistService,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       AvatarStorageService avatarStorageService) {
         this.userRepository = userRepository;
         this.specialistService = specialistService;
         this.passwordEncoder = passwordEncoder;
+        this.avatarStorageService = avatarStorageService;
     }
 
     public User getByUsername(String username) {
@@ -39,15 +46,72 @@ public class UserService implements UserDetailsService {
     }
 
     public User updateProfile(String username, String displayName, String email, String phone) {
+        return updateProfile(username, displayName, email, phone, null, null);
+    }
+
+    @Transactional
+    public User updateAvatar(String username, MultipartFile avatar) {
+        User user = requireExistingUser(username);
+        if (!hasUploadedFile(avatar)) {
+            throw new IllegalArgumentException("Please choose an avatar image before submitting.");
+        }
+
+        String previousAvatarPath = user.getAvatarPath();
+        String nextAvatarPath = avatarStorageService.storeAvatar(avatar, user.getUsername());
+        user.setAvatarPath(nextAvatarPath);
+
+        try {
+            User savedUser = userRepository.save(user);
+            if (previousAvatarPath != null && !previousAvatarPath.equals(nextAvatarPath)) {
+                avatarStorageService.deleteAvatar(previousAvatarPath);
+            }
+            return savedUser;
+        } catch (RuntimeException ex) {
+            avatarStorageService.deleteAvatar(nextAvatarPath);
+            throw ex;
+        }
+    }
+
+    @Transactional
+    public User updateProfile(String username,
+                              String displayName,
+                              String email,
+                              String phone,
+                              GenderType gender,
+                              MultipartFile avatar) {
         String normalizedEmail = normalizeEmail(email);
         ensureEmailAvailable(normalizedEmail, username);
         User user = requireExistingUser(username);
+        String previousAvatarPath = user.getAvatarPath();
+        String nextAvatarPath = previousAvatarPath;
+
+        if (hasUploadedFile(avatar)) {
+            nextAvatarPath = avatarStorageService.storeAvatar(avatar, user.getUsername());
+        }
+
         user.setDisplayName(normalizeRequiredText(displayName, "Display name"));
         user.setEmail(normalizedEmail);
         user.setPhone(normalizeRequiredText(phone, "Phone"));
-        return userRepository.save(user);
+        if (gender != null) {
+            user.setGender(normalizeGender(gender));
+        }
+        user.setAvatarPath(nextAvatarPath);
+
+        try {
+            User savedUser = userRepository.save(user);
+            if (hasUploadedFile(avatar) && previousAvatarPath != null && !previousAvatarPath.equals(nextAvatarPath)) {
+                avatarStorageService.deleteAvatar(previousAvatarPath);
+            }
+            return savedUser;
+        } catch (RuntimeException ex) {
+            if (hasUploadedFile(avatar) && nextAvatarPath != null && !nextAvatarPath.equals(previousAvatarPath)) {
+                avatarStorageService.deleteAvatar(nextAvatarPath);
+            }
+            throw ex;
+        }
     }
 
+    @Transactional
     public User registerUser(String username,
                              String password,
                              String displayName,
@@ -58,7 +122,8 @@ public class UserService implements UserDetailsService {
                              Long categoryId,
                              String level,
                              Double feeRate,
-                             String description) {
+                             String description,
+                             MultipartFile avatar) {
         String normalizedUsername = normalizeUsername(username);
         String normalizedEmail = normalizeEmail(email);
         if (role == RoleType.ADMIN) {
@@ -86,6 +151,7 @@ public class UserService implements UserDetailsService {
         );
         user.setVerificationToken(generateToken());
         user.setEmailVerified(false);
+
         if (role == RoleType.SPECIALIST) {
             if (categoryId == null) {
                 throw new IllegalArgumentException("Specialist registration requires an expertise category.");
@@ -98,7 +164,17 @@ public class UserService implements UserDetailsService {
             Specialist specialist = specialistService.createPendingSpecialist(displayName, finalLevel, finalFeeRate, finalDescription, categoryId);
             user.setSpecialistId(specialist.getId());
         }
-        return userRepository.save(user);
+
+        String avatarPath = hasUploadedFile(avatar) ? avatarStorageService.storeAvatar(avatar, normalizedUsername) : null;
+        user.setAvatarPath(avatarPath);
+        try {
+            return userRepository.save(user);
+        } catch (RuntimeException ex) {
+            if (avatarPath != null) {
+                avatarStorageService.deleteAvatar(avatarPath);
+            }
+            throw ex;
+        }
     }
 
     public User verifyEmail(String username, String token) {
@@ -164,13 +240,24 @@ public class UserService implements UserDetailsService {
             return Map.of();
         }
 
-        Map<Long, GenderType> gendersBySpecialistId = userRepository.findAllBySpecialistIdIn(specialistIds).stream()
+        Map<Long, String> avatarPathsBySpecialistId = userRepository.findAllBySpecialistIdIn(specialistIds).stream()
                 .filter(user -> user.getSpecialistId() != null)
-                .collect(Collectors.toMap(User::getSpecialistId, User::getGender, (left, right) -> left));
+                .collect(Collectors.toMap(User::getSpecialistId, this::resolveAvatarPath, (left, right) -> left));
 
         return specialistIds.stream()
                 .distinct()
-                .collect(Collectors.toMap(Function.identity(), id -> resolveAvatarPath(gendersBySpecialistId.get(id))));
+                .collect(Collectors.toMap(Function.identity(),
+                        id -> avatarPathsBySpecialistId.getOrDefault(id, DEFAULT_AVATAR_PATH)));
+    }
+
+    public String getSpecialistAvatarPath(Long specialistId) {
+        return userRepository.findBySpecialistId(specialistId)
+                .map(this::resolveAvatarPath)
+                .orElse(DEFAULT_AVATAR_PATH);
+    }
+
+    public String getUserAvatarPath(User user) {
+        return resolveAvatarPath(user);
     }
 
     @Override
@@ -251,17 +338,21 @@ public class UserService implements UserDetailsService {
     }
 
     private GenderType normalizeGender(GenderType gender) {
-        return gender == null ? GenderType.UNSPECIFIED : gender;
+        if (gender == null || gender == GenderType.UNSPECIFIED) {
+            throw new IllegalArgumentException("Gender must be either Male or Female.");
+        }
+        return gender;
     }
 
-    private String resolveAvatarPath(GenderType gender) {
-        if (gender == GenderType.FEMALE) {
-            return "/images/avatar-female.png";
+    private String resolveAvatarPath(User user) {
+        if (user == null || user.getAvatarPath() == null || user.getAvatarPath().isBlank()) {
+            return DEFAULT_AVATAR_PATH;
         }
-        if (gender == GenderType.MALE) {
-            return "/images/avatar-male.png";
-        }
-        return "/images/avatar-neutral.png";
+        return user.getAvatarPath();
+    }
+
+    private boolean hasUploadedFile(MultipartFile avatar) {
+        return avatar != null && !avatar.isEmpty();
     }
 
     private String generateToken() {

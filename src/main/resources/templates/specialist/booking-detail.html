@@ -13,15 +13,18 @@
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="specialist-page">
-        <div class="page-header specialist-page__header">
-            <div>
-                <span class="section-kicker">Consultation Detail</span>
-                <h1 class="page-title" th:text="${booking.topic}">Booking Topic</h1>
-                <p class="page-subtitle">Review customer information, appointment details, and booking status history.</p>
+        <section class="specialist-page">
+            <div class="page-header specialist-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/specialist/bookings}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Bookings</span>
+                    </a>
+                    <span class="section-kicker">Consultation Detail</span>
+                    <h1 class="page-title" th:text="${booking.topic}">Booking Topic</h1>
+                    <p class="page-subtitle">Review customer information, appointment details, and booking status history.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary" th:href="@{/specialist/bookings}">Back to Bookings</a>
-        </div>
 
         <section class="specialist-detail-grid">
             <article class="card specialist-detail-card">

@@ -36,7 +36,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GenderType gender = GenderType.UNSPECIFIED;
+    private GenderType gender = GenderType.MALE;
+
+    @Column(name = "avatar_path")
+    private String avatarPath;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -58,7 +61,7 @@ public class User {
     }
 
     public User(String username, String password, String displayName, String email, String phone, RoleType role) {
-        this(username, password, displayName, email, phone, GenderType.UNSPECIFIED, role);
+        this(username, password, displayName, email, phone, GenderType.MALE, role);
     }
 
     public User(String username,
@@ -109,6 +112,10 @@ public class User {
         return role;
     }
 
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
     public Long getSpecialistId() {
         return specialistId;
     }
@@ -150,11 +157,15 @@ public class User {
     }
 
     public void setGender(GenderType gender) {
-        this.gender = gender == null ? GenderType.UNSPECIFIED : gender;
+        this.gender = gender == null ? GenderType.MALE : gender;
     }
 
     public void setRole(RoleType role) {
         this.role = role;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 
     public void setSpecialistId(Long specialistId) {

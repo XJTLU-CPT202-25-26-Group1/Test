@@ -9,12 +9,16 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/auth.css(v='20260426')}">
+    <link rel="stylesheet" th:href="@{/css/auth.css(v='20260428b')}">
 </th:block>
 
 <th:block th:fragment="content">
     <section class="auth-shell auth-shell--simple">
         <article class="card auth-card auth-card--compact">
+            <a class="auth-back" th:href="@{/auth/login}">
+                <span class="auth-back__icon" aria-hidden="true">&#8592;</span>
+                <span>Back to Login</span>
+            </a>
             <h1>Resend Verification</h1>
             <p class="auth-card__subtitle">Enter your username and email to receive a new verification link.</p>
 
@@ -48,7 +52,6 @@
             </form>
 
             <div class="auth-links auth-links--stack">
-                <a th:href="@{/auth/login}">Back to login</a>
                 <a th:href="@{/auth/forgot-password}">Forgot password?</a>
             </div>
         </article>

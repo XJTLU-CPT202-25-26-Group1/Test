@@ -13,15 +13,18 @@
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="admin-page">
-        <div class="page-header admin-page__header">
-            <div>
-                <span class="section-kicker">Booking Detail</span>
-                <h1 class="page-title" th:text="${booking.topic}">Booking Topic</h1>
-                <p class="page-subtitle">Inspect booking details, status, fee calculation, and audit history.</p>
+        <section class="admin-page">
+            <div class="page-header admin-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/admin/bookings}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Bookings</span>
+                    </a>
+                    <span class="section-kicker">Booking Detail</span>
+                    <h1 class="page-title" th:text="${booking.topic}">Booking Topic</h1>
+                    <p class="page-subtitle">Inspect booking details, status, fee calculation, and audit history.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary" th:href="@{/admin/bookings}">Back to Bookings</a>
-        </div>
 
         <section class="admin-booking-detail-grid">
             <article class="card admin-booking-detail-card">

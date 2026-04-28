@@ -13,18 +13,18 @@
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="customer-page">
-        <div class="page-header customer-page__header">
-            <div>
-                <span class="section-kicker">Booking Request</span>
-                <h1 class="page-title">Create Booking</h1>
-                <p class="page-subtitle">Confirm the selected specialist and slot, then describe your consultation request.</p>
+        <section class="customer-page">
+            <div class="page-header customer-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/customer/specialists/detail(id=${specialist.id})}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Specialist</span>
+                    </a>
+                    <span class="section-kicker">Booking Request</span>
+                    <h1 class="page-title">Create Booking</h1>
+                    <p class="page-subtitle">Confirm the selected specialist and slot, then describe your consultation request.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary"
-               th:href="@{/customer/specialists/detail(id=${specialist.id})}">
-                Back to Specialist
-            </a>
-        </div>
 
         <section class="booking-create-grid">
             <article class="card booking-summary-card">

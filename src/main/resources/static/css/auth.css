@@ -26,6 +26,38 @@
     width: min(100%, 720px);
 }
 
+.auth-back {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    color: var(--primary);
+    font-weight: 700;
+    line-height: 1;
+    transition:
+            color var(--transition-fast),
+            transform var(--transition-fast);
+}
+
+.auth-back:hover {
+    color: var(--primary-hover);
+    transform: translateX(-2px);
+}
+
+.auth-back__icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: #eef1ff;
+    color: inherit;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
 .auth-card h1 {
     margin: 0 0 8px;
     font-size: 1.8rem;

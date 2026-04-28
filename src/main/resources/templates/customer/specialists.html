@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260428')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -66,9 +66,14 @@
                 <article class="specialist-list-card" th:each="specialist : ${specialists}">
                     <div class="specialist-list-card__body">
                         <div class="specialist-list-card__top">
-                            <div>
-                                <h3 th:text="${specialist.name}">Specialist Name</h3>
-                                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                            <div class="specialist-list-card__summary">
+                                <div class="specialist-list-card__avatar">
+                                    <img th:src="${specialistAvatarMap[specialist.id]}" alt="Specialist avatar">
+                                </div>
+                                <div>
+                                    <h3 th:text="${specialist.name}">Specialist Name</h3>
+                                    <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                                </div>
                             </div>
                             <span class="status-badge status-badge--active" th:text="${specialist.status}">ACTIVE</span>
                         </div>

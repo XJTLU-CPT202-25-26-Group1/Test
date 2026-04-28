@@ -13,15 +13,18 @@
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="admin-page">
-        <div class="page-header admin-page__header">
-            <div>
-                <span class="section-kicker">Specialist Record</span>
-                <h1 class="page-title">Edit Specialist</h1>
-                <p class="page-subtitle">Update the specialist profile used by search, booking, and operations.</p>
+        <section class="admin-page">
+            <div class="page-header admin-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/admin/specialists}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Specialists</span>
+                    </a>
+                    <span class="section-kicker">Specialist Record</span>
+                    <h1 class="page-title">Edit Specialist</h1>
+                    <p class="page-subtitle">Update the specialist profile used by search, booking, and operations.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary" th:href="@{/admin/specialists}">Back to Specialists</a>
-        </div>
 
         <section class="admin-edit-grid">
             <article class="card admin-summary-card admin-summary-card--profile">

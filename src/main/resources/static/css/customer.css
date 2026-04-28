@@ -134,6 +134,29 @@
     margin-bottom: var(--space-4);
 }
 
+.specialist-list-card__summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+}
+
+.specialist-list-card__avatar {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: #eef1ff;
+    overflow: hidden;
+}
+
+.specialist-list-card__avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
 .specialist-list-card__top h3 {
     margin: 0 0 4px;
     font-size: 1.2rem;
@@ -200,10 +223,15 @@
     align-items: center;
     justify-content: center;
     background: #eef1ff;
-    color: var(--primary);
-    font-size: 2rem;
-    font-weight: 800;
     border: 1px solid rgba(126, 137, 210, 0.34);
+    overflow: hidden;
+}
+
+.specialist-profile-card__avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 .specialist-profile-card__summary h2 {
@@ -535,9 +563,14 @@
     justify-content: center;
     border: 1px solid rgba(126, 137, 210, 0.34);
     background: #eef1ff;
-    color: var(--primary);
-    font-size: 2.2rem;
-    font-weight: 800;
+    overflow: hidden;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 .profile-summary-card h2,

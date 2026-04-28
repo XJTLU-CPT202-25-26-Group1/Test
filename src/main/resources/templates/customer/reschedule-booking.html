@@ -13,15 +13,18 @@
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="customer-page">
-        <div class="page-header customer-page__header">
-            <div>
-                <span class="section-kicker">Reschedule</span>
-                <h1 class="page-title">Reschedule Booking</h1>
-                <p class="page-subtitle">Choose another available slot for the same specialist.</p>
+        <section class="customer-page">
+            <div class="page-header customer-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/customer/bookings/detail(id=${booking.id})}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Detail</span>
+                    </a>
+                    <span class="section-kicker">Reschedule</span>
+                    <h1 class="page-title">Reschedule Booking</h1>
+                    <p class="page-subtitle">Choose another available slot for the same specialist.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary" th:href="@{/customer/bookings/detail(id=${booking.id})}">Back to Detail</a>
-        </div>
 
         <section class="booking-create-grid">
             <article class="card booking-summary-card">

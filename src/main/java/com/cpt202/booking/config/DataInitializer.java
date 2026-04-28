@@ -58,7 +58,7 @@ public class DataInitializer {
                 slotRepository.save(createSlot(bob, 3, 16, 0, 17, 0));
             }
 
-            seedUser(userRepository, passwordEncoder, "admin", "admin123", "System Admin", "admin@demo.local", "13800000001", GenderType.UNSPECIFIED, RoleType.ADMIN, null);
+            seedUser(userRepository, passwordEncoder, "admin", "admin123", "System Admin", "admin@demo.local", "13800000001", GenderType.MALE, RoleType.ADMIN, null);
             seedUser(userRepository, passwordEncoder, "specialist", "specialist123", "Demo Specialist", "specialist@demo.local", "13800000002", GenderType.MALE, RoleType.SPECIALIST, alice.getId());
             seedUser(userRepository, passwordEncoder, "customer", "customer123", "Demo Customer", "customer@demo.local", "13800000003", GenderType.FEMALE, RoleType.CUSTOMER, null);
         };

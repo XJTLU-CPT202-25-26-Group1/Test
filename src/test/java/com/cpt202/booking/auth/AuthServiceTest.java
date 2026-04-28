@@ -45,8 +45,9 @@ class AuthServiceTest {
                 "New Customer",
                 "newcustomer@example.com",
                 "13800001111",
-                GenderType.UNSPECIFIED,
+                GenderType.MALE,
                 RoleType.CUSTOMER,
+                null,
                 null,
                 null,
                 null,
@@ -76,7 +77,8 @@ class AuthServiceTest {
                 categoryId,
                 "Senior",
                 320.0,
-                "Focused on complex consultation work."
+                "Focused on complex consultation work.",
+                null
         );
 
         assertNotNull(created.getSpecialistId());
@@ -132,7 +134,8 @@ class AuthServiceTest {
                 categoryId,
                 "Associate",
                 220.0,
-                "Pending review"
+                "Pending review",
+                null
         );
         created.setEmailVerified(true);
         userRepository.save(created);

@@ -9,25 +9,29 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260428')}">
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="customer-page">
-        <div class="page-header customer-page__header">
-            <div>
-                <span class="section-kicker">Specialist Detail</span>
-                <h1 class="page-title" th:text="${specialist.name}">Specialist Name</h1>
-                <p class="page-subtitle">Review specialist information and choose an available consultation slot.</p>
+        <section class="customer-page">
+            <div class="page-header customer-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/customer/specialists}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Search</span>
+                    </a>
+                    <span class="section-kicker">Specialist Detail</span>
+                    <h1 class="page-title" th:text="${specialist.name}">Specialist Name</h1>
+                    <p class="page-subtitle">Review specialist information and choose an available consultation slot.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary" th:href="@{/customer/specialists}">Back to Search</a>
-        </div>
 
         <section class="specialist-detail-grid">
             <article class="card specialist-profile-card">
                 <div class="specialist-profile-card__summary">
-                    <div class="specialist-profile-card__avatar"
-                         th:text="${#strings.substring(specialist.name, 0, 1)}">S</div>
+                    <div class="specialist-profile-card__avatar">
+                        <img th:src="${specialistAvatarPath}" alt="Specialist avatar">
+                    </div>
                     <div>
                         <h2 th:text="${specialist.name}">Specialist Name</h2>
                         <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>

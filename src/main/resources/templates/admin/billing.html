@@ -13,15 +13,18 @@
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="admin-page">
-        <div class="page-header admin-page__header">
-            <div>
-                <span class="section-kicker">Admin Finance</span>
-                <h1 class="page-title">Billing Summary</h1>
-                <p class="page-subtitle">Track billable booking value from confirmed and completed consultations.</p>
+        <section class="admin-page">
+            <div class="page-header admin-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/admin/bookings}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Bookings</span>
+                    </a>
+                    <span class="section-kicker">Admin Finance</span>
+                    <h1 class="page-title">Billing Summary</h1>
+                    <p class="page-subtitle">Track billable booking value from confirmed and completed consultations.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary" th:href="@{/admin/bookings}">Back to Bookings</a>
-        </div>
 
         <section class="admin-metric-grid admin-metric-grid--billing">
             <article class="card admin-metric-card admin-metric-card--primary">

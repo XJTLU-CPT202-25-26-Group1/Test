@@ -9,23 +9,29 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/specialist.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/specialist.css(v='20260428')}">
 </th:block>
 
 <th:block th:fragment="content">
-    <section class="specialist-page">
-        <div class="page-header specialist-page__header">
-            <div>
-                <span class="section-kicker">Profile</span>
-                <h1 class="page-title">Specialist Profile</h1>
-                <p class="page-subtitle">Review account identity and specialist service information.</p>
+        <section class="specialist-page">
+            <div class="page-header specialist-page__header">
+                <div class="page-header__main">
+                    <a class="page-back" th:href="@{/specialist/dashboard}">
+                        <span class="page-back__icon" aria-hidden="true">&#8592;</span>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <span class="section-kicker">Profile</span>
+                    <h1 class="page-title">Specialist Profile</h1>
+                    <p class="page-subtitle">Review account identity and specialist service information.</p>
+                </div>
             </div>
-            <a class="btn btn-secondary" th:href="@{/specialist/dashboard}">Back to Dashboard</a>
-        </div>
 
         <section class="specialist-profile-grid">
             <article class="card specialist-profile-card">
-                <div class="specialist-profile-avatar" th:text="${#strings.substring(specialist.name, 0, 1)}">S</div>
+                <div class="specialist-profile-avatar">
+                    <img th:src="${account.avatarPath != null and !#strings.isEmpty(account.avatarPath) ? account.avatarPath : '/images/avatar-placeholder.svg'}"
+                         alt="Specialist avatar">
+                </div>
                 <h2 th:text="${specialist.name}">Specialist Name</h2>
                 <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
 
@@ -66,13 +72,31 @@
                     </div>
                     <div>
                         <span>Gender</span>
-                        <strong th:text="${account.gender}">UNSPECIFIED</strong>
+                        <strong th:text="${account.gender.label}">Male</strong>
                     </div>
                     <div>
                         <span>Email Verification</span>
                         <strong th:text="${account.emailVerified ? 'Verified' : 'Not verified'}">Verified</strong>
                     </div>
                 </div>
+            </article>
+
+            <article class="card specialist-profile-card specialist-profile-card--form">
+                <h2>Replace Avatar</h2>
+                <p>Upload a new profile image for your account and specialist-facing preview areas.</p>
+                <form th:action="@{/specialist/profile}" method="post" enctype="multipart/form-data" class="form-grid">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="form-group">
+                        <label for="avatar">Avatar Image</label>
+                        <input id="avatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" required>
+                        <span class="help-text">Upload a PNG, JPG, or WEBP image. Leave other account fields unchanged.</span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Update Avatar</button>
+                    </div>
+                </form>
             </article>
 
             <article class="card specialist-profile-description">

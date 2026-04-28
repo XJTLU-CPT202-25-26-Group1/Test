@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +39,7 @@ public class AuthController {
     @GetMapping("/auth/register")
     public String register(Model model) {
         model.addAttribute("categories", categoryService.getActiveCategories());
-        model.addAttribute("genders", GenderType.values());
+        model.addAttribute("genders", GenderType.selectableValues());
         model.addAttribute("roles", new RoleType[]{RoleType.CUSTOMER, RoleType.SPECIALIST});
         return "auth/register";
     }
@@ -70,6 +71,7 @@ public class AuthController {
                                @RequestParam String phone,
                                @RequestParam GenderType gender,
                                @RequestParam RoleType role,
+                               @RequestParam(required = false) MultipartFile avatar,
                                @RequestParam(required = false) Long categoryId,
                                @RequestParam(required = false) String level,
                                @RequestParam(required = false) Double feeRate,
@@ -77,7 +79,7 @@ public class AuthController {
                                RedirectAttributes redirectAttributes) {
         User user;
         try {
-            user = userService.registerUser(username, password, displayName, email, phone, gender, role, categoryId, level, feeRate, description);
+            user = userService.registerUser(username, password, displayName, email, phone, gender, role, categoryId, level, feeRate, description, avatar);
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/auth/register";

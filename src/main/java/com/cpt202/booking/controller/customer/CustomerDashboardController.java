@@ -29,11 +29,17 @@ public class CustomerDashboardController {
     public String dashboard(Authentication authentication, Model model) {
         User user = userService.getByUsername(authentication.getName());
         List<Booking> bookings = bookingService.getCustomerBookings(user.getEmail());
+        List<Booking> upcomingBookings = bookingService.getUpcomingBookings(user.getEmail());
         model.addAttribute("profile", user);
         model.addAttribute("bookingCount", bookings.size());
         model.addAttribute("pendingCount", bookings.stream().filter(booking -> booking.getStatus() == BookingStatus.PENDING).count());
         model.addAttribute("completedCount", bookings.stream().filter(booking -> booking.getStatus() == BookingStatus.COMPLETED).count());
-        model.addAttribute("upcomingBookings", bookingService.getUpcomingBookings(user.getEmail()));
+        model.addAttribute("upcomingBookings", upcomingBookings);
+        model.addAttribute("specialistAvatarMap",
+                userService.buildSpecialistAvatarMap(
+                        upcomingBookings.stream()
+                                .map(booking -> booking.getSpecialist().getId())
+                                .toList()));
         model.addAttribute("recentBookings", bookings.stream().limit(5).toList());
         model.addAttribute("notifications", bookingService.getCustomerNotifications(user.getEmail()));
         return "customer/dashboard";

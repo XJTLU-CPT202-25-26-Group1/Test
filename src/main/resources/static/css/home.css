@@ -252,6 +252,19 @@
     object-fit: contain;
 }
 
+.home-specialist-card__initial {
+    width: 116px;
+    height: 116px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: #eef1ff;
+    color: var(--primary);
+    font-size: 2.6rem;
+    font-weight: 800;
+}
+
 .home-specialist-card__body {
     padding: 16px;
 }

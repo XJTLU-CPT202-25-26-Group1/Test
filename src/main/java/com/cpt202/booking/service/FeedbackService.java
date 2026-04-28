@@ -13,6 +13,8 @@ import java.util.Optional;
 @Service
 public class FeedbackService {
 
+    static final int FEEDBACK_COMMENT_MAX_LENGTH = 255;
+
     private final FeedbackRepository feedbackRepository;
     private final BookingRepository bookingRepository;
 
@@ -24,6 +26,7 @@ public class FeedbackService {
     public Feedback submitFeedback(Long bookingId, String customerEmail, Integer rating, String comment) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+        String normalizedComment = normalizeRequiredText(comment, "Feedback comment", FEEDBACK_COMMENT_MAX_LENGTH);
 
         if (!booking.getCustomerEmail().equalsIgnoreCase(customerEmail)) {
             throw new IllegalArgumentException("You can only submit feedback for your own bookings.");
@@ -44,7 +47,7 @@ public class FeedbackService {
         feedback.setCustomerEmail(booking.getCustomerEmail());
         feedback.setCustomerName(booking.getCustomerName());
         feedback.setRating(rating);
-        feedback.setComment(comment);
+        feedback.setComment(normalizedComment);
         return feedbackRepository.save(feedback);
     }
 
@@ -54,5 +57,16 @@ public class FeedbackService {
 
     public Optional<Feedback> getFeedbackForBooking(Long bookingId) {
         return feedbackRepository.findByBookingId(bookingId);
+    }
+
+    private String normalizeRequiredText(String value, String fieldName, int maxLength) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " is required.");
+        }
+        String normalized = value.trim();
+        if (normalized.length() > maxLength) {
+            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+        }
+        return normalized;
     }
 }

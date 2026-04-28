@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260428')}">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260428c')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -68,7 +68,14 @@
                         <div class="specialist-list-card__top">
                             <div class="specialist-list-card__summary">
                                 <div class="specialist-list-card__avatar">
-                                    <img th:src="${specialistAvatarMap[specialist.id]}" alt="Specialist avatar">
+                                    <img th:if="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
+                                         th:src="${specialistAvatarMap[specialist.id]}"
+                                         alt="Specialist avatar">
+                                    <span th:unless="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
+                                          class="specialist-list-card__avatar-initial"
+                                          th:text="${#strings.substring(specialist.name, 0, 1)}">
+                                        S
+                                    </span>
                                 </div>
                                 <div>
                                     <h3 th:text="${specialist.name}">Specialist Name</h3>

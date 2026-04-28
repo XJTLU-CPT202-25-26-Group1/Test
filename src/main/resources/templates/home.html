@@ -122,8 +122,14 @@
         <div th:if="${featuredSpecialists != null and !#lists.isEmpty(featuredSpecialists)}" class="home-specialists__grid">
             <article class="home-specialist-card" th:each="specialist : ${featuredSpecialists}">
                 <div class="home-specialist-card__portrait">
-                    <img th:src="${specialistAvatarMap[specialist.id]}"
+                    <img th:if="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
+                         th:src="${specialistAvatarMap[specialist.id]}"
                          alt="Specialist avatar">
+                    <span th:unless="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
+                          class="home-specialist-card__initial"
+                          th:text="${#strings.substring(specialist.name, 0, 1)}">
+                        S
+                    </span>
                 </div>
                 <div class="home-specialist-card__body">
                     <h3 th:text="${specialist.name}">Specialist Name</h3>

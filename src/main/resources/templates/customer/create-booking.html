@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260428c')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -66,14 +66,16 @@
 
                     <div class="form-group">
                         <label for="topic">Consultation Topic</label>
-                        <input id="topic" name="topic" type="text"
+                        <input id="topic" name="topic" type="text" maxlength="255"
                                placeholder="Briefly describe the consultation topic" required>
+                        <span class="help-text">Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-group">
                         <label for="notes">Notes</label>
-                        <textarea id="notes" name="notes"
+                        <textarea id="notes" name="notes" maxlength="255"
                                   placeholder="Add context, expectations, or questions for the specialist."></textarea>
+                        <span class="help-text">Optional. Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-actions booking-form-actions">

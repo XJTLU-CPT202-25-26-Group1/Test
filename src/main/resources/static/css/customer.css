@@ -157,6 +157,17 @@
     object-fit: cover;
 }
 
+.specialist-list-card__avatar-initial {
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
 .specialist-list-card__top h3 {
     margin: 0 0 4px;
     font-size: 1.2rem;
@@ -232,6 +243,17 @@
     height: 100%;
     display: block;
     object-fit: cover;
+}
+
+.specialist-profile-card__avatar-initial {
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 2rem;
+    font-weight: 800;
 }
 
 .specialist-profile-card__summary h2 {
@@ -406,6 +428,101 @@
 .compact-list {
     display: grid;
     gap: var(--space-3);
+}
+
+.customer-upcoming-list {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.customer-upcoming-card {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--surface-muted);
+    background: #ffffff;
+    color: inherit;
+    text-decoration: none;
+}
+
+.customer-upcoming-card:hover {
+    border-color: rgba(76, 91, 214, 0.42);
+    background: #f9faff;
+}
+
+.customer-upcoming-card__profile {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.customer-upcoming-card__avatar {
+    width: 72px;
+    height: 72px;
+    overflow: hidden;
+    border: 1px solid rgba(126, 137, 210, 0.34);
+    background: #eef1ff;
+    flex: 0 0 auto;
+}
+
+.customer-upcoming-card__avatar img,
+.customer-upcoming-card__avatar-initial {
+    width: 100%;
+    height: 100%;
+}
+
+.customer-upcoming-card__avatar img {
+    display: block;
+    object-fit: cover;
+}
+
+.customer-upcoming-card__avatar-initial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.7rem;
+    font-weight: 800;
+}
+
+.customer-upcoming-card__identity {
+    display: grid;
+    gap: 6px;
+}
+
+.customer-upcoming-card__identity strong {
+    color: var(--text);
+    font-size: 1.05rem;
+}
+
+.customer-upcoming-card__identity span,
+.customer-upcoming-card__description,
+.customer-upcoming-card__meta {
+    color: var(--text-muted);
+}
+
+.customer-upcoming-card__description {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.customer-upcoming-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.customer-upcoming-card__meta span,
+.customer-upcoming-card__topic {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    padding: 0 10px;
+    background: #eef1ff;
+    color: var(--primary);
+    font-size: 0.86rem;
+    font-weight: 700;
+    width: fit-content;
 }
 
 .compact-list__item {
@@ -627,6 +744,7 @@
     }
 
     .customer-section__head,
+    .customer-upcoming-card__profile,
     .slot-card,
     .booking-row-card__main,
     .booking-row-card__meta,

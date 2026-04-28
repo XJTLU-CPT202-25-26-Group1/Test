@@ -37,8 +37,8 @@
                 <div class="form-grid form-grid--2">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input id="username" name="username" type="text" autocomplete="username" required>
-                        <span class="help-text">Choose a unique username for future login.</span>
+                        <input id="username" name="username" type="text" maxlength="255" autocomplete="username" required>
+                        <span class="help-text">Choose a unique username for future login. Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-group">
@@ -62,8 +62,8 @@
 
                     <div class="form-group">
                         <label for="displayName">Display Name</label>
-                        <input id="displayName" name="displayName" type="text" required>
-                        <span class="help-text">This name will be shown in dashboards and booking records.</span>
+                        <input id="displayName" name="displayName" type="text" maxlength="255" required>
+                        <span class="help-text">This name will be shown in dashboards and booking records. Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-group">
@@ -80,14 +80,14 @@
 
                     <div class="form-group">
                         <label for="phone">Phone</label>
-                        <input id="phone" name="phone" type="text" inputmode="tel" required>
-                        <span class="help-text">Enter a reachable phone number for booking contact.</span>
+                        <input id="phone" name="phone" type="text" maxlength="255" inputmode="tel" required>
+                        <span class="help-text">Enter a reachable phone number for booking contact. Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input id="email" name="email" type="email" autocomplete="email" required>
-                        <span class="help-text">A verification email will be sent to this address.</span>
+                        <input id="email" name="email" type="email" maxlength="255" autocomplete="email" required>
+                        <span class="help-text">A verification email will be sent to this address. Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-group">
@@ -129,9 +129,9 @@
 
                         <div class="form-group">
                             <label for="level">Professional Level</label>
-                            <input id="level" name="level" type="text" placeholder="Associate, Senior, Consultant"
+                            <input id="level" name="level" type="text" maxlength="255" placeholder="Associate, Senior, Consultant"
                                    data-required-for-specialist>
-                            <span class="help-text">Examples: Associate, Senior, Consultant.</span>
+                            <span class="help-text">Examples: Associate, Senior, Consultant. Maximum 255 characters.</span>
                         </div>
 
                         <div class="form-group">
@@ -143,10 +143,10 @@
 
                         <div class="form-group">
                             <label for="description">Profile Description</label>
-                            <textarea id="description" name="description"
+                            <textarea id="description" name="description" maxlength="255"
                                       placeholder="Briefly describe your expertise."
                                       data-required-for-specialist></textarea>
-                            <span class="help-text">A short introduction helps customers understand your expertise.</span>
+                            <span class="help-text">A short introduction helps customers understand your expertise. Maximum 255 characters.</span>
                         </div>
                     </div>
                 </section>

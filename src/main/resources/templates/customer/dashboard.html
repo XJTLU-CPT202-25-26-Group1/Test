@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260425')}">
+    <link rel="stylesheet" th:href="@{/css/customer.css(v='20260428c')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -53,18 +53,33 @@
                     <span class="customer-count" th:text="${upcomingBookings != null ? #lists.size(upcomingBookings) + ' items' : '0 items'}">0 items</span>
                 </div>
 
-                <div th:if="${upcomingBookings != null and !#lists.isEmpty(upcomingBookings)}" class="compact-list">
-                    <a class="compact-list__item"
+                <div th:if="${upcomingBookings != null and !#lists.isEmpty(upcomingBookings)}" class="customer-upcoming-list">
+                    <a class="customer-upcoming-card"
                        th:each="booking : ${upcomingBookings}"
                        th:href="@{/customer/bookings/detail(id=${booking.id})}">
-                        <strong th:text="${booking.specialist.name}">Specialist</strong>
-                        <span>
+                        <div class="customer-upcoming-card__profile">
+                            <div class="customer-upcoming-card__avatar">
+                                <img th:if="${specialistAvatarMap[booking.specialist.id] != null and specialistAvatarMap[booking.specialist.id] != '/images/avatar-placeholder.svg'}"
+                                     th:src="${specialistAvatarMap[booking.specialist.id]}"
+                                     th:alt="${booking.specialist.name + ' avatar'}">
+                                <span th:if="${specialistAvatarMap[booking.specialist.id] == null or specialistAvatarMap[booking.specialist.id] == '/images/avatar-placeholder.svg'}"
+                                      class="customer-upcoming-card__avatar-initial"
+                                      th:text="${#strings.substring(booking.specialist.name, 0, 1)}">S</span>
+                            </div>
+                            <div class="customer-upcoming-card__identity">
+                                <strong th:text="${booking.specialist.name}">Specialist</strong>
+                                <span th:text="${booking.specialist.category != null ? booking.specialist.category.name : 'Uncategorized'}">Category</span>
+                            </div>
+                        </div>
+                        <p class="customer-upcoming-card__description"
+                           th:text="${booking.specialist.profileDescription != null and !#strings.isEmpty(booking.specialist.profileDescription) ? booking.specialist.profileDescription : 'View booking details for the full specialist profile and appointment context.'}">
+                            Specialist description
+                        </p>
+                        <div class="customer-upcoming-card__meta">
                             <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
-                            <span> </span>
-                            <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm')}">09:00</span>
-                            <span> - </span>
-                            <span th:text="${booking.topic}">Topic</span>
-                        </span>
+                            <span th:text="${#temporals.format(booking.slot.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.slot.endTime, 'HH:mm')}">09:00 - 10:00</span>
+                        </div>
+                        <span class="customer-upcoming-card__topic" th:text="${booking.topic}">Topic</span>
                     </a>
                 </div>
 

@@ -18,8 +18,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -70,6 +71,21 @@ class SpecialistServiceTest {
                 "Duplicate specialist",
                 category.getId()
         ));
+    }
+
+    @Test
+    void createSpecialistRejectsOverlongDescription() {
+        ExpertiseCategory category = categoryRepository.findByNameIgnoreCase("Legal").orElseThrow();
+
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class, () -> specialistService.createSpecialist(
+                "Length Checked Specialist",
+                "Senior",
+                300.0,
+                "a".repeat(256),
+                category.getId()
+        ));
+
+        assertEquals("Specialist description must not exceed 255 characters.", error.getMessage());
     }
 
     @Test

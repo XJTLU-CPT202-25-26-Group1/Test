@@ -47,7 +47,7 @@ public class SpecialistBookingController {
         model.addAttribute("weekStart", resolvedWeekStart);
         model.addAttribute("weekEnd", resolvedWeekStart.plusDays(6));
         model.addAttribute("bookings", bookingService.getSpecialistBookingsForWeek(specialistId, resolvedWeekStart));
-        model.addAttribute("historyBookings", bookingService.getSpecialistCompletedBookings(specialistId).stream().limit(8).toList());
+        model.addAttribute("historyBookings", bookingService.getSpecialistCompletedBookings(specialistId).stream().limit(3).toList());
         return "specialist/booking-history";
     }
 

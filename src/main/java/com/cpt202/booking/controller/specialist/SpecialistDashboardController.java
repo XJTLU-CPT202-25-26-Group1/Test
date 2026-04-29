@@ -48,7 +48,7 @@ public class SpecialistDashboardController {
         model.addAttribute("confirmedCount", bookings.stream().filter(booking -> booking.getStatus() == BookingStatus.CONFIRMED).count());
         model.addAttribute("completedCount", bookings.stream().filter(booking -> booking.getStatus() == BookingStatus.COMPLETED).count());
         model.addAttribute("availableSlotCount", slots.stream().filter(slot -> !slot.isBooked() && !slot.getSlotDate().isBefore(LocalDate.now())).count());
-        model.addAttribute("recentBookings", bookings.stream().limit(5).toList());
+        model.addAttribute("recentBookings", bookings.stream().limit(3).toList());
         model.addAttribute("notifications", bookingService.getSpecialistNotifications(specialistId));
         return "specialist/dashboard";
     }

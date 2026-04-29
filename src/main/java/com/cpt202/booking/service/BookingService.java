@@ -143,7 +143,7 @@ public class BookingService {
         return bookingAuditLogRepository.findAllByOrderByOperatedAtDesc()
                 .stream()
                 .filter(log -> bookingIds.contains(log.getBookingId()))
-                .limit(5)
+                .limit(3)
                 .collect(Collectors.toList());
     }
 
@@ -155,7 +155,7 @@ public class BookingService {
         return bookingAuditLogRepository.findAllByOrderByOperatedAtDesc()
                 .stream()
                 .filter(log -> bookingIds.contains(log.getBookingId()))
-                .limit(5)
+                .limit(3)
                 .collect(Collectors.toList());
     }
 

@@ -265,6 +265,10 @@
     font-weight: 800;
 }
 
+.home-specialist-card__initial[hidden] {
+    display: none !important;
+}
+
 .home-specialist-card__body {
     padding: 16px;
 }

@@ -11,8 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Comparator;
+import java.util.Map;
+
 @Controller
 public class PageController {
+
+    private static final String DEFAULT_AVATAR_PATH = "/images/avatar-placeholder.svg";
 
     private final SpecialistService specialistService;
     private final BookingService bookingService;
@@ -34,17 +39,30 @@ public class PageController {
         if (authentication != null) {
             return resolveDashboard(authentication);
         }
-        var featuredSpecialists = specialistService.getAllSpecialists().stream().limit(6).toList();
+        var activeSpecialists = specialistService.searchSpecialists(null, null, null);
+        Map<Long, String> specialistAvatarMap = userService.buildSpecialistAvatarMap(
+                activeSpecialists.stream().map(Specialist::getId).toList()
+        );
+        var featuredSpecialists = activeSpecialists.stream()
+                .sorted(Comparator
+                        .comparing((Specialist specialist) -> hasUploadedAvatar(specialistAvatarMap.get(specialist.getId())))
+                        .reversed()
+                        .thenComparing(Specialist::getName, String.CASE_INSENSITIVE_ORDER))
+                .limit(6)
+                .toList();
+
         model.addAttribute("featuredSpecialists", featuredSpecialists);
         model.addAttribute("activeCategories", categoryService.getActiveCategories().stream().limit(8).toList());
-        model.addAttribute("specialistAvatarMap", userService.buildSpecialistAvatarMap(
-                featuredSpecialists.stream().map(Specialist::getId).toList()
-        ));
-        model.addAttribute("specialistCount", specialistService.getAllSpecialists().size());
+        model.addAttribute("specialistAvatarMap", specialistAvatarMap);
+        model.addAttribute("specialistCount", activeSpecialists.size());
         model.addAttribute("categoryCount", categoryService.getActiveCategories().size());
         model.addAttribute("bookingCount", bookingService.getAllBookings().size());
         model.addAttribute("pendingCount", bookingService.getPendingBookings().size());
         return "home";
+    }
+
+    private boolean hasUploadedAvatar(String avatarPath) {
+        return avatarPath != null && !avatarPath.isBlank() && !DEFAULT_AVATAR_PATH.equals(avatarPath);
     }
 
     private String resolveDashboard(Authentication authentication) {

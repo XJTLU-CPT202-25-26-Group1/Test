@@ -120,4 +120,15 @@ public class AdminSpecialistController {
         }
         return "redirect:/admin/specialists";
     }
+
+    @PostMapping("/delete")
+    public String deleteSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        try {
+            specialistService.deleteSpecialist(id);
+            redirectAttributes.addFlashAttribute("message", "Specialist deleted.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/admin/specialists";
+    }
 }

@@ -7,7 +7,9 @@ import com.cpt202.booking.model.ExpertiseCategory;
 import com.cpt202.booking.model.Specialist;
 import com.cpt202.booking.model.User;
 import com.cpt202.booking.repository.AvailabilitySlotRepository;
+import com.cpt202.booking.repository.BookingRepository;
 import com.cpt202.booking.repository.ExpertiseCategoryRepository;
+import com.cpt202.booking.repository.FeedbackRepository;
 import com.cpt202.booking.repository.SpecialistRepository;
 import com.cpt202.booking.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -28,19 +30,28 @@ public class SpecialistService {
     private final SpecialistRepository specialistRepository;
     private final ExpertiseCategoryRepository categoryRepository;
     private final AvailabilitySlotRepository availabilitySlotRepository;
+    private final BookingRepository bookingRepository;
+    private final FeedbackRepository feedbackRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final AvatarStorageService avatarStorageService;
 
     public SpecialistService(SpecialistRepository specialistRepository,
                              ExpertiseCategoryRepository categoryRepository,
                              AvailabilitySlotRepository availabilitySlotRepository,
+                             BookingRepository bookingRepository,
+                             FeedbackRepository feedbackRepository,
                              UserRepository userRepository,
-                             EmailService emailService) {
+                             EmailService emailService,
+                             AvatarStorageService avatarStorageService) {
         this.specialistRepository = specialistRepository;
         this.categoryRepository = categoryRepository;
         this.availabilitySlotRepository = availabilitySlotRepository;
+        this.bookingRepository = bookingRepository;
+        this.feedbackRepository = feedbackRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.avatarStorageService = avatarStorageService;
     }
 
     public List<Specialist> getAllSpecialists() {
@@ -191,6 +202,31 @@ public class SpecialistService {
         userRepository.findBySpecialistId(saved.getId())
                 .ifPresent(emailService::sendSpecialistRejectionEmail);
         return saved;
+    }
+
+    @Transactional
+    public void deleteSpecialist(Long id) {
+        Specialist specialist = specialistRepository.findByIdForUpdate(id)
+                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+        if (bookingRepository.existsBySpecialistId(id)) {
+            throw new IllegalStateException("Specialists with booking history cannot be deleted. Deactivate them instead.");
+        }
+        if (feedbackRepository.existsBySpecialistId(id)) {
+            throw new IllegalStateException("Specialists with feedback history cannot be deleted. Deactivate them instead.");
+        }
+        if (availabilitySlotRepository.existsBySpecialistIdAndBookedTrue(id)) {
+            throw new IllegalStateException("Specialists with booked slots cannot be deleted. Deactivate them instead.");
+        }
+
+        User linkedUser = userRepository.findBySpecialistId(id).orElse(null);
+        String avatarPath = linkedUser == null ? null : linkedUser.getAvatarPath();
+
+        availabilitySlotRepository.deleteBySpecialistId(id);
+        if (linkedUser != null) {
+            userRepository.delete(linkedUser);
+        }
+        specialistRepository.delete(specialist);
+        avatarStorageService.deleteAvatar(avatarPath);
     }
 
     private ExpertiseCategory requireActiveCategory(Long categoryId) {

@@ -117,4 +117,25 @@ class AdminWorkflowTest {
 
         assertEquals("Only pending specialist registrations can be rejected.", error.getMessage());
     }
+
+    @Test
+    void adminCannotDeleteSpecialistWithBookingHistory() {
+        Specialist specialist = specialistRepository.findAll().get(0);
+        AvailabilitySlot slot = availabilitySlotRepository
+                .findBySpecialistIdAndBookedFalseAndSlotDateGreaterThanEqualOrderBySlotDateAscStartTimeAsc(specialist.getId(), LocalDate.now())
+                .get(0);
+        bookingService.createBooking(
+                "Deletion Guard Customer",
+                "deletion-guard@example.com",
+                specialist.getId(),
+                slot.getId(),
+                "Deletion guard",
+                ""
+        );
+
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+                () -> specialistService.deleteSpecialist(specialist.getId()));
+
+        assertEquals("Specialists with booking history cannot be deleted. Deactivate them instead.", error.getMessage());
+    }
 }

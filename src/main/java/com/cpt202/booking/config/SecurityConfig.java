@@ -27,7 +27,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authz -> authz
                 // Allow static assets
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/vendors/**", "/webjars/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/uploads/avatars/**", "/vendors/**", "/webjars/**").permitAll()
                 // Public pages
                 .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-email", "/auth/resend-verification", "/error/**").permitAll()
                 // Role-based access control

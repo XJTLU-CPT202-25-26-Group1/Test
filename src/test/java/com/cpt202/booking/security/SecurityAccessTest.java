@@ -33,4 +33,10 @@ class SecurityAccessTest {
                 .andExpect(status().isForbidden())
                 .andExpect(forwardedUrl("/error/403"));
     }
+
+    @Test
+    void uploadedAvatarsArePubliclyReadable() throws Exception {
+        mockMvc.perform(get("/uploads/avatars/missing-avatar.png"))
+                .andExpect(status().isNotFound());
+    }
 }

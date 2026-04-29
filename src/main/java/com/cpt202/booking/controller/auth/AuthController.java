@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Controller
 public class AuthController {
 
@@ -101,10 +104,13 @@ public class AuthController {
     }
 
     @GetMapping("/auth/verify-email")
-    public String verifyEmail(@RequestParam String username,
-                              @RequestParam String token,
+    public String verifyEmail(@RequestParam(required = false) String username,
+                              @RequestParam(required = false) String token,
                               RedirectAttributes redirectAttributes) {
         try {
+            if (username == null || username.isBlank() || token == null || token.isBlank()) {
+                throw new IllegalArgumentException("Verification link is incomplete. Please request a new verification email.");
+            }
             userService.verifyEmail(username, token);
             redirectAttributes.addFlashAttribute("message", "Email verified successfully. You can now log in.");
         } catch (Exception ex) {
@@ -155,8 +161,12 @@ public class AuthController {
             return "redirect:/auth/login";
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
-            return "redirect:/auth/reset-password?username=" + username + "&token=" + token;
+            return "redirect:/auth/reset-password?username=" + encodeQueryValue(username) + "&token=" + encodeQueryValue(token);
         }
+    }
+
+    private String encodeQueryValue(String value) {
+        return URLEncoder.encode(value == null ? "" : value, StandardCharsets.UTF_8);
     }
 
     @GetMapping("/auth/profile-edit")

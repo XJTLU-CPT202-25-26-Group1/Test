@@ -9,6 +9,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Service
 public class EmailService {
 
@@ -31,7 +34,8 @@ public class EmailService {
     }
 
     public void sendVerificationEmail(User user) {
-        String verifyLink = baseUrl + "/auth/verify-email?username=" + user.getUsername() + "&token=" + user.getVerificationToken();
+        String verifyLink = baseUrl + "/auth/verify-email?username=" + encodeQueryValue(user.getUsername())
+                + "&token=" + encodeQueryValue(user.getVerificationToken());
         sendEmail(
                 user.getEmail(),
                 "Verify your XJTLU Academic Expert Appointment account",
@@ -43,7 +47,8 @@ public class EmailService {
     }
 
     public void sendResetPasswordEmail(User user) {
-        String resetLink = baseUrl + "/auth/reset-password?username=" + user.getUsername() + "&token=" + user.getResetToken();
+        String resetLink = baseUrl + "/auth/reset-password?username=" + encodeQueryValue(user.getUsername())
+                + "&token=" + encodeQueryValue(user.getResetToken());
         sendEmail(
                 user.getEmail(),
                 "Reset your XJTLU Academic Expert Appointment password",
@@ -111,5 +116,9 @@ public class EmailService {
             normalized = normalized.substring(0, normalized.length() - 1);
         }
         return normalized;
+    }
+
+    private String encodeQueryValue(String value) {
+        return URLEncoder.encode(value == null ? "" : value, StandardCharsets.UTF_8);
     }
 }

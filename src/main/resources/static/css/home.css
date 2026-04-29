@@ -247,9 +247,10 @@
 }
 
 .home-specialist-card__portrait img {
-    width: 116px;
-    height: 116px;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 .home-specialist-card__initial {
@@ -263,10 +264,6 @@
     color: var(--primary);
     font-size: 2.6rem;
     font-weight: 800;
-}
-
-.home-specialist-card__initial[hidden] {
-    display: none !important;
 }
 
 .home-specialist-card__body {

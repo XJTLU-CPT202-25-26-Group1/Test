@@ -19,6 +19,10 @@ public interface AvailabilitySlotRepository extends JpaRepository<AvailabilitySl
 
     List<AvailabilitySlot> findBySpecialistIdAndBookedFalseAndSlotDateOrderByStartTimeAsc(Long specialistId, LocalDate date);
 
+    boolean existsBySpecialistIdAndBookedTrue(Long specialistId);
+
+    long deleteBySpecialistId(Long specialistId);
+
     Optional<AvailabilitySlot> findByIdAndSpecialistId(Long id, Long specialistId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

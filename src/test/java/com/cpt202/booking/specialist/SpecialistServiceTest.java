@@ -1,12 +1,16 @@
 package com.cpt202.booking.specialist;
 
+import com.cpt202.booking.enums.GenderType;
+import com.cpt202.booking.enums.RoleType;
 import com.cpt202.booking.enums.SpecialistStatus;
 import com.cpt202.booking.model.AvailabilitySlot;
 import com.cpt202.booking.model.ExpertiseCategory;
 import com.cpt202.booking.model.Specialist;
+import com.cpt202.booking.model.User;
 import com.cpt202.booking.repository.AvailabilitySlotRepository;
 import com.cpt202.booking.repository.ExpertiseCategoryRepository;
 import com.cpt202.booking.repository.SpecialistRepository;
+import com.cpt202.booking.repository.UserRepository;
 import com.cpt202.booking.service.SpecialistService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,9 @@ class SpecialistServiceTest {
 
     @Autowired
     private AvailabilitySlotRepository availabilitySlotRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void customerSearchFiltersByCategoryAndAvailability() {
@@ -86,6 +93,39 @@ class SpecialistServiceTest {
         ));
 
         assertEquals("Specialist description must not exceed 255 characters.", error.getMessage());
+    }
+
+    @Test
+    void adminCanDeleteUnusedSpecialistAndRelatedAccountData() {
+        ExpertiseCategory category = categoryRepository.findByNameIgnoreCase("Legal").orElseThrow();
+        Specialist specialist = specialistRepository.save(new Specialist(
+                "Disposable Specialist",
+                "Associate",
+                180.0,
+                "No appointment history.",
+                SpecialistStatus.PENDING_APPROVAL,
+                category
+        ));
+        Long specialistId = specialist.getId();
+
+        AvailabilitySlot slot = new AvailabilitySlot();
+        slot.setSpecialist(specialist);
+        slot.setSlotDate(LocalDate.now().plusDays(3));
+        slot.setStartTime(LocalTime.of(9, 0));
+        slot.setEndTime(LocalTime.of(10, 0));
+        slot.setBooked(false);
+        availabilitySlotRepository.save(slot);
+
+        User user = new User("delete-specialist", "encoded", "Disposable Specialist",
+                "delete-specialist@example.com", "13800009999", GenderType.FEMALE, RoleType.SPECIALIST);
+        user.setSpecialistId(specialistId);
+        userRepository.save(user);
+
+        specialistService.deleteSpecialist(specialistId);
+
+        assertTrue(specialistRepository.findById(specialistId).isEmpty());
+        assertTrue(availabilitySlotRepository.findBySpecialistIdOrderBySlotDateAscStartTimeAsc(specialistId).isEmpty());
+        assertTrue(userRepository.findBySpecialistId(specialistId).isEmpty());
     }
 
     @Test

@@ -9,7 +9,7 @@
       )}">
 <body>
 <th:block th:fragment="pageStyles">
-    <link rel="stylesheet" th:href="@{/css/home.css(v='20260424')}">
+    <link rel="stylesheet" th:href="@{/css/home.css(v='20260429')}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -121,11 +121,12 @@
 
         <div th:if="${featuredSpecialists != null and !#lists.isEmpty(featuredSpecialists)}" class="home-specialists__grid">
             <article class="home-specialist-card" th:each="specialist : ${featuredSpecialists}">
-                <div class="home-specialist-card__portrait">
-                    <img th:if="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
-                         th:src="${specialistAvatarMap[specialist.id]}"
-                         alt="Specialist avatar">
-                    <span th:unless="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
+                <div class="home-specialist-card__portrait"
+                     th:with="avatarPath=${specialistAvatarMap.get(specialist.id)}">
+                    <img th:if="${avatarPath != null and avatarPath != '/images/avatar-placeholder.svg'}"
+                         th:src="@{${avatarPath}}"
+                         th:alt="${specialist.name + ' avatar'}">
+                    <span th:unless="${avatarPath != null and avatarPath != '/images/avatar-placeholder.svg'}"
                           class="home-specialist-card__initial"
                           th:text="${#strings.substring(specialist.name, 0, 1)}">
                         S

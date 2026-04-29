@@ -57,7 +57,7 @@ public class AvailabilityService {
         validateSlotStartsInFuture(slotDate, startTime);
 
         Specialist specialist = specialistRepository.findByIdForUpdate(specialistId)
-                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic expert not found."));
 
         List<AvailabilitySlot> existingSlots = availabilitySlotRepository.findBySpecialistIdOrderBySlotDateAscStartTimeAsc(specialistId);
         validateOverlap(existingSlots, slotDate, startTime, endTime, null);
@@ -82,7 +82,7 @@ public class AvailabilityService {
         validateSlotStartsInFuture(slotDate, startTime);
 
         specialistRepository.findByIdForUpdate(specialistId)
-                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic expert not found."));
 
         AvailabilitySlot slot = availabilitySlotRepository.findByIdAndSpecialistIdForUpdate(slotId, specialistId)
                 .orElseThrow(() -> new IllegalArgumentException("Slot not found."));
@@ -103,7 +103,7 @@ public class AvailabilityService {
     @Transactional
     public void deleteSlot(Long specialistId, Long slotId) {
         specialistRepository.findByIdForUpdate(specialistId)
-                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic expert not found."));
 
         AvailabilitySlot slot = availabilitySlotRepository.findByIdAndSpecialistIdForUpdate(slotId, specialistId)
                 .orElseThrow(() -> new IllegalArgumentException("Slot not found."));

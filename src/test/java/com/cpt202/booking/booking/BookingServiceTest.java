@@ -202,7 +202,7 @@ class BookingServiceTest {
                         "cross-specialist@example.com"
                 ));
 
-        assertEquals("Booking can only be rescheduled to another slot for the same specialist.", error.getMessage());
+        assertEquals("Appointment can only be rescheduled to another slot for the same academic expert.", error.getMessage());
     }
 
     @Test
@@ -225,6 +225,6 @@ class BookingServiceTest {
         IllegalStateException error = assertThrows(IllegalStateException.class,
                 () -> bookingService.completeBookingForSpecialist(booking.getId(), specialist.getId()));
 
-        assertEquals("Booking can only be completed after the consultation has finished.", error.getMessage());
+        assertEquals("Appointment can only be completed after the consultation has finished.", error.getMessage());
     }
 }

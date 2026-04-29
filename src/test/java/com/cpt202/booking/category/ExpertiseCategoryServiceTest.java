@@ -28,7 +28,7 @@ class ExpertiseCategoryServiceTest {
         IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
                 () -> categoryService.createCategory("   "));
 
-        assertEquals("Category name is required.", error.getMessage());
+        assertEquals("Academic area name is required.", error.getMessage());
     }
 
     @Test
@@ -36,7 +36,7 @@ class ExpertiseCategoryServiceTest {
         IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
                 () -> categoryService.createCategory("  Legal  "));
 
-        assertEquals("Category already exists.", error.getMessage());
+        assertEquals("Academic area already exists.", error.getMessage());
     }
 
     @Test

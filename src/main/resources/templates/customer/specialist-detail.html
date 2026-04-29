@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Specialist Detail',
+        'Academic Expert Detail',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -20,9 +20,9 @@
                         <span class="page-back__icon" aria-hidden="true">&#8592;</span>
                         <span>Back to Search</span>
                     </a>
-                    <span class="section-kicker">Specialist Detail</span>
-                    <h1 class="page-title" th:text="${specialist.name}">Specialist Name</h1>
-                    <p class="page-subtitle">Review specialist information and choose an available consultation slot.</p>
+                    <span class="section-kicker">Academic Expert Detail</span>
+                    <h1 class="page-title" th:text="${specialist.name}">Academic Expert Name</h1>
+                    <p class="page-subtitle">Review XJTLU expert information and choose an available consultation slot.</p>
                 </div>
             </div>
 
@@ -32,7 +32,7 @@
                     <div class="specialist-profile-card__avatar">
                         <img th:if="${specialistAvatarPath != null and specialistAvatarPath != '/images/avatar-placeholder.svg'}"
                              th:src="${specialistAvatarPath}"
-                             alt="Specialist avatar">
+                             alt="Academic expert avatar">
                         <span th:unless="${specialistAvatarPath != null and specialistAvatarPath != '/images/avatar-placeholder.svg'}"
                               class="specialist-profile-card__avatar-initial"
                               th:text="${#strings.substring(specialist.name, 0, 1)}">
@@ -40,8 +40,8 @@
                         </span>
                     </div>
                     <div>
-                        <h2 th:text="${specialist.name}">Specialist Name</h2>
-                        <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                        <h2 th:text="${specialist.name}">Academic Expert Name</h2>
+                        <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Academic Area</p>
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="specialist-profile-card__description">
-                    <h3>Profile Description</h3>
+	                    <h3>Expertise Summary</h3>
                     <p th:text="${specialist.profileDescription}">Profile description.</p>
                 </div>
             </article>

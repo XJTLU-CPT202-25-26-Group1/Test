@@ -109,7 +109,7 @@ class AuthServiceTest {
 
     @Test
     void resetPasswordUpdatesStoredPassword() {
-        String token = userService.createResetToken("customer", "customer@demo.local");
+        String token = userService.createResetToken("customer", "requester@xjtlu.local");
         userService.resetPassword("customer", token, "newpass123");
 
         User stored = userRepository.findByUsernameIgnoreCase("customer").orElseThrow();
@@ -120,7 +120,7 @@ class AuthServiceTest {
     @Test
     void resendVerificationRejectsAlreadyVerifiedUser() {
         IllegalStateException error = assertThrows(IllegalStateException.class,
-                () -> userService.resendVerificationToken("customer", "customer@demo.local"));
+                () -> userService.resendVerificationToken("customer", "requester@xjtlu.local"));
 
         assertEquals("Email is already verified.", error.getMessage());
         assertTrue(userRepository.findByUsernameIgnoreCase("customer").orElseThrow().isEmailVerified());
@@ -136,7 +136,7 @@ class AuthServiceTest {
         IllegalStateException error = assertThrows(IllegalStateException.class,
                 () -> userService.resolveSpecialistId("orphan-specialist"));
 
-        assertEquals("Specialist account is not linked to a specialist profile.", error.getMessage());
+        assertEquals("Academic expert account is not linked to an expert profile.", error.getMessage());
     }
 
     @Test

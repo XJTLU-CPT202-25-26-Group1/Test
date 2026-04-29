@@ -68,7 +68,7 @@ public class SpecialistBookingController {
         try {
             Long specialistId = userService.resolveSpecialistId(authentication.getName());
             bookingService.completeBookingForSpecialist(id, specialistId);
-            redirectAttributes.addFlashAttribute("message", "Booking marked as completed.");
+            redirectAttributes.addFlashAttribute("message", "Consultation marked as completed.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }

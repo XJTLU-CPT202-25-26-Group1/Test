@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Specialist Bookings',
+	        'Expert Bookings',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -17,8 +17,8 @@
         <div class="page-header specialist-page__header">
             <div>
                 <span class="section-kicker">Consultation Worklist</span>
-                <h1 class="page-title">Specialist Bookings</h1>
-                <p class="page-subtitle">Review assigned bookings, track status changes, and complete confirmed consultations.</p>
+	                <h1 class="page-title">Expert Consultation Bookings</h1>
+	                <p class="page-subtitle">Review assigned XJTLU appointments, track status changes, and complete confirmed consultations.</p>
             </div>
             <div class="specialist-header-actions">
                 <a class="btn btn-primary" th:href="@{/specialist/bookings/weekly}">Weekly Schedule</a>
@@ -63,7 +63,7 @@
                         <div>
                             <h3 th:text="${booking.topic}">Booking Topic</h3>
                             <p>
-                                <span th:text="${booking.customerName}">Customer</span>
+	                                <span th:text="${booking.customerName}">Requester</span>
                                 <span> · </span>
                                 <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
                                 <span> </span>
@@ -97,7 +97,7 @@
             </div>
 
             <div th:if="${bookings == null or #lists.isEmpty(bookings)}" class="empty-state">
-                No booking records have been assigned to you yet.
+	                No appointment records have been assigned to you yet.
             </div>
         </section>
     </section>

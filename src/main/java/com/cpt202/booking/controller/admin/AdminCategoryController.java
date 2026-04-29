@@ -29,7 +29,7 @@ public class AdminCategoryController {
     public String createCategory(@RequestParam String name, RedirectAttributes redirectAttributes) {
         try {
             categoryService.createCategory(name);
-            redirectAttributes.addFlashAttribute("message", "Category created.");
+            redirectAttributes.addFlashAttribute("message", "Academic area created.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -40,7 +40,7 @@ public class AdminCategoryController {
     public String updateCategory(@RequestParam Long id, @RequestParam String name, RedirectAttributes redirectAttributes) {
         try {
             categoryService.updateCategory(id, name);
-            redirectAttributes.addFlashAttribute("message", "Category updated.");
+            redirectAttributes.addFlashAttribute("message", "Academic area updated.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -51,7 +51,7 @@ public class AdminCategoryController {
     public String toggleCategory(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             categoryService.toggleCategoryStatus(id);
-            redirectAttributes.addFlashAttribute("message", "Category status updated.");
+            redirectAttributes.addFlashAttribute("message", "Academic area status updated.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }

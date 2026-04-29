@@ -56,7 +56,7 @@
                         <div>
                             <h3 th:text="${booking.topic}">Booking Topic</h3>
                             <p>
-                                <span th:text="${booking.customerName}">Customer</span>
+	                                <span th:text="${booking.customerName}">Requester</span>
                                 <span> · </span>
                                 <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">Date</span>
                                 <span> </span>
@@ -93,7 +93,7 @@
                    th:each="booking : ${historyBookings}"
                    th:href="@{/specialist/bookings/detail(id=${booking.id})}">
                     <strong th:text="${booking.topic}">Topic</strong>
-                    <span th:text="${booking.customerName}">Customer</span>
+	                    <span th:text="${booking.customerName}">Requester</span>
                     <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">Date</span>
                 </a>
             </div>

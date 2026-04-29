@@ -25,17 +25,17 @@ public class FeedbackService {
 
     public Feedback submitFeedback(Long bookingId, String customerEmail, Integer rating, String comment) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
         String normalizedComment = normalizeRequiredText(comment, "Feedback comment", FEEDBACK_COMMENT_MAX_LENGTH);
 
         if (!booking.getCustomerEmail().equalsIgnoreCase(customerEmail)) {
-            throw new IllegalArgumentException("You can only submit feedback for your own bookings.");
+            throw new IllegalArgumentException("You can only submit feedback for your own appointments.");
         }
         if (booking.getStatus() != BookingStatus.COMPLETED) {
             throw new IllegalStateException("Feedback is available only after the consultation is completed.");
         }
         if (feedbackRepository.findByBookingId(bookingId).isPresent()) {
-            throw new IllegalStateException("Feedback has already been submitted for this booking.");
+            throw new IllegalStateException("Feedback has already been submitted for this appointment.");
         }
         if (rating == null || rating < 1 || rating > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5.");

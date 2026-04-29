@@ -38,7 +38,7 @@ public class AdminBookingController {
     public String confirm(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             bookingService.confirmBooking(id);
-            redirectAttributes.addFlashAttribute("message", "Booking confirmed.");
+            redirectAttributes.addFlashAttribute("message", "Appointment request confirmed.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -49,7 +49,7 @@ public class AdminBookingController {
     public String reject(@RequestParam Long id, @RequestParam String reason, RedirectAttributes redirectAttributes) {
         try {
             bookingService.rejectBooking(id, reason);
-            redirectAttributes.addFlashAttribute("message", "Booking rejected.");
+            redirectAttributes.addFlashAttribute("message", "Appointment request rejected.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }

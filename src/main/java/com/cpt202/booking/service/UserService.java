@@ -155,12 +155,12 @@ public class UserService implements UserDetailsService {
 
         if (role == RoleType.SPECIALIST) {
             if (categoryId == null) {
-                throw new IllegalArgumentException("Specialist registration requires an expertise category.");
+                throw new IllegalArgumentException("Academic expert registration requires an academic area.");
             }
             Double finalFeeRate = feeRate == null ? 200.0 : feeRate;
             String finalLevel = (level == null || level.isBlank()) ? "Associate" : level;
             String finalDescription = (description == null || description.isBlank())
-                    ? "Self-registered specialist profile pending enrichment."
+                    ? "Self-registered XJTLU academic expert profile pending review."
                     : description.trim();
             Specialist specialist = specialistService.createPendingSpecialist(displayName, finalLevel, finalFeeRate, finalDescription, categoryId);
             user.setSpecialistId(specialist.getId());
@@ -228,10 +228,10 @@ public class UserService implements UserDetailsService {
     public Long resolveSpecialistId(String username) {
         User user = requireExistingUser(username);
         if (user.getRole() != RoleType.SPECIALIST) {
-            throw new IllegalArgumentException("Current account is not a specialist.");
+            throw new IllegalArgumentException("Current account is not an academic expert account.");
         }
         if (user.getSpecialistId() == null) {
-            throw new IllegalStateException("Specialist account is not linked to a specialist profile.");
+            throw new IllegalStateException("Academic expert account is not linked to an expert profile.");
         }
         return specialistService.getSpecialistById(user.getSpecialistId()).getId();
     }

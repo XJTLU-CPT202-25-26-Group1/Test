@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'My Bookings',
+        'My Appointments',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -16,11 +16,11 @@
     <section class="customer-page">
         <div class="page-header customer-page__header">
             <div>
-                <span class="section-kicker">Customer Booking</span>
-                <h1 class="page-title">My Bookings</h1>
-                <p class="page-subtitle">Track submitted requests, upcoming appointments, and booking history.</p>
+	                <span class="section-kicker">Campus Appointment Records</span>
+	                <h1 class="page-title">My Appointments</h1>
+		                <p class="page-subtitle">Track submitted expert requests, upcoming appointments, and consultation history.</p>
             </div>
-            <a class="btn btn-primary" th:href="@{/customer/specialists}">Find Specialist</a>
+	            <a class="btn btn-primary" th:href="@{/customer/specialists}">Find Expert</a>
         </div>
 
         <section class="customer-dashboard-grid">
@@ -30,7 +30,7 @@
                     <a class="compact-list__item"
                        th:each="booking : ${upcomingBookings}"
                        th:href="@{/customer/bookings/detail(id=${booking.id})}">
-                        <strong th:text="${booking.specialist.name}">Specialist</strong>
+	                        <strong th:text="${booking.specialist.name}">Academic Expert</strong>
                         <span>
                             <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
                             <span> </span>
@@ -60,9 +60,9 @@
         <section class="card customer-filter">
             <form th:action="@{/customer/bookings}" method="get" class="booking-search-form">
                 <div class="form-group">
-                    <label for="keyword">Search Bookings</label>
+	                    <label for="keyword">Search Appointments</label>
                     <input id="keyword" name="keyword" type="text" th:value="${keyword}"
-                           placeholder="Topic, specialist, or status">
+	                           placeholder="Topic, expert, or status">
                 </div>
                 <div class="customer-filter__actions">
                     <button type="submit" class="btn btn-primary">Search</button>
@@ -73,7 +73,7 @@
 
         <section class="customer-section">
             <div class="customer-section__head">
-                <h2>Booking History</h2>
+	                    <h2>Appointment History</h2>
                 <span class="customer-count" th:text="${bookings != null ? #lists.size(bookings) + ' records' : '0 records'}">0 records</span>
             </div>
 
@@ -83,7 +83,7 @@
                         <div>
                             <h3 th:text="${booking.topic}">Booking Topic</h3>
                             <p>
-                                <span th:text="${booking.specialist.name}">Specialist</span>
+	                                <span th:text="${booking.specialist.name}">Academic Expert</span>
                                 <span> · </span>
                                 <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
                                 <span> </span>
@@ -104,7 +104,7 @@
             </div>
 
             <div th:if="${bookings == null or #lists.isEmpty(bookings)}" class="empty-state">
-                No bookings match the current search.
+	                No appointment records match the current search.
             </div>
         </section>
     </section>

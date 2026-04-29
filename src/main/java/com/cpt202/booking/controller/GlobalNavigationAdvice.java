@@ -53,8 +53,8 @@ public class GlobalNavigationAdvice {
     private String toRoleLabel(RoleType role) {
         return switch (role) {
             case ADMIN -> "Administrator";
-            case SPECIALIST -> "Specialist";
-            case CUSTOMER -> "Customer";
+            case SPECIALIST -> "Academic Expert";
+            case CUSTOMER -> "Student / Staff";
         };
     }
 

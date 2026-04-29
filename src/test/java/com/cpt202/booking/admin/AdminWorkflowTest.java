@@ -115,7 +115,7 @@ class AdminWorkflowTest {
         IllegalStateException error = assertThrows(IllegalStateException.class,
                 () -> specialistService.rejectSpecialist(specialist.getId()));
 
-        assertEquals("Only pending specialist registrations can be rejected.", error.getMessage());
+        assertEquals("Only pending academic expert registrations can be rejected.", error.getMessage());
     }
 
     @Test
@@ -136,6 +136,6 @@ class AdminWorkflowTest {
         IllegalStateException error = assertThrows(IllegalStateException.class,
                 () -> specialistService.deleteSpecialist(specialist.getId()));
 
-        assertEquals("Specialists with booking history cannot be deleted. Deactivate them instead.", error.getMessage());
+        assertEquals("Academic experts with appointment history cannot be deleted. Deactivate them instead.", error.getMessage());
     }
 }

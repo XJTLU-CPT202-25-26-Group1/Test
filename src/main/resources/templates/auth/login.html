@@ -15,8 +15,8 @@
 <th:block th:fragment="content">
     <section class="auth-shell auth-shell--simple">
         <article class="card auth-card auth-card--compact">
-            <h1>Login</h1>
-            <p class="auth-card__subtitle">Enter your account information to continue.</p>
+            <h1>XJTLU Appointment Login</h1>
+            <p class="auth-card__subtitle">Sign in to manage XJTLU academic expert appointments.</p>
 
             <div th:if="${param.error != null}" class="auth-alert auth-alert--error">
                 Username or password is incorrect. Please check your credentials and try again.
@@ -27,15 +27,15 @@
             </div>
 
             <div th:if="${param.pendingApproval != null}" class="auth-alert auth-alert--warning">
-                Your specialist registration is waiting for administrator approval. You will receive an email after review.
+	                Your academic expert registration is waiting for administrator approval. You will receive an email after review.
             </div>
 
             <div th:if="${param.approvalRejected != null}" class="auth-alert auth-alert--error">
-                Your specialist registration was not approved. Please check your email or contact the administrator.
+	                Your academic expert registration was not approved. Please check your email or contact the administrator.
             </div>
 
             <div th:if="${param.specialistInactive != null}" class="auth-alert auth-alert--error">
-                Your specialist account is currently inactive. Please contact the administrator for assistance.
+	                Your academic expert account is currently inactive. Please contact the administrator for assistance.
             </div>
 
             <div th:if="${param.logout != null}" class="auth-alert auth-alert--success">
@@ -68,9 +68,9 @@
             <section class="auth-note">
                 <h2>Quick Help</h2>
                 <ul class="auth-checklist">
-                    <li>If you just registered, verify your email before trying to log in.</li>
-                    <li>If your password is wrong, use “Forgot password?” to reset it.</li>
-                    <li>If the verification email is missing, use “Resend verification email”.</li>
+	                    <li>New XJTLU requesters must verify email before logging in.</li>
+	                    <li>Academic expert accounts also require administrator approval.</li>
+	                    <li>If the verification email is missing, use “Resend verification email”.</li>
                 </ul>
             </section>
 

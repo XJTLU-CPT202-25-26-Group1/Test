@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Booking Review',
+        'Appointment Review',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -16,9 +16,9 @@
     <section class="admin-page">
         <div class="page-header admin-page__header">
             <div>
-                <span class="section-kicker">Admin Review</span>
-                <h1 class="page-title">Booking Management</h1>
-                <p class="page-subtitle">Review pending booking requests, inspect all records, and monitor status history.</p>
+	                <span class="section-kicker">XJTLU Appointment Review</span>
+	                <h1 class="page-title">Appointment Management</h1>
+		                <p class="page-subtitle">Review pending expert appointment requests, view records, and check status history.</p>
             </div>
             <a class="btn btn-secondary" th:href="@{/admin/billing}">Billing</a>
         </div>
@@ -27,7 +27,7 @@
             <div class="admin-section__head">
                 <div>
                     <h2>Pending Review</h2>
-                    <p>Confirm valid requests or reject requests with a reason.</p>
+	                    <p>Confirm valid campus appointment requests or reject requests with a reason.</p>
                 </div>
                 <span class="admin-count" th:text="${pendingBookings != null ? #lists.size(pendingBookings) + ' pending' : '0 pending'}">0 pending</span>
             </div>
@@ -38,9 +38,9 @@
                         <div>
                             <h3 th:text="${booking.topic}">Booking Topic</h3>
                             <p>
-                                <span th:text="${booking.customerName}">Customer</span>
+	                                <span th:text="${booking.customerName}">Requester</span>
                                 <span> · </span>
-                                <span th:text="${booking.specialist.name}">Specialist</span>
+	                                <span th:text="${booking.specialist.name}">Academic Expert</span>
                             </p>
                         </div>
                         <span class="status-badge status-badge--pending" th:text="${booking.status}">PENDING</span>
@@ -76,7 +76,7 @@
             </div>
 
             <div th:if="${pendingBookings == null or #lists.isEmpty(pendingBookings)}" class="empty-state">
-                No bookings are pending review.
+	                No appointment requests are pending review.
             </div>
         </section>
 
@@ -85,7 +85,7 @@
                 <div class="admin-section__head">
                     <div>
                         <h2>All Bookings</h2>
-                        <p>Complete booking record list.</p>
+	                        <p>Complete XJTLU appointment record list.</p>
                     </div>
                     <span class="admin-count" th:text="${allBookings != null ? #lists.size(allBookings) + ' records' : '0 records'}">0 records</span>
                 </div>
@@ -96,9 +96,9 @@
                        th:href="@{/admin/bookings/detail(id=${booking.id})}">
                         <strong th:text="${booking.topic}">Topic</strong>
                         <span>
-                            <span th:text="${booking.customerName}">Customer</span>
+	                            <span th:text="${booking.customerName}">Requester</span>
                             <span> · </span>
-                            <span th:text="${booking.specialist.name}">Specialist</span>
+	                            <span th:text="${booking.specialist.name}">Academic Expert</span>
                         </span>
                         <span class="status-badge" th:classappend="${' status-badge--' + #strings.toLowerCase(booking.status.name())}"
                               th:text="${booking.status}">STATUS</span>
@@ -106,7 +106,7 @@
                 </div>
 
                 <p th:if="${allBookings == null or #lists.isEmpty(allBookings)}" class="admin-muted-text">
-                    No booking records yet.
+	                    No appointment records yet.
                 </p>
             </article>
 

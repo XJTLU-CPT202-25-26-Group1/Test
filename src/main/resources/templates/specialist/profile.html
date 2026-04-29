@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Specialist Profile',
+        'Expert Profile',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -21,8 +21,8 @@
                         <span>Back to Dashboard</span>
                     </a>
                     <span class="section-kicker">Profile</span>
-                    <h1 class="page-title">Specialist Profile</h1>
-                    <p class="page-subtitle">Review account identity and specialist service information.</p>
+	                    <h1 class="page-title">Academic Expert Profile</h1>
+	                    <p class="page-subtitle">Review account identity and XJTLU consultation service information.</p>
                 </div>
             </div>
 
@@ -30,10 +30,10 @@
             <article class="card specialist-profile-card">
                 <div class="specialist-profile-avatar">
                     <img th:src="${account.avatarPath != null and !#strings.isEmpty(account.avatarPath) ? account.avatarPath : '/images/avatar-placeholder.svg'}"
-                         alt="Specialist avatar">
+	                         alt="Academic expert avatar">
                 </div>
-                <h2 th:text="${specialist.name}">Specialist Name</h2>
-                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+	                <h2 th:text="${specialist.name}">Academic Expert Name</h2>
+                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Academic Area</p>
 
                 <div class="specialist-readonly-list">
                     <div>
@@ -83,7 +83,7 @@
 
             <article class="card specialist-profile-card specialist-profile-card--form">
                 <h2>Replace Avatar</h2>
-                <p>Upload a new profile image for your account and specialist-facing preview areas.</p>
+	                <p>Upload a new profile image for your account and expert-facing preview areas.</p>
                 <form th:action="@{/specialist/profile}" method="post" enctype="multipart/form-data" class="form-grid">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
@@ -103,7 +103,7 @@
                 <h2>Profile Description</h2>
                 <p th:text="${specialist.profileDescription}">Profile description.</p>
                 <p class="specialist-muted-text">
-                    Profile editing is currently managed through administrator or operations workflows.
+                    Ask an administrator to update expert profile details.
                 </p>
             </article>
         </section>

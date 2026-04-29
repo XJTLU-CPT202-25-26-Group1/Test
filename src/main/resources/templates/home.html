@@ -128,6 +128,7 @@
                          th:alt="${specialist.name + ' avatar'}"
                          onerror="this.hidden=true; this.nextElementSibling.hidden=false;">
                     <span th:hidden="${avatarPath != null and avatarPath != '/images/avatar-placeholder.svg'}"
+                          hidden
                           class="home-specialist-card__initial"
                           th:text="${#strings.substring(specialist.name, 0, 1)}">
                         S

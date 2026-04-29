@@ -33,9 +33,9 @@ public class EmailService {
         String verifyLink = baseUrl + "/auth/verify-email?username=" + user.getUsername() + "&token=" + user.getVerificationToken();
         sendEmail(
                 user.getEmail(),
-                "Verify your Expert Appointment account",
+                "Verify your XJTLU Academic Expert Appointment account",
                 "Hello " + user.getDisplayName() + ",\n\n"
-                        + "Please verify your account email by opening the link below:\n"
+                        + "Please verify your account email for the XJTLU Academic Expert Appointment System by opening the link below:\n"
                         + verifyLink + "\n\n"
                         + "If you did not create this account, you can ignore this message."
         );
@@ -45,9 +45,9 @@ public class EmailService {
         String resetLink = baseUrl + "/auth/reset-password?username=" + user.getUsername() + "&token=" + user.getResetToken();
         sendEmail(
                 user.getEmail(),
-                "Reset your Expert Appointment password",
+                "Reset your XJTLU Academic Expert Appointment password",
                 "Hello " + user.getDisplayName() + ",\n\n"
-                        + "Use the link below to reset your password:\n"
+                        + "Use the link below to reset your XJTLU appointment system password:\n"
                         + resetLink + "\n\n"
                         + "Reset token: " + user.getResetToken() + "\n\n"
                         + "If you did not request a password reset, you can ignore this message."
@@ -57,11 +57,11 @@ public class EmailService {
     public void sendSpecialistApprovalEmail(User user, boolean emailVerified) {
         sendEmail(
                 user.getEmail(),
-                "Your specialist registration has been approved",
+                "Your XJTLU expert registration has been approved",
                 "Hello " + user.getDisplayName() + ",\n\n"
-                        + "Your specialist registration has been approved by the administrator.\n"
+                        + "Your XJTLU academic expert registration has been approved by the administrator.\n"
                         + (emailVerified
-                        ? "You can now log in to the system and start using your specialist portal."
+                        ? "You can now log in and start managing consultation availability."
                         : "Please verify your email first. After email verification, you will be able to log in.")
                         + "\n\n"
                         + "Login page: " + baseUrl + "/auth/login"
@@ -71,10 +71,10 @@ public class EmailService {
     public void sendSpecialistRejectionEmail(User user) {
         sendEmail(
                 user.getEmail(),
-                "Your specialist registration was not approved",
+                "Your XJTLU expert registration was not approved",
                 "Hello " + user.getDisplayName() + ",\n\n"
-                        + "Your specialist registration request was reviewed by the administrator and was not approved at this time.\n"
-                        + "If you believe this was a mistake, please contact the system administrator for further support."
+                        + "Your XJTLU academic expert registration request was reviewed by the administrator and was not approved at this time.\n"
+                        + "If you believe this was a mistake, please contact the module administrator or system administrator for further support."
         );
     }
 

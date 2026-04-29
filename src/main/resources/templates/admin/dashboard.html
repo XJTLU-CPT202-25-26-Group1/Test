@@ -16,36 +16,36 @@
     <section class="admin-page">
         <div class="page-header admin-page__header">
             <div>
-                <span class="section-kicker">Admin Console</span>
-                <h1 class="page-title">Operations Dashboard</h1>
-                <p class="page-subtitle">Monitor booking workload, specialist capacity, category setup, and recent workflow actions.</p>
+	                <span class="section-kicker">XJTLU Admin Console</span>
+	                <h1 class="page-title">Appointment Operations Dashboard</h1>
+		                <p class="page-subtitle">Track pending requests, expert records, academic areas, and recent status changes.</p>
             </div>
-            <a class="btn btn-primary" th:href="@{/admin/bookings}">Review Bookings</a>
+            <a class="btn btn-primary" th:href="@{/admin/bookings}">Review Appointments</a>
         </div>
 
         <section class="admin-metric-grid">
             <article class="card admin-metric-card admin-metric-card--primary">
                 <span>Pending Review</span>
                 <strong th:text="${pendingCount}">0</strong>
-                <p>Booking requests waiting for administrator confirmation or rejection.</p>
+	                <p>XJTLU appointment requests waiting for administrator confirmation or rejection.</p>
             </article>
 
             <article class="card admin-metric-card">
                 <span>Total Bookings</span>
                 <strong th:text="${bookingCount}">0</strong>
-                <p>All booking records currently stored in the system.</p>
+		                <p>All appointment records currently stored in the system.</p>
             </article>
 
             <article class="card admin-metric-card">
-                <span>Specialists</span>
+	                <span>Experts</span>
                 <strong th:text="${specialistCount}">0</strong>
-                <p>Specialist profiles available for operations and customer discovery.</p>
+		                <p>Academic expert profiles available for appointment requests.</p>
             </article>
 
             <article class="card admin-metric-card">
                 <span>Categories</span>
                 <strong th:text="${categoryCount}">0</strong>
-                <p>Expertise categories used by filtering, specialist setup, and booking search.</p>
+	                <p>Academic areas used by filtering, expert setup, and appointment search.</p>
             </article>
         </section>
 
@@ -54,22 +54,22 @@
                 <div class="admin-section__head">
                     <div>
                         <h2>Quick Actions</h2>
-                        <p>Jump to the most common administrator workflows.</p>
+		                        <p>Open common XJTLU appointment administration tasks.</p>
                     </div>
                 </div>
 
                 <div class="admin-action-grid">
                     <a th:href="@{/admin/bookings}">
-                        <strong>Booking Review</strong>
-                        <span>Confirm, reject, and inspect booking status history.</span>
+                        <strong>Appointment Review</strong>
+                        <span>Confirm, reject, and inspect appointment status history.</span>
                     </a>
                     <a th:href="@{/admin/specialists}">
-                        <strong>Specialist Records</strong>
-                        <span>Create, search, edit, and activate specialist profiles.</span>
+	                        <strong>Expert Records</strong>
+		                        <span>Create, search, edit, approve, and update expert profiles.</span>
                     </a>
                     <a th:href="@{/admin/categories}">
-                        <strong>Expertise Categories</strong>
-                        <span>Maintain category names and active selection status.</span>
+	                        <strong>Academic Areas</strong>
+		                        <span>Maintain consultation area names and active status.</span>
                     </a>
                     <a th:href="@{/admin/billing}">
                         <strong>Billing Summary</strong>
@@ -82,7 +82,7 @@
                 <div class="admin-section__head">
                     <div>
                         <h2>Recent Audit Logs</h2>
-                        <p>Latest booking workflow operations.</p>
+	                        <p>Latest appointment status changes.</p>
                     </div>
                     <span class="admin-count" th:text="${recentAuditLogs != null ? #lists.size(recentAuditLogs) + ' logs' : '0 logs'}">0 logs</span>
                 </div>

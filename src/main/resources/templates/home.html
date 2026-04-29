@@ -17,11 +17,11 @@
         <article class="home-hero__banner">
             <div class="home-hero__overlay">
                 <div class="home-hero__copy">
-                    <span class="eyebrow home-hero__eyebrow">Specialist Booking System</span>
-                    <h1 class="home-hero__title">Book the right specialist through a homepage that stays focused on the real next action.</h1>
+                    <span class="eyebrow home-hero__eyebrow">XJTLU Academic Expert Appointment</span>
+                    <h1 class="home-hero__title">Book campus academic experts for study, programme, and professional guidance.</h1>
                     <p class="home-hero__text">
-                        Register, log in, review available specialists, and enter the booking workflow
-                        without extra content getting in the way.
+                        A 2026 CPT202 group coursework system for XJTLU students, staff, academic experts, and administrators
+                        to handle campus consultation appointments.
                     </p>
 
                     <div class="cta-row">
@@ -32,11 +32,11 @@
 
                 <aside class="home-hero__metrics card">
                     <div class="home-hero__metric">
-                        <span class="home-hero__metric-label">Active specialists</span>
+                        <span class="home-hero__metric-label">Active experts</span>
                         <strong th:text="${specialistCount}">0</strong>
                     </div>
                     <div class="home-hero__metric">
-                        <span class="home-hero__metric-label">Expertise categories</span>
+                        <span class="home-hero__metric-label">Academic areas</span>
                         <strong th:text="${categoryCount}">0</strong>
                     </div>
                     <div class="home-hero__metric">
@@ -55,19 +55,19 @@
     <section class="home-roles">
         <div class="home-roles__grid">
             <a class="home-role-card" th:href="@{/auth/login}">
-                <span class="home-role-card__label">Customer</span>
-                <h2>I am a customer</h2>
-                <p>Search specialists, submit booking requests, and track appointment progress.</p>
+	                <span class="home-role-card__label">Student / Staff</span>
+	                <h2>I need academic guidance</h2>
+	                <p>Search XJTLU experts, submit appointment requests, and track consultation progress.</p>
             </a>
             <a class="home-role-card" th:href="@{/auth/login}">
-                <span class="home-role-card__label">Specialist</span>
-                <h2>I am a specialist</h2>
-                <p>Maintain availability, review scheduled consultations, and complete bookings.</p>
+	                <span class="home-role-card__label">Academic Expert</span>
+	                <h2>I provide consultations</h2>
+	                <p>Maintain availability, review scheduled sessions, and record completed consultations.</p>
             </a>
             <a class="home-role-card" th:href="@{/auth/login}">
-                <span class="home-role-card__label">Administrator</span>
-                <h2>I am an administrator</h2>
-                <p>Manage specialists, categories, booking approvals, and operational records.</p>
+	                <span class="home-role-card__label">Administrator</span>
+	                <h2>I review appointments</h2>
+	                <p>Approve requests, maintain expert records, and update academic areas.</p>
             </a>
         </div>
     </section>
@@ -75,9 +75,9 @@
     <section class="home-process">
         <div class="page-header">
             <div>
-                <span class="section-kicker">Appointment Process</span>
-                <h2 class="page-title home-section-title">How a Booking Moves Through the System</h2>
-                <p class="page-subtitle">A simple lifeline view of the main appointment path from account access to feedback.</p>
+	                <span class="section-kicker">Campus Appointment Flow</span>
+	                <h2 class="page-title home-section-title">From Expert Search to Consultation Record</h2>
+		                <p class="page-subtitle">Each record shows request status, approval result, completion, and feedback.</p>
             </div>
         </div>
 
@@ -85,27 +85,27 @@
             <article class="home-lifeline__step">
                 <span class="home-lifeline__point"></span>
                 <h3>Register and verify</h3>
-                <p>Create an account and complete email verification before entering the system.</p>
+	                <p>Create an account and complete email verification before using the XJTLU appointment service.</p>
             </article>
             <article class="home-lifeline__step">
                 <span class="home-lifeline__point"></span>
-                <h3>Select specialist</h3>
-                <p>Browse active specialists by category and choose an available consultation slot.</p>
+	                <h3>Select an expert</h3>
+	                <p>Browse active academic experts by area and choose an available consultation slot.</p>
             </article>
             <article class="home-lifeline__step">
                 <span class="home-lifeline__point"></span>
                 <h3>Submit request</h3>
-                <p>Send a validated booking request and wait for administrative confirmation.</p>
+	                <p>Send a validated appointment request and wait for administrator confirmation.</p>
             </article>
             <article class="home-lifeline__step">
                 <span class="home-lifeline__point"></span>
                 <h3>Attend appointment</h3>
-                <p>The specialist completes the consultation after the scheduled time.</p>
+	                <p>The expert completes the consultation record after the scheduled session.</p>
             </article>
             <article class="home-lifeline__step">
                 <span class="home-lifeline__point"></span>
                 <h3>Review record</h3>
-                <p>Customers and specialists can view history, status updates, and feedback.</p>
+	                <p>Requesters and experts can review history, status updates, and feedback.</p>
             </article>
         </div>
     </section>
@@ -113,9 +113,9 @@
     <section class="home-specialists">
         <div class="page-header">
             <div>
-                <span class="section-kicker">Specialist Preview</span>
-                <h2 class="page-title home-section-title">Featured Specialists</h2>
-                <p class="page-subtitle">A compact preview block for the specialists users are likely to browse first.</p>
+	                <span class="section-kicker">Academic Expert Preview</span>
+	                <h2 class="page-title home-section-title">Featured XJTLU Experts</h2>
+		                <p class="page-subtitle">Active experts available for campus consultation appointments.</p>
             </div>
         </div>
 
@@ -134,10 +134,10 @@
                     </span>
                 </div>
                 <div class="home-specialist-card__body">
-                    <h3 th:text="${specialist.name}">Specialist Name</h3>
+                    <h3 th:text="${specialist.name}">Academic Expert Name</h3>
                     <p class="home-specialist-card__category"
                        th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">
-                        Category
+                        Academic Area
                     </p>
                     <div class="inline-list">
                         <span class="pill" th:text="${specialist.level}">Level</span>
@@ -148,16 +148,16 @@
         </div>
 
         <div th:if="${featuredSpecialists == null or #lists.isEmpty(featuredSpecialists)}" class="empty-state">
-            Featured specialists will appear here once specialist records are available.
+	            Featured experts will appear here once expert records are available.
         </div>
     </section>
 
     <section class="home-categories">
         <div class="page-header">
             <div>
-                <span class="section-kicker">Expertise List</span>
-                <h2 class="page-title home-section-title">Available Expertise Categories</h2>
-                <p class="page-subtitle">Customers can use these categories during specialist search and booking.</p>
+	                <span class="section-kicker">Academic Areas</span>
+	                <h2 class="page-title home-section-title">Available Consultation Areas</h2>
+	                <p class="page-subtitle">Students and staff can use these areas to find the right XJTLU expert.</p>
             </div>
         </div>
 
@@ -166,14 +166,14 @@
                 <span class="home-category-card__icon"
                       th:text="${#strings.substring(category.name, 0, 1)}">C</span>
                 <div class="home-category-card__body">
-                    <h3 th:text="${category.name}">Category</h3>
-                    <p>Available for registration support and booking-side filtering.</p>
+                    <h3 th:text="${category.name}">Academic Area</h3>
+	                    <p>Used for expert registration, search, and appointment filters.</p>
                 </div>
             </article>
         </div>
 
         <div th:if="${activeCategories == null or #lists.isEmpty(activeCategories)}" class="empty-state">
-            Active expertise categories will appear here once category data is configured.
+	            Active academic areas will appear here once category data is configured.
         </div>
     </section>
 </th:block>

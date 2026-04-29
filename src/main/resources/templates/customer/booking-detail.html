@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Booking Detail',
+        'Appointment Detail',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -20,9 +20,9 @@
                         <span class="page-back__icon" aria-hidden="true">&#8592;</span>
                         <span>Back to Bookings</span>
                     </a>
-                    <span class="section-kicker">Booking Detail</span>
+                    <span class="section-kicker">Appointment Detail</span>
                     <h1 class="page-title" th:text="${booking.topic}">Booking Topic</h1>
-                    <p class="page-subtitle">Review appointment information, status, and available customer actions.</p>
+                    <p class="page-subtitle">Review your XJTLU appointment information, status, and available actions.</p>
                 </div>
             </div>
 
@@ -30,8 +30,8 @@
             <article class="card booking-detail-card">
                 <div class="booking-detail-card__head">
                     <div>
-                        <h2 th:text="${booking.specialist.name}">Specialist Name</h2>
-                        <p th:text="${booking.specialist.category != null ? booking.specialist.category.name : 'Uncategorized'}">Category</p>
+                        <h2 th:text="${booking.specialist.name}">Academic Expert Name</h2>
+                        <p th:text="${booking.specialist.category != null ? booking.specialist.category.name : 'Uncategorized'}">Academic Area</p>
                     </div>
                     <span class="status-badge" th:classappend="${' status-badge--' + #strings.toLowerCase(booking.status.name())}"
                           th:text="${booking.status}">PENDING</span>
@@ -75,7 +75,7 @@
 
             <aside class="card booking-action-card">
                 <h2>Actions</h2>
-                <p class="muted-panel-text">Available actions depend on the current booking status and appointment time.</p>
+	                <p class="muted-panel-text">Available actions depend on the current appointment status and scheduled time.</p>
 
                 <div class="booking-action-list">
                     <a th:if="${booking.status.name() == 'CONFIRMED'}"

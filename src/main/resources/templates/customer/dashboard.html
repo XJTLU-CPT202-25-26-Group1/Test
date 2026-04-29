@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Customer Dashboard',
+        'Requester Dashboard',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -16,14 +16,14 @@
     <section class="customer-page">
         <div class="page-header customer-page__header">
             <div>
-                <span class="section-kicker">Customer Portal</span>
+	                <span class="section-kicker">Student / Staff Portal</span>
                 <h1 class="page-title">Dashboard</h1>
                 <p class="page-subtitle">
-                    Welcome back, <span th:text="${profile.displayName}">Customer</span>. Review your booking activity and continue to the next action.
+	                    Welcome back, <span th:text="${profile.displayName}">Requester</span>. Review your XJTLU expert appointments and continue to the next action.
                 </p>
             </div>
             <div class="customer-header-actions">
-                <a class="btn btn-primary" th:href="@{/customer/specialists}">Find Specialist</a>
+	                <a class="btn btn-primary" th:href="@{/customer/specialists}">Find Expert</a>
                 <a class="btn btn-secondary" th:href="@{/customer/profile}">Edit Profile</a>
             </div>
         </div>
@@ -48,7 +48,7 @@
                 <div class="customer-section__head">
                     <div>
                         <h2>Upcoming Appointments</h2>
-                        <p>Confirmed appointments that are still ahead.</p>
+	                        <p>Confirmed XJTLU expert appointments that are still ahead.</p>
                     </div>
                     <span class="customer-count" th:text="${upcomingBookings != null ? #lists.size(upcomingBookings) + ' items' : '0 items'}">0 items</span>
                 </div>
@@ -67,13 +67,13 @@
                                       th:text="${#strings.substring(booking.specialist.name, 0, 1)}">S</span>
                             </div>
                             <div class="customer-upcoming-card__identity">
-                                <strong th:text="${booking.specialist.name}">Specialist</strong>
-                                <span th:text="${booking.specialist.category != null ? booking.specialist.category.name : 'Uncategorized'}">Category</span>
+	                                <strong th:text="${booking.specialist.name}">Academic Expert</strong>
+                                <span th:text="${booking.specialist.category != null ? booking.specialist.category.name : 'Uncategorized'}">Academic Area</span>
                             </div>
                         </div>
                         <p class="customer-upcoming-card__description"
-                           th:text="${booking.specialist.profileDescription != null and !#strings.isEmpty(booking.specialist.profileDescription) ? booking.specialist.profileDescription : 'View booking details for the full specialist profile and appointment context.'}">
-                            Specialist description
+                           th:text="${booking.specialist.profileDescription != null and !#strings.isEmpty(booking.specialist.profileDescription) ? booking.specialist.profileDescription : 'View appointment details for the expert profile and notes.'}">
+	                            Academic expert consultation summary
                         </p>
                         <div class="customer-upcoming-card__meta">
                             <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
@@ -84,7 +84,7 @@
                 </div>
 
                 <p th:if="${upcomingBookings == null or #lists.isEmpty(upcomingBookings)}" class="muted-panel-text">
-                    No confirmed upcoming appointments yet.
+	                    No confirmed upcoming appointments yet.
                 </p>
             </article>
 
@@ -92,7 +92,7 @@
                 <div class="customer-section__head">
                     <div>
                         <h2>Notifications</h2>
-                        <p>Recent status changes related to your bookings.</p>
+	                        <p>Recent status changes related to your appointment requests.</p>
                     </div>
                     <span class="customer-count" th:text="${notifications != null ? #lists.size(notifications) + ' items' : '0 items'}">0 items</span>
                 </div>
@@ -115,7 +115,7 @@
             <div class="customer-section__head">
                 <div>
                     <h2>Recent Bookings</h2>
-                    <p>Your latest booking records.</p>
+	                    <p>Your latest campus appointment records.</p>
                 </div>
                 <a class="btn btn-secondary" th:href="@{/customer/bookings}">View All</a>
             </div>
@@ -124,9 +124,9 @@
                 <article class="booking-row-card" th:each="booking : ${recentBookings}">
                     <div class="booking-row-card__main">
                         <div>
-                            <h3 th:text="${booking.topic}">Booking Topic</h3>
+	                            <h3 th:text="${booking.topic}">Appointment Topic</h3>
                             <p>
-                                <span th:text="${booking.specialist.name}">Specialist</span>
+	                                <span th:text="${booking.specialist.name}">Academic Expert</span>
                                 <span> · </span>
                                 <span th:text="${#temporals.format(booking.slot.slotDate, 'yyyy-MM-dd')}">2026-04-23</span>
                                 <span> </span>
@@ -143,7 +143,7 @@
             </div>
 
             <div th:if="${recentBookings == null or #lists.isEmpty(recentBookings)}" class="empty-state">
-                No bookings yet. Start by finding a specialist.
+	                No bookings yet. Start by finding an academic expert.
             </div>
         </section>
     </section>

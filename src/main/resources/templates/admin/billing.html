@@ -22,7 +22,7 @@
                     </a>
                     <span class="section-kicker">Admin Finance</span>
                     <h1 class="page-title">Billing Summary</h1>
-                    <p class="page-subtitle">Track billable booking value from confirmed and completed consultations.</p>
+	                    <p class="page-subtitle">Track billable value from confirmed and completed XJTLU expert consultations.</p>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
             <article class="card admin-metric-card admin-metric-card--primary">
                 <span>Billable Records</span>
                 <strong th:text="${billableCount}">0</strong>
-                <p>Confirmed and completed bookings included in this billing view.</p>
+	                <p>Confirmed and completed appointment records included in this billing view.</p>
             </article>
 
             <article class="card admin-metric-card">
@@ -50,7 +50,7 @@
             <div class="admin-section__head">
                 <div>
                     <h2>Billable Bookings</h2>
-                    <p>Only confirmed and completed bookings are included in billing calculations.</p>
+	                <p>Only confirmed and completed appointment records are included in billing calculations.</p>
                 </div>
                 <span class="admin-count" th:text="${billableBookings != null ? #lists.size(billableBookings) + ' records' : '0 records'}">0 records</span>
             </div>
@@ -61,9 +61,9 @@
                         <div>
                             <h3 th:text="${booking.topic}">Booking Topic</h3>
                             <p>
-                                <span th:text="${booking.customerName}">Customer</span>
+	                                <span th:text="${booking.customerName}">Requester</span>
                                 <span> · </span>
-                                <span th:text="${booking.specialist.name}">Specialist</span>
+	                                <span th:text="${booking.specialist.name}">Academic Expert</span>
                             </p>
                         </div>
                         <span class="status-badge"
@@ -88,7 +88,7 @@
             </div>
 
             <div th:if="${billableBookings == null or #lists.isEmpty(billableBookings)}" class="empty-state">
-                No confirmed or completed bookings are ready for billing yet.
+	                No confirmed or completed appointment records are ready for billing yet.
             </div>
         </section>
     </section>

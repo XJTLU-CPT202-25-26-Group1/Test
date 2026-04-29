@@ -85,7 +85,7 @@ public class CustomerBookingController {
             String email = userService.getByUsername(authentication.getName()).getEmail();
             String displayName = userService.getByUsername(authentication.getName()).getDisplayName();
             bookingService.createBooking(displayName, email, specialistId, slotId, topic, notes);
-            redirectAttributes.addFlashAttribute("message", "Booking request submitted successfully.");
+            redirectAttributes.addFlashAttribute("message", "Appointment request submitted successfully.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -114,7 +114,7 @@ public class CustomerBookingController {
         try {
             String email = userService.getByUsername(authentication.getName()).getEmail();
             bookingService.cancelBookingForCustomer(id, email);
-            redirectAttributes.addFlashAttribute("message", "Booking cancelled.");
+            redirectAttributes.addFlashAttribute("message", "Appointment cancelled.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -129,7 +129,7 @@ public class CustomerBookingController {
         try {
             String email = userService.getByUsername(authentication.getName()).getEmail();
             bookingService.rescheduleBookingForCustomer(id, newSlotId, email);
-            redirectAttributes.addFlashAttribute("message", "Booking rescheduled and returned to pending review.");
+            redirectAttributes.addFlashAttribute("message", "Appointment rescheduled and returned to pending review.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }

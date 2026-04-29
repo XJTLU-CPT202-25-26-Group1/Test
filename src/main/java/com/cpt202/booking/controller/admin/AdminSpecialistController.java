@@ -64,7 +64,7 @@ public class AdminSpecialistController {
                                    RedirectAttributes redirectAttributes) {
         try {
             specialistService.createSpecialist(name, level, feeRate, description, categoryId);
-            redirectAttributes.addFlashAttribute("message", "Specialist created.");
+            redirectAttributes.addFlashAttribute("message", "Academic expert record created.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -81,7 +81,7 @@ public class AdminSpecialistController {
                                    RedirectAttributes redirectAttributes) {
         try {
             specialistService.updateSpecialist(id, name, level, feeRate, description, categoryId);
-            redirectAttributes.addFlashAttribute("message", "Specialist updated.");
+            redirectAttributes.addFlashAttribute("message", "Academic expert record updated.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -92,7 +92,7 @@ public class AdminSpecialistController {
     public String toggleSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             specialistService.toggleStatus(id);
-            redirectAttributes.addFlashAttribute("message", "Specialist status updated.");
+            redirectAttributes.addFlashAttribute("message", "Academic expert status updated.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -103,7 +103,7 @@ public class AdminSpecialistController {
     public String approveSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             specialistService.approveSpecialist(id);
-            redirectAttributes.addFlashAttribute("message", "Specialist approved successfully.");
+            redirectAttributes.addFlashAttribute("message", "Academic expert registration approved.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -114,7 +114,7 @@ public class AdminSpecialistController {
     public String rejectSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             specialistService.rejectSpecialist(id);
-            redirectAttributes.addFlashAttribute("message", "Specialist rejected successfully.");
+            redirectAttributes.addFlashAttribute("message", "Academic expert registration rejected.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -125,7 +125,7 @@ public class AdminSpecialistController {
     public String deleteSpecialist(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             specialistService.deleteSpecialist(id);
-            redirectAttributes.addFlashAttribute("message", "Specialist deleted.");
+            redirectAttributes.addFlashAttribute("message", "Academic expert record deleted.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }

@@ -51,7 +51,7 @@ public class BookingService {
 
     public Booking getBookingDetail(Long bookingId) {
         return bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
     }
 
     public List<Booking> getPendingBookings() {
@@ -102,14 +102,14 @@ public class BookingService {
 
     public Booking getCustomerBookingDetail(Long bookingId, String customerEmail) {
         return bookingRepository.findByIdAndCustomerEmail(bookingId, customerEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
     }
 
     public Booking getSpecialistBookingDetail(Long bookingId, Long specialistId) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
         if (!booking.getSpecialist().getId().equals(specialistId)) {
-            throw new IllegalArgumentException("You can only view your own consultation bookings.");
+            throw new IllegalArgumentException("You can only view your own consultation appointments.");
         }
         return booking;
     }
@@ -162,19 +162,19 @@ public class BookingService {
     @Transactional
     public Booking createBooking(String customerName, String customerEmail, Long specialistId, Long slotId, String topic, String notes) {
         String normalizedTopic = normalizeRequiredText(topic, "Consultation topic", BOOKING_TOPIC_MAX_LENGTH);
-        String normalizedNotes = normalizeOptionalText(notes, "Booking notes", BOOKING_NOTES_MAX_LENGTH);
+        String normalizedNotes = normalizeOptionalText(notes, "Appointment notes", BOOKING_NOTES_MAX_LENGTH);
 
         Specialist specialist = specialistRepository.findById(specialistId)
-                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic expert not found."));
         if (specialist.getStatus() != SpecialistStatus.ACTIVE) {
-            throw new IllegalStateException("Selected specialist is not available for booking.");
+            throw new IllegalStateException("Selected academic expert is not available for appointments.");
         }
 
         AvailabilitySlot slot = availabilitySlotRepository.findByIdForUpdate(slotId)
                 .orElseThrow(() -> new IllegalArgumentException("Slot not found."));
 
         if (!slot.getSpecialist().getId().equals(specialistId)) {
-            throw new IllegalArgumentException("Slot does not belong to specialist.");
+            throw new IllegalArgumentException("Slot does not belong to this academic expert.");
         }
 
         if (slot.isBooked()) {
@@ -199,34 +199,34 @@ public class BookingService {
         slot.setBooked(true);
         availabilitySlotRepository.save(slot);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), null, BookingStatus.PENDING, customerEmail, "Booking created");
+        createAuditLog(saved.getId(), null, BookingStatus.PENDING, customerEmail, "Appointment request created");
         return saved;
     }
 
     @Transactional
     public Booking confirmBooking(Long id) {
         Booking booking = bookingRepository.findByIdForUpdate(id)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
 
         if (booking.getStatus() != BookingStatus.PENDING) {
-            throw new IllegalStateException("Only pending bookings can be confirmed.");
+            throw new IllegalStateException("Only pending appointment requests can be confirmed.");
         }
 
         BookingStatus oldStatus = booking.getStatus();
         booking.setStatus(BookingStatus.CONFIRMED);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.CONFIRMED, "admin", "Booking confirmed");
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.CONFIRMED, "admin", "Appointment request confirmed");
         return saved;
     }
 
     @Transactional
     public Booking rejectBooking(Long id, String reason) {
         Booking booking = bookingRepository.findByIdForUpdate(id)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
         String normalizedReason = normalizeRequiredText(reason, "Rejection reason", REJECTION_REASON_MAX_LENGTH);
 
         if (booking.getStatus() != BookingStatus.PENDING) {
-            throw new IllegalStateException("Only pending bookings can be rejected.");
+            throw new IllegalStateException("Only pending appointment requests can be rejected.");
         }
 
         BookingStatus oldStatus = booking.getStatus();
@@ -234,17 +234,17 @@ public class BookingService {
         booking.setRejectionReason(normalizedReason);
         releaseSlot(booking);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.REJECTED, "admin", "Booking rejected: " + normalizedReason);
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.REJECTED, "admin", "Appointment request rejected: " + normalizedReason);
         return saved;
     }
 
     @Transactional
     public Booking cancelBooking(Long id) {
         Booking booking = bookingRepository.findByIdForUpdate(id)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
 
         if (booking.getStatus() != BookingStatus.CONFIRMED && booking.getStatus() != BookingStatus.PENDING) {
-            throw new IllegalStateException("Only pending or confirmed bookings can be cancelled.");
+            throw new IllegalStateException("Only pending or confirmed appointment requests can be cancelled.");
         }
 
         if (isWithin24Hours(booking)) {
@@ -255,19 +255,19 @@ public class BookingService {
         booking.setStatus(BookingStatus.CANCELLED);
         releaseSlot(booking);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.CANCELLED, booking.getCustomerEmail(), "Booking cancelled by customer");
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.CANCELLED, booking.getCustomerEmail(), "Appointment cancelled by requester");
         return saved;
     }
 
     @Transactional
     public Booking cancelBookingForCustomer(Long id, String customerEmail) {
         Booking booking = bookingRepository.findByIdForUpdate(id)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
         if (!booking.getCustomerEmail().equalsIgnoreCase(customerEmail)) {
-            throw new IllegalArgumentException("You can only cancel your own booking.");
+            throw new IllegalArgumentException("You can only cancel your own appointment request.");
         }
         if (booking.getStatus() != BookingStatus.CONFIRMED && booking.getStatus() != BookingStatus.PENDING) {
-            throw new IllegalStateException("Only pending or confirmed bookings can be cancelled.");
+            throw new IllegalStateException("Only pending or confirmed appointment requests can be cancelled.");
         }
         if (isWithin24Hours(booking)) {
             throw new IllegalStateException("Cancellation is not allowed within 24 hours.");
@@ -277,17 +277,17 @@ public class BookingService {
         booking.setStatus(BookingStatus.CANCELLED);
         releaseSlot(booking);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.CANCELLED, booking.getCustomerEmail(), "Booking cancelled by customer");
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.CANCELLED, booking.getCustomerEmail(), "Appointment cancelled by requester");
         return saved;
     }
 
     @Transactional
     public Booking rescheduleBooking(Long bookingId, Long newSlotId) {
         Booking booking = bookingRepository.findByIdForUpdate(bookingId)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
 
         if (booking.getStatus() != BookingStatus.CONFIRMED) {
-            throw new IllegalStateException("Only confirmed bookings can be rescheduled.");
+            throw new IllegalStateException("Only confirmed appointment requests can be rescheduled.");
         }
 
         if (isWithin24Hours(booking)) {
@@ -308,19 +308,19 @@ public class BookingService {
         booking.setCalculatedFee(calculateFee(newSlot.getSpecialist(), newSlot));
         booking.setStatus(BookingStatus.PENDING);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.PENDING, booking.getCustomerEmail(), "Booking rescheduled and returned to pending");
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.PENDING, booking.getCustomerEmail(), "Appointment rescheduled and returned to pending review");
         return saved;
     }
 
     @Transactional
     public Booking rescheduleBookingForCustomer(Long bookingId, Long newSlotId, String customerEmail) {
         Booking booking = bookingRepository.findByIdForUpdate(bookingId)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
         if (!booking.getCustomerEmail().equalsIgnoreCase(customerEmail)) {
-            throw new IllegalArgumentException("You can only reschedule your own booking.");
+            throw new IllegalArgumentException("You can only reschedule your own appointment request.");
         }
         if (booking.getStatus() != BookingStatus.CONFIRMED) {
-            throw new IllegalStateException("Only confirmed bookings can be rescheduled.");
+            throw new IllegalStateException("Only confirmed appointment requests can be rescheduled.");
         }
         if (isWithin24Hours(booking)) {
             throw new IllegalStateException("Rescheduling is not allowed within 24 hours.");
@@ -340,35 +340,35 @@ public class BookingService {
         booking.setCalculatedFee(calculateFee(newSlot.getSpecialist(), newSlot));
         booking.setStatus(BookingStatus.PENDING);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.PENDING, booking.getCustomerEmail(), "Booking rescheduled and returned to pending");
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.PENDING, booking.getCustomerEmail(), "Appointment rescheduled and returned to pending review");
         return saved;
     }
 
     @Transactional
     public Booking completeBooking(Long id) {
         Booking booking = bookingRepository.findByIdForUpdate(id)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
 
         if (booking.getStatus() != BookingStatus.CONFIRMED) {
-            throw new IllegalStateException("Only confirmed bookings can be completed.");
+            throw new IllegalStateException("Only confirmed appointment requests can be completed.");
         }
         if (!hasConsultationFinished(booking)) {
-            throw new IllegalStateException("Booking can only be completed after the consultation has finished.");
+            throw new IllegalStateException("Appointment can only be completed after the consultation has finished.");
         }
 
         BookingStatus oldStatus = booking.getStatus();
         booking.setStatus(BookingStatus.COMPLETED);
         Booking saved = bookingRepository.save(booking);
-        createAuditLog(saved.getId(), oldStatus, BookingStatus.COMPLETED, "specialist", "Booking marked completed");
+        createAuditLog(saved.getId(), oldStatus, BookingStatus.COMPLETED, "expert", "Consultation marked completed");
         return saved;
     }
 
     @Transactional
     public Booking completeBookingForSpecialist(Long id, Long specialistId) {
         Booking booking = bookingRepository.findByIdForUpdate(id)
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment request not found."));
         if (!booking.getSpecialist().getId().equals(specialistId)) {
-            throw new IllegalArgumentException("You can only complete your own consultation bookings.");
+            throw new IllegalArgumentException("You can only complete your own consultation appointments.");
         }
         return completeBooking(id);
     }
@@ -391,13 +391,13 @@ public class BookingService {
 
     private void validateRescheduleTarget(Booking booking, AvailabilitySlot newSlot) {
         if (!newSlot.getSpecialist().getId().equals(booking.getSpecialist().getId())) {
-            throw new IllegalStateException("Booking can only be rescheduled to another slot for the same specialist.");
+            throw new IllegalStateException("Appointment can only be rescheduled to another slot for the same academic expert.");
         }
         if (newSlot.isBooked()) {
             throw new IllegalStateException("New slot is already booked.");
         }
         if (newSlot.getSpecialist().getStatus() != SpecialistStatus.ACTIVE) {
-            throw new IllegalStateException("New slot belongs to an inactive specialist.");
+            throw new IllegalStateException("New slot belongs to an inactive academic expert.");
         }
         if (newSlot.getSlotDate() == null || newSlot.getStartTime() == null
                 || LocalDateTime.of(newSlot.getSlotDate(), newSlot.getStartTime()).isBefore(LocalDateTime.now())) {

@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Specialists',
+	        'Academic Experts',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -16,11 +16,11 @@
     <section class="customer-page">
         <div class="page-header customer-page__header">
             <div>
-                <span class="section-kicker">Customer Search</span>
-                <h1 class="page-title">Find a Specialist</h1>
-                <p class="page-subtitle">Search by specialist name, expertise category, or available appointment date.</p>
+	                <span class="section-kicker">Campus Expert Search</span>
+	                <h1 class="page-title">Find an Academic Expert</h1>
+	                <p class="page-subtitle">Search by expert name, academic area, or available appointment date.</p>
             </div>
-            <a class="btn btn-secondary" th:href="@{/customer/bookings}">My Bookings</a>
+            <a class="btn btn-secondary" th:href="@{/customer/bookings}">My Appointments</a>
         </div>
 
         <section class="card customer-filter">
@@ -28,11 +28,11 @@
                 <div class="form-group">
                     <label for="keyword">Keyword</label>
                     <input id="keyword" name="keyword" type="text" th:value="${keyword}"
-                           placeholder="Name or expertise category">
+	                           placeholder="Name or academic area">
                 </div>
 
                 <div class="form-group">
-                    <label for="categoryId">Expertise Category</label>
+	                    <label for="categoryId">Academic Area</label>
                     <select id="categoryId" name="categoryId">
                         <option value="">All categories</option>
                         <option th:each="category : ${categories}"
@@ -58,7 +58,7 @@
 
         <section class="customer-section">
             <div class="customer-section__head">
-                <h2>Available Specialists</h2>
+	                <h2>Available Academic Experts</h2>
                 <span class="customer-count" th:text="${specialists != null ? #lists.size(specialists) + ' results' : '0 results'}">0 results</span>
             </div>
 
@@ -70,7 +70,7 @@
                                 <div class="specialist-list-card__avatar">
                                     <img th:if="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
                                          th:src="${specialistAvatarMap[specialist.id]}"
-                                         alt="Specialist avatar">
+                                         alt="Academic expert avatar">
                                     <span th:unless="${specialistAvatarMap[specialist.id] != null and specialistAvatarMap[specialist.id] != '/images/avatar-placeholder.svg'}"
                                           class="specialist-list-card__avatar-initial"
                                           th:text="${#strings.substring(specialist.name, 0, 1)}">
@@ -78,8 +78,8 @@
                                     </span>
                                 </div>
                                 <div>
-                                    <h3 th:text="${specialist.name}">Specialist Name</h3>
-                                    <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+                                    <h3 th:text="${specialist.name}">Academic Expert Name</h3>
+                                    <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Academic Area</p>
                                 </div>
                             </div>
                             <span class="status-badge status-badge--active" th:text="${specialist.status}">ACTIVE</span>
@@ -87,7 +87,7 @@
 
                         <p class="specialist-list-card__description"
                            th:text="${specialist.profileDescription}">
-                            Specialist description.
+	                            Expert description.
                         </p>
 
                         <div class="specialist-list-card__meta">
@@ -106,7 +106,7 @@
             </div>
 
             <div th:if="${specialists == null or #lists.isEmpty(specialists)}" class="empty-state">
-                No active specialists match the current search filters.
+	                No active academic experts match the current search filters.
             </div>
         </section>
     </section>

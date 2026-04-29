@@ -19,15 +19,16 @@
                 <span class="auth-back__icon" aria-hidden="true">&#8592;</span>
                 <span>Back to Login</span>
             </a>
-            <h1>Register</h1>
-            <p class="auth-card__subtitle">Fill in the required information to create your account.</p>
+            <h1>Create an XJTLU Appointment Account</h1>
+            <p class="auth-card__subtitle">Register as a student/staff requester or as an academic expert for campus consultation appointments.</p>
 
             <section class="auth-note">
                 <h2>Before You Start</h2>
                 <ul class="auth-checklist">
                     <li>Password must contain at least 6 characters.</li>
-                    <li>Only customer and specialist accounts can be self-registered.</li>
-                    <li>After registration, login is available only after email verification.</li>
+	                    <li>Student/staff requester and academic expert accounts can be self-registered.</li>
+	                    <li>After registration, login is available only after email verification.</li>
+	                    <li>Academic expert accounts require administrator approval before login.</li>
                 </ul>
             </section>
 
@@ -63,7 +64,7 @@
                     <div class="form-group">
                         <label for="displayName">Display Name</label>
                         <input id="displayName" name="displayName" type="text" maxlength="255" required>
-                        <span class="help-text">This name will be shown in dashboards and booking records. Maximum 255 characters.</span>
+	                        <span class="help-text">This name will be shown in dashboards and appointment records. Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-group">
@@ -102,20 +103,20 @@
                             <option th:each="role : ${roles}"
                                     th:value="${role.name()}"
                                     th:text="${#strings.capitalize(#strings.toLowerCase(role.name()))}">
-                                Customer
+	                                Student / Staff
                             </option>
                         </select>
-                        <span class="help-text">Choose specialist only if you want to provide consultations.</span>
+	                        <span class="help-text">Choose specialist only if you are registering as an XJTLU academic expert.</span>
                     </div>
                 </div>
 
                 <section class="role-fields hidden" data-specialist-fields>
-                    <h2 class="role-fields__title">Specialist Details</h2>
-                    <p class="role-fields__subtitle">These fields are required only for specialist registration.</p>
+	                    <h2 class="role-fields__title">Academic Expert Details</h2>
+	                    <p class="role-fields__subtitle">These fields are required only for expert registration and will be reviewed by an administrator.</p>
 
                     <div class="form-grid form-grid--2">
                         <div class="form-group">
-                            <label for="categoryId">Expertise Category</label>
+	                            <label for="categoryId">Academic Area</label>
                             <select id="categoryId" name="categoryId" data-required-for-specialist>
                                 <option value="">Select a category</option>
                                 <option th:each="category : ${categories}"
@@ -124,7 +125,7 @@
                                     Category
                                 </option>
                             </select>
-                            <span class="help-text">Customers will use this category to search and filter specialists.</span>
+	                            <span class="help-text">Students and staff will use this area to search and filter experts.</span>
                         </div>
 
                         <div class="form-group">
@@ -146,7 +147,7 @@
                             <textarea id="description" name="description" maxlength="255"
                                       placeholder="Briefly describe your expertise."
                                       data-required-for-specialist></textarea>
-                            <span class="help-text">A short introduction helps customers understand your expertise. Maximum 255 characters.</span>
+	                            <span class="help-text">A short introduction helps requesters understand your academic expertise. Maximum 255 characters.</span>
                         </div>
                     </div>
                 </section>

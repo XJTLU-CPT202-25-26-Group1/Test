@@ -94,7 +94,7 @@ public class SpecialistService {
 
     public Specialist getSpecialistById(Long id) {
         return specialistRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic expert not found."));
     }
 
     private boolean hasAvailableSlotOnDate(Long specialistId, LocalDate date) {
@@ -126,14 +126,14 @@ public class SpecialistService {
                                        String description,
                                        Long categoryId,
                                        SpecialistStatus initialStatus) {
-        String normalizedName = normalizeRequiredText(name, "Specialist name", SPECIALIST_NAME_MAX_LENGTH);
-        String normalizedLevel = normalizeRequiredText(level, "Specialist level", SPECIALIST_LEVEL_MAX_LENGTH);
-        String normalizedDescription = normalizeRequiredText(description, "Specialist description", SPECIALIST_DESCRIPTION_MAX_LENGTH);
+        String normalizedName = normalizeRequiredText(name, "Academic expert name", SPECIALIST_NAME_MAX_LENGTH);
+        String normalizedLevel = normalizeRequiredText(level, "Academic expert level", SPECIALIST_LEVEL_MAX_LENGTH);
+        String normalizedDescription = normalizeRequiredText(description, "Academic expert description", SPECIALIST_DESCRIPTION_MAX_LENGTH);
         double normalizedFeeRate = normalizeFeeRate(feeRate);
         ExpertiseCategory category = requireActiveCategory(categoryId);
 
         if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(normalizedName, categoryId)) {
-            throw new IllegalArgumentException("Duplicate specialist name and category combination.");
+            throw new IllegalArgumentException("Duplicate academic expert name and academic area combination.");
         }
 
         Specialist specialist = new Specialist();
@@ -149,15 +149,15 @@ public class SpecialistService {
     @Transactional
     public Specialist updateSpecialist(Long id, String name, String level, Double feeRate, String description, Long categoryId) {
         Specialist specialist = getSpecialistById(id);
-        String normalizedName = normalizeRequiredText(name, "Specialist name", SPECIALIST_NAME_MAX_LENGTH);
-        String normalizedLevel = normalizeRequiredText(level, "Specialist level", SPECIALIST_LEVEL_MAX_LENGTH);
-        String normalizedDescription = normalizeRequiredText(description, "Specialist description", SPECIALIST_DESCRIPTION_MAX_LENGTH);
+        String normalizedName = normalizeRequiredText(name, "Academic expert name", SPECIALIST_NAME_MAX_LENGTH);
+        String normalizedLevel = normalizeRequiredText(level, "Academic expert level", SPECIALIST_LEVEL_MAX_LENGTH);
+        String normalizedDescription = normalizeRequiredText(description, "Academic expert description", SPECIALIST_DESCRIPTION_MAX_LENGTH);
         double normalizedFeeRate = normalizeFeeRate(feeRate);
         ExpertiseCategory category = requireActiveCategory(categoryId);
 
         if (specialistRepository.existsByNameIgnoreCaseAndCategoryId(normalizedName, categoryId)
                 && (!specialist.getName().equalsIgnoreCase(normalizedName) || specialist.getCategory() == null || !specialist.getCategory().getId().equals(categoryId))) {
-            throw new IllegalArgumentException("Duplicate specialist name and category combination.");
+            throw new IllegalArgumentException("Duplicate academic expert name and academic area combination.");
         }
 
         specialist.setName(normalizedName);
@@ -172,7 +172,7 @@ public class SpecialistService {
     public Specialist toggleStatus(Long id) {
         Specialist specialist = getSpecialistById(id);
         if (specialist.getStatus() == SpecialistStatus.PENDING_APPROVAL || specialist.getStatus() == SpecialistStatus.REJECTED) {
-            throw new IllegalStateException("Pending or rejected specialists must be approved before operational status can be changed.");
+            throw new IllegalStateException("Pending or rejected academic experts must be approved before active status can be changed.");
         }
         specialist.setStatus(specialist.getStatus() == SpecialistStatus.ACTIVE ? SpecialistStatus.INACTIVE : SpecialistStatus.ACTIVE);
         return specialistRepository.save(specialist);
@@ -182,7 +182,7 @@ public class SpecialistService {
     public Specialist approveSpecialist(Long id) {
         Specialist specialist = getSpecialistById(id);
         if (specialist.getStatus() != SpecialistStatus.PENDING_APPROVAL) {
-            throw new IllegalStateException("Only pending specialist registrations can be approved.");
+            throw new IllegalStateException("Only pending academic expert registrations can be approved.");
         }
         specialist.setStatus(SpecialistStatus.ACTIVE);
         Specialist saved = specialistRepository.save(specialist);
@@ -195,7 +195,7 @@ public class SpecialistService {
     public Specialist rejectSpecialist(Long id) {
         Specialist specialist = getSpecialistById(id);
         if (specialist.getStatus() != SpecialistStatus.PENDING_APPROVAL) {
-            throw new IllegalStateException("Only pending specialist registrations can be rejected.");
+            throw new IllegalStateException("Only pending academic expert registrations can be rejected.");
         }
         specialist.setStatus(SpecialistStatus.REJECTED);
         Specialist saved = specialistRepository.save(specialist);
@@ -207,15 +207,15 @@ public class SpecialistService {
     @Transactional
     public void deleteSpecialist(Long id) {
         Specialist specialist = specialistRepository.findByIdForUpdate(id)
-                .orElseThrow(() -> new IllegalArgumentException("Specialist not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic expert not found."));
         if (bookingRepository.existsBySpecialistId(id)) {
-            throw new IllegalStateException("Specialists with booking history cannot be deleted. Deactivate them instead.");
+            throw new IllegalStateException("Academic experts with appointment history cannot be deleted. Deactivate them instead.");
         }
         if (feedbackRepository.existsBySpecialistId(id)) {
-            throw new IllegalStateException("Specialists with feedback history cannot be deleted. Deactivate them instead.");
+            throw new IllegalStateException("Academic experts with feedback history cannot be deleted. Deactivate them instead.");
         }
         if (availabilitySlotRepository.existsBySpecialistIdAndBookedTrue(id)) {
-            throw new IllegalStateException("Specialists with booked slots cannot be deleted. Deactivate them instead.");
+            throw new IllegalStateException("Academic experts with booked slots cannot be deleted. Deactivate them instead.");
         }
 
         User linkedUser = userRepository.findBySpecialistId(id).orElse(null);
@@ -231,9 +231,9 @@ public class SpecialistService {
 
     private ExpertiseCategory requireActiveCategory(Long categoryId) {
         ExpertiseCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic area not found."));
         if (category.getStatus() != CategoryStatus.ACTIVE) {
-            throw new IllegalArgumentException("Inactive category cannot be assigned to a specialist.");
+            throw new IllegalArgumentException("Inactive academic area cannot be assigned to an academic expert.");
         }
         return category;
     }

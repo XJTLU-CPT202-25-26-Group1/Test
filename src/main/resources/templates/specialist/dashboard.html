@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Specialist Dashboard',
+	        'Expert Dashboard',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -16,10 +16,10 @@
     <section class="specialist-page">
         <div class="page-header specialist-page__header">
             <div>
-                <span class="section-kicker">Specialist Portal</span>
+	                <span class="section-kicker">Academic Expert Portal</span>
                 <h1 class="page-title">Dashboard</h1>
                 <p class="page-subtitle">
-                    Welcome back, <span th:text="${specialist.name}">Specialist</span>. Review booking workload, open slots, and recent updates.
+	                    Welcome back, <span th:text="${specialist.name}">Academic Expert</span>. Review consultation workload, open slots, and recent updates.
                 </p>
             </div>
             <div class="specialist-header-actions">
@@ -72,8 +72,8 @@
 
             <article class="card specialist-profile-strip">
                 <span class="specialist-profile-strip__label">Profile Summary</span>
-                <h2 th:text="${specialist.name}">Specialist Name</h2>
-                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+	                <h2 th:text="${specialist.name}">Academic Expert Name</h2>
+                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Academic Area</p>
                 <div class="specialist-chip-row">
                     <span th:text="${specialist.level}">Level</span>
                     <span th:text="${'Fee ' + #numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>

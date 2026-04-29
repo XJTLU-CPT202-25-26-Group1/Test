@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Availability',
+	        'Expert Availability',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -16,10 +16,10 @@
     <section class="specialist-page">
         <div class="page-header specialist-page__header">
             <div>
-                <span class="section-kicker">Specialist Schedule</span>
+	                <span class="section-kicker">Expert Schedule</span>
                 <h1 class="page-title">Availability Management</h1>
                 <p class="page-subtitle">
-                    Manage future consultation slots for <span th:text="${specialist.name}">Specialist</span>.
+	                    Manage future XJTLU consultation slots for <span th:text="${specialist.name}">Academic Expert</span>.
                     Booked slots are locked from editing or deletion.
                 </p>
             </div>
@@ -29,8 +29,8 @@
         <section class="specialist-grid specialist-grid--create">
             <article class="card specialist-profile-strip">
                 <span class="specialist-profile-strip__label">Profile</span>
-                <h2 th:text="${specialist.name}">Specialist Name</h2>
-                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</p>
+	                <h2 th:text="${specialist.name}">Academic Expert Name</h2>
+                <p th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Academic Area</p>
                 <div class="specialist-chip-row">
                     <span th:text="${specialist.level}">Level</span>
                     <span th:text="${'Fee ' + #numbers.formatDecimal(specialist.feeRate, 1, 2)}">Fee</span>
@@ -78,7 +78,7 @@
                 <article class="availability-card" th:each="slot : ${slots}" th:classappend="${slot.booked} ? ' availability-card--booked' : ''">
                     <div class="availability-card__status">
                         <strong th:text="${slot.booked ? 'Booked' : 'Open'}">Open</strong>
-                        <span th:text="${slot.booked ? 'Locked from modification' : 'Available for customer booking'}">Status</span>
+	                        <span th:text="${slot.booked ? 'Locked from modification' : 'Available for student/staff booking'}">Status</span>
                     </div>
 
                     <form th:action="@{/specialist/availability/update}" method="post" class="availability-edit-form">

@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: appLayout(
-        'Customer Profile',
+        'Requester Profile',
         ~{::content},
         ~{::pageStyles},
         ~{::pageScripts}
@@ -21,8 +21,8 @@
                         <span>Back to Dashboard</span>
                     </a>
                     <span class="section-kicker">Personal Information</span>
-                    <h1 class="page-title">Customer Profile</h1>
-                    <p class="page-subtitle">Keep your contact information up to date for booking communication.</p>
+	                    <h1 class="page-title">Requester Profile</h1>
+	                    <p class="page-subtitle">Keep your contact information up to date for XJTLU appointment communication.</p>
                 </div>
             </div>
 
@@ -30,9 +30,9 @@
             <article class="card profile-summary-card">
                 <div class="profile-avatar">
                     <img th:src="${profile.avatarPath != null and !#strings.isEmpty(profile.avatarPath) ? profile.avatarPath : '/images/avatar-placeholder.svg'}"
-                         alt="Customer avatar">
+	                         alt="Requester avatar">
                 </div>
-                <h2 th:text="${profile.displayName}">Customer Name</h2>
+	                <h2 th:text="${profile.displayName}">Requester Name</h2>
                 <p th:text="${profile.email}">customer@example.com</p>
 
                 <div class="profile-readonly-list">

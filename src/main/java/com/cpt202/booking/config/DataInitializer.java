@@ -41,14 +41,14 @@ public class DataInitializer {
                     .filter(specialist -> "Alice Chen".equalsIgnoreCase(specialist.getName()))
                     .findFirst()
                     .orElseGet(() -> specialistRepository.save(
-                            new Specialist("Alice Chen", "Senior", 300.0, "Commercial law and contract specialist.", SpecialistStatus.ACTIVE, legal)
+                            new Specialist("Alice Chen", "Senior", 300.0, "XJTLU academic support expert for contract and commercial law consultations.", SpecialistStatus.ACTIVE, legal)
                     ));
 
             Specialist bob = specialistRepository.findAll().stream()
                     .filter(specialist -> "Bob Wang".equalsIgnoreCase(specialist.getName()))
                     .findFirst()
                     .orElseGet(() -> specialistRepository.save(
-                            new Specialist("Bob Wang", "Consultant", 260.0, "SME finance and tax planning expert.", SpecialistStatus.ACTIVE, finance)
+                            new Specialist("Bob Wang", "Consultant", 260.0, "XJTLU academic support expert for finance, budgeting, and tax planning consultations.", SpecialistStatus.ACTIVE, finance)
                     ));
 
             if (slotRepository.count() == 0) {
@@ -58,9 +58,9 @@ public class DataInitializer {
                 slotRepository.save(createSlot(bob, 3, 16, 0, 17, 0));
             }
 
-            seedUser(userRepository, passwordEncoder, "admin", "admin123", "System Admin", "admin@demo.local", "13800000001", GenderType.MALE, RoleType.ADMIN, null);
-            seedUser(userRepository, passwordEncoder, "specialist", "specialist123", "Demo Specialist", "specialist@demo.local", "13800000002", GenderType.MALE, RoleType.SPECIALIST, alice.getId());
-            seedUser(userRepository, passwordEncoder, "customer", "customer123", "Demo Customer", "customer@demo.local", "13800000003", GenderType.FEMALE, RoleType.CUSTOMER, null);
+            seedUser(userRepository, passwordEncoder, "admin", "admin123", "CPT202 Admin", "admin@xjtlu.local", "13800000001", GenderType.MALE, RoleType.ADMIN, null);
+            seedUser(userRepository, passwordEncoder, "specialist", "specialist123", "CPT202 Expert", "expert@xjtlu.local", "13800000002", GenderType.MALE, RoleType.SPECIALIST, alice.getId());
+            seedUser(userRepository, passwordEncoder, "customer", "customer123", "CPT202 Requester", "requester@xjtlu.local", "13800000003", GenderType.FEMALE, RoleType.CUSTOMER, null);
         };
     }
 

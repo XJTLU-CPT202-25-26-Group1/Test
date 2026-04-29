@@ -33,7 +33,7 @@ public class ExpertiseCategoryService {
 
         expertiseCategoryRepository.findByNameIgnoreCase(normalizedName)
                 .ifPresent(existing -> {
-                    throw new IllegalArgumentException("Category already exists.");
+                    throw new IllegalArgumentException("Academic area already exists.");
                 });
 
         return expertiseCategoryRepository.save(new ExpertiseCategory(normalizedName, CategoryStatus.ACTIVE));
@@ -41,13 +41,13 @@ public class ExpertiseCategoryService {
 
     public ExpertiseCategory updateCategory(Long id, String name) {
         ExpertiseCategory category = expertiseCategoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic area not found."));
         String normalizedName = normalizeName(name);
 
         expertiseCategoryRepository.findByNameIgnoreCase(normalizedName)
                 .filter(existing -> !existing.getId().equals(id))
                 .ifPresent(existing -> {
-                    throw new IllegalArgumentException("Category already exists.");
+                    throw new IllegalArgumentException("Academic area already exists.");
                 });
 
         category.setName(normalizedName);
@@ -56,14 +56,14 @@ public class ExpertiseCategoryService {
 
     public ExpertiseCategory toggleCategoryStatus(Long id) {
         ExpertiseCategory category = expertiseCategoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Academic area not found."));
         category.setStatus(category.getStatus() == CategoryStatus.ACTIVE ? CategoryStatus.INACTIVE : CategoryStatus.ACTIVE);
         return expertiseCategoryRepository.save(category);
     }
 
     private String normalizeName(String name) {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Category name is required.");
+            throw new IllegalArgumentException("Academic area name is required.");
         }
         return name.trim();
     }

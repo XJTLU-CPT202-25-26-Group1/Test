@@ -18,11 +18,11 @@
                 <div class="page-header__main">
                     <a class="page-back" th:href="@{/customer/specialists/detail(id=${specialist.id})}">
                         <span class="page-back__icon" aria-hidden="true">&#8592;</span>
-                        <span>Back to Specialist</span>
+	                        <span>Back to Expert</span>
                     </a>
                     <span class="section-kicker">Booking Request</span>
                     <h1 class="page-title">Create Booking</h1>
-                    <p class="page-subtitle">Confirm the selected specialist and slot, then describe your consultation request.</p>
+	                    <p class="page-subtitle">Confirm the selected XJTLU academic expert and slot, then describe your consultation request.</p>
                 </div>
             </div>
 
@@ -31,12 +31,12 @@
                 <h2>Selected Appointment</h2>
                 <div class="booking-summary-list">
                     <div>
-                        <span>Specialist</span>
-                        <strong th:text="${specialist.name}">Specialist Name</strong>
+	                        <span>Academic Expert</span>
+                        <strong th:text="${specialist.name}">Academic Expert Name</strong>
                     </div>
                     <div>
-                        <span>Category</span>
-                        <strong th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Category</strong>
+                        <span>Academic Area</span>
+                        <strong th:text="${specialist.category != null ? specialist.category.name : 'Uncategorized'}">Academic Area</strong>
                     </div>
                     <div>
                         <span>Date</span>
@@ -74,12 +74,12 @@
                     <div class="form-group">
                         <label for="notes">Notes</label>
                         <textarea id="notes" name="notes" maxlength="255"
-                                  placeholder="Add context, expectations, or questions for the specialist."></textarea>
+	                                  placeholder="Add background, expectations, or questions for the academic expert."></textarea>
                         <span class="help-text">Optional. Maximum 255 characters.</span>
                     </div>
 
                     <div class="form-actions booking-form-actions">
-                        <button type="submit" class="btn btn-primary">Submit Booking Request</button>
+	                        <button type="submit" class="btn btn-primary">Submit Appointment Request</button>
                         <a class="btn btn-secondary"
                            th:href="@{/customer/specialists/detail(id=${specialist.id})}">
                             Cancel

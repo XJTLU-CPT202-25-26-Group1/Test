@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
+    private static final String DEFAULT_BASE_URL = "http://47.97.155.89:8080";
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
     private final ObjectProvider<JavaMailSender> mailSenderProvider;
@@ -22,11 +23,11 @@ public class EmailService {
     public EmailService(ObjectProvider<JavaMailSender> mailSenderProvider,
                         @Value("${app.mail.enabled:false}") boolean mailEnabled,
                         @Value("${app.mail.from:no-reply@example.com}") String fromAddress,
-                        @Value("${app.base-url:http://47.97.155.89:8080}") String baseUrl) {
+                        @Value("${app.base-url:" + DEFAULT_BASE_URL + "}") String baseUrl) {
         this.mailSenderProvider = mailSenderProvider;
         this.mailEnabled = mailEnabled;
         this.fromAddress = fromAddress;
-        this.baseUrl = baseUrl;
+        this.baseUrl = normalizeHttpBaseUrl(baseUrl);
     }
 
     public void sendVerificationEmail(User user) {
@@ -95,5 +96,20 @@ public class EmailService {
         message.setSubject(subject);
         message.setText(text);
         mailSender.send(message);
+    }
+
+    private String normalizeHttpBaseUrl(String configuredBaseUrl) {
+        String normalized = configuredBaseUrl == null || configuredBaseUrl.isBlank()
+                ? DEFAULT_BASE_URL
+                : configuredBaseUrl.trim();
+        if (normalized.startsWith("https://")) {
+            normalized = "http://" + normalized.substring("https://".length());
+        } else if (!normalized.startsWith("http://")) {
+            normalized = "http://" + normalized;
+        }
+        while (normalized.endsWith("/")) {
+            normalized = normalized.substring(0, normalized.length() - 1);
+        }
+        return normalized;
     }
 }

@@ -40,7 +40,7 @@ public class CustomerDashboardController {
                         upcomingBookings.stream()
                                 .map(booking -> booking.getSpecialist().getId())
                                 .toList()));
-        model.addAttribute("recentBookings", bookings.stream().limit(5).toList());
+        model.addAttribute("recentBookings", bookings.stream().limit(3).toList());
         model.addAttribute("notifications", bookingService.getCustomerNotifications(user.getEmail()));
         return "customer/dashboard";
     }

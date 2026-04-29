@@ -48,7 +48,7 @@ public class PageController {
                         .comparing((Specialist specialist) -> hasUploadedAvatar(specialistAvatarMap.get(specialist.getId())))
                         .reversed()
                         .thenComparing(Specialist::getName, String.CASE_INSENSITIVE_ORDER))
-                .limit(6)
+                .limit(4)
                 .toList();
 
         model.addAttribute("featuredSpecialists", featuredSpecialists);

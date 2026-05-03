@@ -67,6 +67,6 @@ class FeedbackServiceTest {
                         "a".repeat(256)
                 ));
 
-        assertEquals("Feedback comment must not exceed 255 characters.", error.getMessage());
+        assertEquals("Feedback comment is too long. Please shorten it.", error.getMessage());
     }
 }

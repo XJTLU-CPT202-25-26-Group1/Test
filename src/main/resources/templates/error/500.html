@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'System Error',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles"></th:block>
+
+<th:block th:fragment="content">
+    <section class="error-page">
+        <article class="card error-page__card">
+            <div class="error-page__visual">500</div>
+
+            <div class="error-page__body">
+                <span class="eyebrow">System Error</span>
+                <h1 class="page-title">The system could not complete this action</h1>
+                <p class="page-subtitle">
+                    Please return to a safe page and try again. If the problem continues, contact the system administrator.
+                </p>
+
+                <div class="error-page__actions">
+                    <a class="btn btn-primary" th:href="${isAuthenticated ? dashboardPath : '/'}">
+                        <span th:text="${isAuthenticated ? 'Go to Dashboard' : 'Back Home'}">Back Home</span>
+                    </a>
+                    <a class="btn btn-secondary" th:href="@{/auth/login}">Open Login</a>
+                </div>
+
+                <div class="error-page__tips">
+                    <div>
+                        <strong>No data has been confirmed</strong>
+                        <p>If you were submitting a form, check the target page before submitting again.</p>
+                    </div>
+                    <div>
+                        <strong>Need help?</strong>
+                        <p>Share the time of the error and the page you were using with the administrator.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

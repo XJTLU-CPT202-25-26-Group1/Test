@@ -323,7 +323,7 @@ public class UserService implements UserDetailsService {
         }
         String normalized = username.trim().toLowerCase();
         if (normalized.length() > USERNAME_MAX_LENGTH) {
-            throw new IllegalArgumentException("Username must not exceed " + USERNAME_MAX_LENGTH + " characters.");
+            throw new IllegalArgumentException("Username is too long. Please shorten it.");
         }
         return normalized;
     }
@@ -334,7 +334,7 @@ public class UserService implements UserDetailsService {
         }
         String normalized = email.trim().toLowerCase();
         if (normalized.length() > EMAIL_MAX_LENGTH) {
-            throw new IllegalArgumentException("Email must not exceed " + EMAIL_MAX_LENGTH + " characters.");
+            throw new IllegalArgumentException("Email is too long. Please shorten it.");
         }
         return normalized;
     }
@@ -345,7 +345,7 @@ public class UserService implements UserDetailsService {
         }
         String normalized = value.trim();
         if (normalized.length() > maxLength) {
-            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+            throw new IllegalArgumentException(fieldName + " is too long. Please shorten it.");
         }
         return normalized;
     }

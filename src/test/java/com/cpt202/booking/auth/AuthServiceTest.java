@@ -79,7 +79,7 @@ class AuthServiceTest {
                 null
         ));
 
-        assertEquals("Display name must not exceed 255 characters.", error.getMessage());
+        assertEquals("Display name is too long. Please shorten it.", error.getMessage());
     }
 
     @Test

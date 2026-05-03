@@ -29,7 +29,7 @@ public class SecurityConfig {
                 // Allow static assets
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/uploads/avatars/**", "/vendors/**", "/webjars/**").permitAll()
                 // Public pages
-                .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-email", "/auth/resend-verification", "/error/**").permitAll()
+                .requestMatchers("/", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-email", "/auth/resend-verification", "/error", "/error/**").permitAll()
                 // Role-based access control
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/specialist/**").hasRole("SPECIALIST")
@@ -57,9 +57,7 @@ public class SecurityConfig {
             .exceptionHandling(ex -> ex
                 .accessDeniedPage("/error/403")
             )
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**") // Optional API endpoints
-            );
+            ;
         return http.build();
     }
 

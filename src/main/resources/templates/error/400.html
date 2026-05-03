@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Bad Request',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles"></th:block>
+
+<th:block th:fragment="content">
+    <section class="error-page">
+        <article class="card error-page__card">
+            <div class="error-page__visual">400</div>
+
+            <div class="error-page__body">
+                <span class="eyebrow">Request Could Not Be Processed</span>
+                <h1 class="page-title">Something in this request is incomplete</h1>
+                <p class="page-subtitle">
+                    The link may be missing required information, or the form may have been submitted with invalid data.
+                </p>
+
+                <div class="error-page__actions">
+                    <a class="btn btn-primary" th:href="${isAuthenticated ? dashboardPath : '/'}">
+                        <span th:text="${isAuthenticated ? 'Go to Dashboard' : 'Back Home'}">Back Home</span>
+                    </a>
+                    <a class="btn btn-secondary" th:href="@{/auth/login}">Open Login</a>
+                </div>
+
+                <div class="error-page__tips">
+                    <div>
+                        <strong>Try again from the page</strong>
+                        <p>Return to the system page and submit the form again instead of reusing an old link.</p>
+                    </div>
+                    <div>
+                        <strong>Check email links</strong>
+                        <p>If this happened from an email, request a fresh verification or reset email.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

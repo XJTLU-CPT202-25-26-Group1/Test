@@ -437,7 +437,7 @@ public class BookingService {
         }
         String normalized = value.trim();
         if (normalized.length() > maxLength) {
-            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+            throw new IllegalArgumentException(fieldName + " is too long. Please shorten it.");
         }
         return normalized;
     }
@@ -448,7 +448,7 @@ public class BookingService {
         }
         String normalized = value.trim();
         if (normalized.length() > maxLength) {
-            throw new IllegalArgumentException(fieldName + " must not exceed " + maxLength + " characters.");
+            throw new IllegalArgumentException(fieldName + " is too long. Please shorten it.");
         }
         return normalized;
     }

@@ -76,7 +76,7 @@ class BookingServiceTest {
                 "Background information"
         ));
 
-        assertEquals("Consultation topic must not exceed 255 characters.", error.getMessage());
+        assertEquals("Consultation topic is too long. Please shorten it.", error.getMessage());
     }
 
     @Test
@@ -161,7 +161,7 @@ class BookingServiceTest {
         IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
                 () -> bookingService.rejectBooking(booking.getId(), "a".repeat(256)));
 
-        assertEquals("Rejection reason must not exceed 255 characters.", error.getMessage());
+        assertEquals("Rejection reason is too long. Please shorten it.", error.getMessage());
     }
 
     @Test

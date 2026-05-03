@@ -92,7 +92,7 @@ class SpecialistServiceTest {
                 category.getId()
         ));
 
-        assertEquals("Academic expert description must not exceed 255 characters.", error.getMessage());
+        assertEquals("Academic expert description is too long. Please shorten it.", error.getMessage());
     }
 
     @Test

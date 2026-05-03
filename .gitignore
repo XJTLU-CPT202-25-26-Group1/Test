@@ -2,6 +2,11 @@ HELP.md
 target/
 .env
 .m2repo/
+*.log
+.DS_Store
+outputs/
+tmp/
+uploads/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

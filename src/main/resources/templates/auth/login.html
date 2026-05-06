@@ -27,7 +27,7 @@
             </div>
 
             <div th:if="${param.pendingApproval != null}" class="auth-alert auth-alert--warning">
-	                Your academic expert registration is waiting for administrator approval. You will receive an email after review.
+                Your academic expert registration is waiting for administrator approval. Please try again after the review is completed.
             </div>
 
             <div th:if="${param.approvalRejected != null}" class="auth-alert auth-alert--error">
@@ -63,6 +63,14 @@
                     <button type="submit" class="btn btn-primary">Sign In</button>
                 </div>
             </form>
+
+            <section class="auth-note">
+                <h2>Demo Admin Access</h2>
+                <ul class="auth-checklist">
+                    <li>Username: <strong>admin</strong></li>
+                    <li>Password: <strong>admin123</strong></li>
+                </ul>
+            </section>
 
             <section class="auth-note">
                 <h2>Quick Help</h2>

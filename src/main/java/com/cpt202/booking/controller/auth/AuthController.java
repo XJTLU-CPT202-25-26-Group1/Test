@@ -92,8 +92,8 @@ public class AuthController {
             emailService.sendVerificationEmail(user);
             redirectAttributes.addFlashAttribute("message",
                     role == RoleType.SPECIALIST
-	                            ? "XJTLU expert registration submitted. Please verify your email and wait for administrator approval. You will be notified by email after review."
-	                            : "Registration successful. Please verify your email before logging in to the XJTLU appointment system.");
+		                            ? "XJTLU expert registration submitted. Please verify your email and wait for administrator approval."
+		                            : "Registration successful. Please verify your email before logging in to the XJTLU appointment system.");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("message",
                     role == RoleType.SPECIALIST

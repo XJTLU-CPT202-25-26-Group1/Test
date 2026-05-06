@@ -1,5 +1,6 @@
 package com.cpt202.booking.controller.admin;
 
+import com.cpt202.booking.model.Booking;
 import com.cpt202.booking.service.BookingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Comparator;
 
 @Controller
 @RequestMapping("/admin/bookings")
@@ -22,8 +25,11 @@ public class AdminBookingController {
     @GetMapping
     public String bookingReviewPage(Model model) {
         model.addAttribute("pendingBookings", bookingService.getPendingBookings());
-        model.addAttribute("allBookings", bookingService.getAllBookings());
-        model.addAttribute("auditLogs", bookingService.getAuditLogs());
+        model.addAttribute("allBookings", bookingService.getAllBookings().stream()
+                .sorted(Comparator.comparing(Booking::getCreatedAt, Comparator.nullsFirst(Comparator.naturalOrder())).reversed())
+                .limit(3)
+                .toList());
+        model.addAttribute("auditLogs", bookingService.getAuditLogs().stream().limit(3).toList());
         return "admin/bookings";
     }
 

@@ -84,8 +84,8 @@
             <article class="card admin-mini-panel">
                 <div class="admin-section__head">
                     <div>
-                        <h2>All Bookings</h2>
-	                        <p>Complete XJTLU appointment record list.</p>
+                        <h2>Recent Bookings</h2>
+                        <p>Latest 3 XJTLU appointment records.</p>
                     </div>
                     <span class="admin-count" th:text="${allBookings != null ? #lists.size(allBookings) + ' records' : '0 records'}">0 records</span>
                 </div>
@@ -114,7 +114,7 @@
                 <div class="admin-section__head">
                     <div>
                         <h2>Audit Logs</h2>
-                        <p>Latest status operations across bookings.</p>
+                        <p>Latest 3 status operations across bookings.</p>
                     </div>
                     <span class="admin-count" th:text="${auditLogs != null ? #lists.size(auditLogs) + ' logs' : '0 logs'}">0 logs</span>
                 </div>

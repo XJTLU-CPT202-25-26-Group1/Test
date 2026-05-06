@@ -60,20 +60,6 @@ public class EmailService {
         );
     }
 
-    public void sendSpecialistApprovalEmail(User user, boolean emailVerified) {
-        sendEmail(
-                user.getEmail(),
-                "Your XJTLU expert registration has been approved",
-                "Hello " + user.getDisplayName() + ",\n\n"
-                        + "Your XJTLU academic expert registration has been approved by the administrator.\n"
-                        + (emailVerified
-                        ? "You can now log in and start managing consultation availability."
-                        : "Please verify your email first. After email verification, you will be able to log in.")
-                        + "\n\n"
-                        + "Login page: " + baseUrl + "/auth/login"
-        );
-    }
-
     public void sendSpecialistRejectionEmail(User user) {
         sendEmail(
                 user.getEmail(),

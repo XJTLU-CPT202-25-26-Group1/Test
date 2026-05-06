@@ -185,10 +185,7 @@ public class SpecialistService {
             throw new IllegalStateException("Only pending academic expert registrations can be approved.");
         }
         specialist.setStatus(SpecialistStatus.ACTIVE);
-        Specialist saved = specialistRepository.save(specialist);
-        userRepository.findBySpecialistId(saved.getId())
-                .ifPresent(user -> emailService.sendSpecialistApprovalEmail(user, user.isEmailVerified()));
-        return saved;
+        return specialistRepository.save(specialist);
     }
 
     @Transactional

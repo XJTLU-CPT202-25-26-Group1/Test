@@ -1,1 +1,3 @@
--- Placeholder for initial schema migration
+-- Version reserved for the initial schema baseline.
+-- The implemented table definitions are introduced in V003 after the
+-- team finalized the domain model for bookings, specialists, and users.

@@ -116,6 +116,30 @@
     justify-content: center;
 }
 
+.auth-profile-summary {
+    display: grid;
+    gap: 12px;
+    margin: 0 0 24px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    background: #f7f8ff;
+}
+
+.auth-profile-summary div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.auth-profile-summary span {
+    color: var(--text-muted);
+}
+
+.auth-profile-summary strong {
+    color: var(--text);
+    text-align: right;
+}
+
 .auth-links {
     display: flex;
     flex-wrap: wrap;

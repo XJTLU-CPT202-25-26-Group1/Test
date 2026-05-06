@@ -1,1 +1,3 @@
--- Placeholder for seed roles migration
+-- Version reserved for role seeding.
+-- Roles are stored as enum values in app_user.role, so no separate role
+-- lookup table is required for the current schema.

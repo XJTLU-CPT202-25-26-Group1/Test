@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: appLayout(
+        'Account Profile',
+        ~{::content},
+        ~{::pageStyles},
+        ~{::pageScripts}
+      )}">
+<body>
+<th:block th:fragment="pageStyles">
+    <link rel="stylesheet" th:href="@{/css/auth.css(v='20260428c')}">
+</th:block>
+
+<th:block th:fragment="content">
+    <section class="auth-shell auth-shell--simple">
+        <article class="card auth-card auth-card--wide">
+            <a class="auth-back" th:href="${dashboardPath}">
+                <span class="auth-back__icon" aria-hidden="true">&#8592;</span>
+                <span>Back to Dashboard</span>
+            </a>
+
+            <h1>Account Profile</h1>
+            <p class="auth-card__subtitle">Update the contact details used for appointment administration.</p>
+
+            <div class="profile-readonly-list auth-profile-summary">
+                <div>
+                    <span>Username</span>
+                    <strong th:text="${profile.username}">username</strong>
+                </div>
+                <div>
+                    <span>Role</span>
+                    <strong th:text="${profile.role}">ADMIN</strong>
+                </div>
+                <div>
+                    <span>Email Verification</span>
+                    <strong th:text="${profile.emailVerified ? 'Verified' : 'Not verified'}">Verified</strong>
+                </div>
+            </div>
+
+            <form th:action="@{/auth/profile-edit}" method="post" class="form-grid">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                <div class="form-group">
+                    <label for="displayName">Display Name</label>
+                    <input id="displayName" name="displayName" type="text" maxlength="255"
+                           th:value="${profile.displayName}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" maxlength="255"
+                           th:value="${profile.email}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input id="phone" name="phone" type="text" maxlength="255"
+                           th:value="${profile.phone}" required>
+                </div>
+
+                <div class="form-actions auth-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a class="btn btn-secondary" th:href="${dashboardPath}">Cancel</a>
+                </div>
+            </form>
+        </article>
+    </section>
+</th:block>
+
+<th:block th:fragment="pageScripts"></th:block>
+</body>
+</html>

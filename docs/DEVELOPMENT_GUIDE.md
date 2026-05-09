@@ -2,145 +2,200 @@
 
 ## 1. Project Goal
 
-This project is organized to support incremental development of a complete specialist consultation booking system for:
+This project is the 2026 CPT202 Group 1 XJTLU Academic Expert Appointment System.
 
-- Customer
-- Specialist
-- Administrator / Operations Manager
+It supports three user roles:
 
-The structure is designed so the team can deliver features in phases without rewriting the whole system each time.
+- Customer: XJTLU student or staff requester
+- Specialist: XJTLU academic expert
+- Administrator: system operator who manages academic areas, experts, bookings, and billing
 
-## 2. Incremental Development Principles
+The system provides registration, email verification, expert approval, expert search, availability management, booking review, booking status tracking, completion, feedback, and billing calculation.
 
-- Build shared foundations first.
-- Keep each feature in its own module boundary.
-- Let front-end pages evolve independently from business logic.
-- Let database schema evolve through migrations instead of ad hoc table changes.
-- Keep DTO, entity, validation, and controller responsibilities separate.
-- Add tests alongside each feature module.
+## 2. Current Technology Stack
 
-## 3. Recommended Delivery Phases
+- Java 17+
+- Spring Boot 4
+- Spring Security
+- Spring Data JPA
+- Thymeleaf
+- MySQL in production
+- H2 for tests
+- Flyway for database migration
+- Maven for build and test
+- QQ SMTP for email delivery
+- `systemd` for production service management on Aliyun ECS
 
-### Phase 1: Foundation
+## 3. Main Runtime Profiles
 
-- Security dependency and login flow
-- User, Role, Profile entities
-- Shared layout pages
-- Basic database schema initialization
+### `dev`
 
-### Phase 2: Specialist Discovery + Booking Creation
+Used for local development.
 
-- Specialist list/detail
-- Category filter
-- Availability slot model
-- Customer booking creation
+Configuration file:
 
-### Phase 3: Booking Management
+```text
+src/main/resources/application-dev.properties
+```
 
-- Customer booking history
-- Cancel and reschedule
-- Specialist schedule view
-- Conflict validation
+### `test`
 
-### Phase 4: Admin Workflow
+Used by automated tests.
 
-- Specialist management
-- Category management
-- Pending booking review
-- Booking status transitions
+Configuration file:
 
-### Phase 5: Completion Features
+```text
+src/main/resources/application-test.properties
+```
 
-- Feedback
-- Billing
-- Reporting/dashboard polish
-- Error handling and test hardening
+### `prod`
+
+Used on the Aliyun ECS server.
+
+Configuration file:
+
+```text
+src/main/resources/application-prod.properties
+```
+
+Production uses database schema validation, so MySQL must match the Flyway migrations before startup.
 
 ## 4. Directory Responsibilities
 
-### `src/main/java/com/cpt202/booking/controller`
+### `controller`
 
-- Handles web requests and page/API entry points.
-- Split by role for easier team ownership.
+Handles page routes and form submissions. Controllers are grouped by role:
 
-### `src/main/java/com/cpt202/booking/service`
+- `controller/auth`
+- `controller/customer`
+- `controller/specialist`
+- `controller/admin`
 
-- Holds business rules.
-- Should be the main place for booking rules, schedule conflict checks, and status transitions.
+### `service`
 
-### `src/main/java/com/cpt202/booking/repository`
+Contains business rules, validation, and state transitions. Important rules include:
 
-- Holds persistence access.
-- Keep query logic here instead of controllers.
+- email verification before login
+- academic expert approval before specialist login
+- booking slot conflict prevention
+- booked slot locking
+- booking status transitions
+- fee calculation
+- profile and avatar update handling
 
-### `src/main/java/com/cpt202/booking/model`
+### `repository`
 
-- Holds core entities and domain objects.
+Contains database access through Spring Data JPA.
 
-### `src/main/java/com/cpt202/booking/dto`
+### `model`
 
-- Holds request/response models and search/filter objects.
-
-### `src/main/java/com/cpt202/booking/security`
-
-- Authentication and authorization support classes.
-
-### `src/main/java/com/cpt202/booking/common`
-
-- Shared constants, common response wrappers, and reusable utility code.
-
-### `src/main/java/com/cpt202/booking/mapper`
-
-- Optional mapping layer between DTO and entity.
-- Useful once DTOs and entities begin diverging.
-
-### `src/main/java/com/cpt202/booking/validator`
-
-- Custom validation classes for booking conflicts, duplicate categories, and role-specific rules.
-
-### `src/main/resources/templates`
-
-- Role-based page templates.
-
-### `src/main/resources/static`
-
-- Role-based JS/CSS assets.
-
-### `src/main/resources/db/migration`
-
-- Database migration scripts.
-- Add one migration per schema change.
-
-### `src/test/java/com/cpt202/booking`
-
-- Test packages should mirror the main feature areas.
-
-## 5. Team Collaboration Rules
-
-- One owner updates shared entities after team agreement.
-- Use DTOs for page forms and request payloads.
-- Do not put business logic in Thymeleaf templates or controllers.
-- Do not change booking status strings in multiple places; use enums.
-- Do not hardcode role names across many files; centralize them.
-- Each feature should include at least one service test.
-
-## 6. Suggested Branch Strategy
-
-- `main`: stable integration branch
-- `develop`: active integration branch
-- `feature/auth-*`
-- `feature/booking-*`
-- `feature/specialist-*`
-- `feature/admin-*`
-- `feature/frontend-*`
-
-## 7. Shared Files That Need Agreement First
+Contains persisted entities:
 
 - `User`
-- `Role`
-- `Booking`
-- `AvailabilitySlot`
+- `Specialist`
 - `ExpertiseCategory`
+- `AvailabilitySlot`
+- `Booking`
+- `BookingAuditLog`
+- `Feedback`
+
+### `enums`
+
+Contains controlled status and role values:
+
+- `RoleType`
+- `GenderType`
+- `SpecialistStatus`
+- `CategoryStatus`
 - `BookingStatus`
 
-These should be agreed before parallel implementation starts.
+### `templates`
+
+Contains Thymeleaf pages grouped by role:
+
+- `auth`
+- `customer`
+- `specialist`
+- `admin`
+- `error`
+- `fragments`
+
+### `static`
+
+Contains CSS, JavaScript, and static image assets.
+
+### `db/migration`
+
+Contains Flyway production migrations.
+
+### `db/test-migration`
+
+Contains test schema migration for H2.
+
+## 5. Local Development Commands
+
+Run tests:
+
+```bash
+./mvnw -q test
+```
+
+Build jar without tests:
+
+```bash
+./mvnw clean package -DskipTests
+```
+
+Run locally with default profile:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Run locally with production-like profile:
+
+```bash
+SPRING_PROFILES_ACTIVE=prod ./mvnw spring-boot:run
+```
+
+## 6. Demo Accounts
+
+The seeded administrator account is:
+
+```text
+Username: admin
+Password: admin123
+```
+
+The login page also displays these demo administrator credentials for assessment convenience.
+
+## 7. Mail Behaviour
+
+The application sends:
+
+- registration verification email
+- password reset email
+- academic expert rejection email
+
+The application does not send a separate login email after academic expert approval.
+
+## 8. Development Rules
+
+- Keep business logic in services, not Thymeleaf templates.
+- Keep security rules in `SecurityConfig` and user status checks in `UserService`.
+- Use enums for role and status values.
+- Add or update tests when changing business rules.
+- Add Flyway migrations for database schema changes.
+- Do not commit real production credentials.
+- Do not commit generated files such as `target`, logs, uploads, or `.DS_Store`.
+
+## 9. Final Verification Before Deployment
+
+Before deploying a new jar:
+
+```bash
+./mvnw -q test
+./mvnw clean package -DskipTests
+```
+
+Then copy the jar to `/opt/xsbooking/` and restart the `xsbooking` service on Aliyun.

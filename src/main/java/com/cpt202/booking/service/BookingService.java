@@ -29,6 +29,10 @@ public class BookingService {
     static final int BOOKING_NOTES_MAX_LENGTH = 255;
     static final int REJECTION_REASON_MAX_LENGTH = 255;
     static final int AUDIT_REMARK_MAX_LENGTH = 255;
+    private static final List<BookingStatus> CUSTOMER_TIME_BLOCKING_STATUSES = List.of(
+            BookingStatus.PENDING,
+            BookingStatus.CONFIRMED
+    );
 
     private final BookingRepository bookingRepository;
     private final SpecialistRepository specialistRepository;
@@ -185,6 +189,7 @@ public class BookingService {
         if (slotDateTime.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Selected slot must be in the future.");
         }
+        validateCustomerHasNoOverlappingBooking(customerEmail, slot, null);
 
         Booking booking = new Booking();
         booking.setCustomerName(customerName);
@@ -297,6 +302,7 @@ public class BookingService {
         AvailabilitySlot newSlot = availabilitySlotRepository.findByIdForUpdate(newSlotId)
                 .orElseThrow(() -> new IllegalArgumentException("New slot not found."));
         validateRescheduleTarget(booking, newSlot);
+        validateCustomerHasNoOverlappingBooking(booking.getCustomerEmail(), newSlot, booking.getId());
 
         releaseSlot(booking);
         newSlot.setBooked(true);
@@ -329,6 +335,7 @@ public class BookingService {
         AvailabilitySlot newSlot = availabilitySlotRepository.findByIdForUpdate(newSlotId)
                 .orElseThrow(() -> new IllegalArgumentException("New slot not found."));
         validateRescheduleTarget(booking, newSlot);
+        validateCustomerHasNoOverlappingBooking(customerEmail, newSlot, booking.getId());
 
         releaseSlot(booking);
         newSlot.setBooked(true);
@@ -403,6 +410,33 @@ public class BookingService {
                 || LocalDateTime.of(newSlot.getSlotDate(), newSlot.getStartTime()).isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("New slot must be in the future.");
         }
+    }
+
+    private void validateCustomerHasNoOverlappingBooking(String customerEmail, AvailabilitySlot requestedSlot, Long ignoredBookingId) {
+        List<Booking> activeBookings = bookingRepository.findCustomerBookingsByStatusesForUpdate(
+                customerEmail,
+                CUSTOMER_TIME_BLOCKING_STATUSES
+        );
+
+        boolean hasConflict = activeBookings.stream()
+                .filter(booking -> ignoredBookingId == null || !ignoredBookingId.equals(booking.getId()))
+                .anyMatch(booking -> slotsOverlap(booking.getSlot(), requestedSlot));
+
+        if (hasConflict) {
+            throw new IllegalStateException("You already have an appointment during this time period.");
+        }
+    }
+
+    private boolean slotsOverlap(AvailabilitySlot existingSlot, AvailabilitySlot requestedSlot) {
+        if (existingSlot == null || requestedSlot == null
+                || existingSlot.getSlotDate() == null || requestedSlot.getSlotDate() == null
+                || existingSlot.getStartTime() == null || existingSlot.getEndTime() == null
+                || requestedSlot.getStartTime() == null || requestedSlot.getEndTime() == null) {
+            return false;
+        }
+        return existingSlot.getSlotDate().equals(requestedSlot.getSlotDate())
+                && requestedSlot.getStartTime().isBefore(existingSlot.getEndTime())
+                && requestedSlot.getEndTime().isAfter(existingSlot.getStartTime());
     }
 
     private void releaseSlot(Booking booking) {

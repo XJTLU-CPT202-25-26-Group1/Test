@@ -28,6 +28,16 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByCustomerEmailAndTopicContainingIgnoreCaseOrderByCreatedAtDesc(String customerEmail, String topic);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+            select booking from Booking booking
+            join fetch booking.slot
+            where lower(booking.customerEmail) = lower(:customerEmail)
+              and booking.status in :statuses
+            """)
+    List<Booking> findCustomerBookingsByStatusesForUpdate(@Param("customerEmail") String customerEmail,
+                                                          @Param("statuses") List<BookingStatus> statuses);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select booking from Booking booking where booking.id = :id")
     Optional<Booking> findByIdForUpdate(@Param("id") Long id);
 }

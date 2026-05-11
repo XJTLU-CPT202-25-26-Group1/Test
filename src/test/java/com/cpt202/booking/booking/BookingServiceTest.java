@@ -80,6 +80,49 @@ class BookingServiceTest {
     }
 
     @Test
+    void createBookingRejectsOverlappingCustomerBookingWithDifferentSpecialist() {
+        List<Specialist> specialists = specialistRepository.findAll().stream()
+                .sorted(Comparator.comparingLong(Specialist::getId))
+                .toList();
+        Specialist firstSpecialist = specialists.get(0);
+        Specialist secondSpecialist = specialists.get(1);
+
+        AvailabilitySlot firstSlot = availabilityService.createSlot(
+                firstSpecialist.getId(),
+                LocalDate.now().plusDays(8),
+                LocalTime.of(9, 0),
+                LocalTime.of(10, 0)
+        );
+        AvailabilitySlot overlappingSlot = availabilityService.createSlot(
+                secondSpecialist.getId(),
+                LocalDate.now().plusDays(8),
+                LocalTime.of(9, 30),
+                LocalTime.of(10, 30)
+        );
+
+        bookingService.createBooking(
+                "Overlap Customer",
+                "overlap@example.com",
+                firstSpecialist.getId(),
+                firstSlot.getId(),
+                "First appointment",
+                ""
+        );
+
+        IllegalStateException error = assertThrows(IllegalStateException.class, () -> bookingService.createBooking(
+                "Overlap Customer",
+                "overlap@example.com",
+                secondSpecialist.getId(),
+                overlappingSlot.getId(),
+                "Second appointment",
+                ""
+        ));
+
+        assertEquals("You already have an appointment during this time period.", error.getMessage());
+        assertFalse(availabilitySlotRepository.findById(overlappingSlot.getId()).orElseThrow().isBooked());
+    }
+
+    @Test
     void rescheduleBookingReleasesOldSlotAndLocksNewSlot() {
         Specialist specialist = specialistRepository.findAll().stream()
                 .max(Comparator.comparingLong(Specialist::getId))

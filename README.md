@@ -141,8 +141,4 @@ More details are in [docs/ALIYUN_DEPLOYMENT.md](docs/ALIYUN_DEPLOYMENT.md).
 - [Project Readiness Checklist](docs/PHASE1_CHECKLIST.md)
 - [Team Development and Demonstration Plan](docs/TEAM_DEVELOPMENT_PLAN.md)
 
-## 9. Notes
 
-- Do not commit production passwords, QQ SMTP authorization codes, or environment files.
-- Do not commit generated files such as `target/`, `outputs/`, `tmp/`, logs, uploaded avatars, or `.DS_Store`.
-- Production uses `spring.jpa.hibernate.ddl-auto=validate`, so the database schema must match Flyway migrations before startup.

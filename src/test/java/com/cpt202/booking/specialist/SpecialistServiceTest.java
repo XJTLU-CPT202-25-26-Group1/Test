@@ -143,8 +143,8 @@ class SpecialistServiceTest {
         specialist = specialistRepository.save(specialist);
         Long specialistId = specialist.getId();
 
-        LocalTime pastStart = LocalTime.now().minusHours(2).withSecond(0).withNano(0);
-        LocalTime pastEnd = pastStart.plusHours(1);
+        LocalTime pastStart = LocalTime.MIDNIGHT;
+        LocalTime pastEnd = pastStart.plusMinutes(30);
 
         AvailabilitySlot slot = new AvailabilitySlot();
         slot.setSpecialist(specialist);

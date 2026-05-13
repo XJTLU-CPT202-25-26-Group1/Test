@@ -81,8 +81,8 @@ class AvailabilityServiceTest {
     @Test
     void sameDayPastStartTimeIsRejectedAndHiddenFromAvailableSlots() {
         Specialist specialist = specialistRepository.findAll().get(0);
-        LocalTime pastStart = LocalTime.now().minusHours(2).withSecond(0).withNano(0);
-        LocalTime pastEnd = pastStart.plusHours(1);
+        LocalTime pastStart = LocalTime.MIDNIGHT;
+        LocalTime pastEnd = pastStart.plusMinutes(30);
 
         assertThrows(IllegalArgumentException.class, () -> availabilityService.createSlot(
                 specialist.getId(),
@@ -113,8 +113,8 @@ class AvailabilityServiceTest {
                 .findFirst()
                 .orElseThrow();
 
-        LocalTime pastStart = LocalTime.now().minusHours(2).withSecond(0).withNano(0);
-        LocalTime pastEnd = pastStart.plusHours(1);
+        LocalTime pastStart = LocalTime.MIDNIGHT;
+        LocalTime pastEnd = pastStart.plusMinutes(30);
 
         assertThrows(IllegalArgumentException.class, () -> availabilityService.updateSlot(
                 specialist.getId(),

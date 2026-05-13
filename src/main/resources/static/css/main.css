@@ -14,13 +14,13 @@
     --danger-hover: #4934aa;
 
     --info-bg: #eef2ff;
-    --info-text: #4257c8;
+    --info-text: var(--text);
     --success-bg: #f1efff;
-    --success-text: #5b44c7;
+    --success-text: var(--text);
     --warning-bg: #eef2ff;
-    --warning-text: #4c5fd3;
+    --warning-text: var(--text);
     --error-bg: #f3efff;
-    --error-text: #5b44c7;
+    --error-text: var(--text);
 
     --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
     --shadow-md: 0 16px 38px rgba(16, 24, 40, 0.08);

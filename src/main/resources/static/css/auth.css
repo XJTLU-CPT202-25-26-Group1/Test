@@ -81,19 +81,19 @@
 .auth-alert--error {
     border-color: rgba(91, 68, 199, 0.28);
     background: #f6f2ff;
-    color: #46339b;
+    color: var(--text);
 }
 
 .auth-alert--warning {
     border-color: rgba(76, 95, 211, 0.28);
     background: #f3f5ff;
-    color: #3f53c4;
+    color: var(--text);
 }
 
 .auth-alert--success {
     border-color: rgba(66, 87, 200, 0.28);
     background: #eef2ff;
-    color: #4257c8;
+    color: var(--text);
 }
 
 .auth-note h2 {
